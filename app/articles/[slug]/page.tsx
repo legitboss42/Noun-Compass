@@ -44,6 +44,10 @@ function hasMdxFaqSection(content: string) {
   return /^##\s+Frequently Asked Questions/im.test(content);
 }
 
+function removeMdxFaqSection(content: string) {
+  return content.replace(/\n##\s+Frequently Asked Questions[\s\S]*$/im, "").trimEnd();
+}
+
 function extractHeadings(content: string) {
   return [...content.matchAll(/^##\s+(.+)$/gm)]
     .map((match) => match[1].replace(/\[(.*?)\]\([^)]+\)/g, "$1").trim())
@@ -111,10 +115,11 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
   const faqs = getArticleFaqs(article.slug);
   const mdxFaqs = extractMdxFaqs(article.content);
   const usesInlineFaqSection = hasMdxFaqSection(article.content);
+  const articleContent = usesInlineFaqSection ? removeMdxFaqSection(article.content) : article.content;
   const visibleFaqs = [...faqs, ...mdxFaqs].filter(
     (faq, index, list) => list.findIndex((item) => item.question === faq.question) === index,
   );
-  const headings = extractHeadings(article.content);
+  const headings = extractHeadings(articleContent);
   const authorUrl =
     article.author === "Victor Chinukwue"
       ? `${site.url}/authors/victor`
@@ -259,7 +264,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
 
             <div className="prose">
               <MDXRemote
-                source={article.content}
+                source={articleContent}
                 components={{
                   ArticleScreenshot,
                   h2: (props) => <MdxHeading level={2} {...props} />,
@@ -288,7 +293,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
 
             <AdPlaceholder position="before FAQ" />
 
-            {!usesInlineFaqSection && visibleFaqs.length > 0 && <FAQBlock faqs={visibleFaqs} />}
+            {visibleFaqs.length > 0 && <FAQBlock faqs={visibleFaqs} />}
 
             <RelatedReads articles={related.length ? related : allArticles.slice(0, 3)} />
             <AdPlaceholder position="below related articles" />
