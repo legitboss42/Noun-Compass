@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">Educational result record reconstruction</title>
+  <desc id="desc">A reconstructed result table layout with all academic scores redacted.</desc>
+  <rect width="1200" height="675" fill="#eef5f0"/>
+  <rect x="70" y="50" width="1060" height="575" fill="#fff" stroke="#dfe7e1"/>
+  <rect x="70" y="50" width="1060" height="56" fill="#08783f"/>
+  <text x="96" y="85" fill="#fff" font-family="Arial" font-size="21" font-weight="700">Educational reconstruction - result review</text>
+  <text x="96" y="146" fill="#101713" font-family="Arial" font-size="31" font-weight="700">Result table with sensitive values redacted</text>
+  <text x="96" y="180" fill="#617067" font-family="Arial" font-size="17">Screenshot unavailable. Educational visual used. Never publish private scores or identifiers.</text>
+  <rect x="96" y="224" width="1008" height="52" fill="#f3f7f4"/>
+  <g font-family="Arial" font-size="17">
+    <text x="118" y="256" fill="#101713" font-weight="700">Code</text><text x="260" y="256" fill="#101713" font-weight="700">Title</text><text x="660" y="256" fill="#101713" font-weight="700">TMA</text><text x="780" y="256" fill="#101713" font-weight="700">Exam</text><text x="910" y="256" fill="#101713" font-weight="700">Grade</text>
+    <g fill="#fff" stroke="#dfe7e1"><rect x="96" y="276" width="1008" height="60"/><rect x="96" y="336" width="1008" height="60"/><rect x="96" y="396" width="1008" height="60"/></g>
+    <g fill="#cfd8d2"><rect x="118" y="297" width="100" height="18"/><rect x="260" y="297" width="310" height="18"/><rect x="660" y="297" width="70" height="18"/><rect x="780" y="297" width="70" height="18"/><rect x="910" y="297" width="70" height="18"/><rect x="118" y="357" width="100" height="18"/><rect x="260" y="357" width="350" height="18"/><rect x="660" y="357" width="70" height="18"/><rect x="780" y="357" width="70" height="18"/><rect x="910" y="357" width="70" height="18"/><rect x="118" y="417" width="100" height="18"/><rect x="260" y="417" width="300" height="18"/><rect x="660" y="417" width="70" height="18"/><rect x="780" y="417" width="70" height="18"/><rect x="910" y="417" width="70" height="18"/></g>
+  </g>
+  <rect x="96" y="524" width="1008" height="44" rx="8" fill="#fff8e2" stroke="#f4c95d"/>
+  <text x="118" y="552" fill="#5c4a15" font-family="Arial" font-size="17">No real result, grade, matric number, or statement of result was fabricated.</text>
+</svg>

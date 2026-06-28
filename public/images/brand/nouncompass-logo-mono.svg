@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="280" viewBox="0 0 1040 280" fill="none">
+  <rect width="1040" height="280" rx="28" fill="white"/>
+  <g transform="translate(36 24) scale(.453125)" fill="#12243B" stroke="#12243B">
+    <path d="M256 48c94 0 180 58 212 146v119c0 90-70 155-172 155H216C114 468 44 403 44 313V194C76 106 162 48 256 48Z"/>
+    <path d="M256 86 318 126H194l62-40Z"/>
+    <path d="M206 126h100l-14 20h-72l-14-20Z"/>
+    <circle cx="256" cy="236" r="96" fill="white"/>
+    <circle cx="256" cy="236" r="82"/>
+    <path d="M256 132v20M256 320v20m104-104h-20m-148 0h-20m170.47-66.47-14.14 14.14m-104.66 104.66-14.14 14.14m132.8 0-14.14-14.14M203.67 183.67l-14.14-14.14" stroke-width="10" stroke-linecap="round"/>
+    <path d="M281 184c-9 38-32 88-88 120 31-6 58-9 80-8 22 1 43 6 61 16-11-47-3-91 19-132-29 17-53 19-72 4Z" fill="white" stroke="none"/>
+    <path d="M287 193c-17 31-36 57-70 85 16-2 31-2 44 0 15 2 29 7 42 15-6-30-3-60 10-92-10 3-19 2-26-8Z" fill="#12243B" stroke="none"/>
+    <circle cx="256" cy="236" r="13" fill="white" stroke="none"/>
+    <path d="M132 354c39-24 81-38 124-41 41-3 84 5 124 23-19 25-41 39-67 43-25 4-48 6-68 6-25 0-46-1-62-4-25-5-42-14-51-27Z" stroke="none"/>
+    <path d="M142 354c35-12 72-18 111-18s76 6 117 18c-18 12-37 18-57 20-19 2-38 4-57 4-20 0-39-2-57-4-20-2-39-8-57-20Z" fill="white" stroke="none"/>
+  </g>
+  <text x="280" y="122" fill="#12243B" font-family="Poppins, Manrope, Arial, sans-serif" font-size="86" font-weight="800" letter-spacing="-2">NOUNCOMPASS</text>
+  <text x="280" y="172" fill="#12243B" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="700" letter-spacing="3">Independent student guidance for NOUN success</text>
+  <path d="M280 198H916" stroke="#12243B" stroke-width="2"/>
+  <text x="280" y="228" fill="#12243B" font-family="Inter, Arial, sans-serif" font-size="22">Education • Navigation • Verification • Student support</text>
+</svg>

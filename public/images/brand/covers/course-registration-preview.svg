@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" fill="none">
+  <rect width="1600" height="900" rx="48" fill="#F7F8FA"/>
+  <rect width="1600" height="900" rx="48" fill="url(#wash)"/>
+  <path d="M0 760C140 720 280 662 458 662c210 0 302 98 512 98 194 0 294-96 470-96 62 0 115 8 160 18v218H0V760Z" fill="#0E7A3E"/>
+  <path d="M0 800c152-34 264-72 424-72 182 0 290 74 452 74 172 0 260-64 434-64 117 0 209 24 290 46v116H0V800Z" fill="#12243B"/>
+  <circle cx="1302" cy="168" r="160" fill="#0E7A3E" fill-opacity=".12"/>
+  <circle cx="1200" cy="312" r="94" fill="#D6A21D" fill-opacity=".14"/>
+  <g opacity=".14" stroke="#0E7A3E" stroke-width="4">
+    <circle cx="1212" cy="202" r="88"/>
+    <path d="M1212 98v28M1212 278v28M1108 202h28M1288 202h28"/>
+  </g>
+  <rect x="74" y="70" width="1452" height="748" rx="34" fill="#FFFFFF" fill-opacity=".75" stroke="#D7E1EB"/>
+  <rect x="102" y="98" width="116" height="116" rx="30" fill="url(#badge)"/>
+  <text x="160" y="174" text-anchor="middle" fill="#FFFFFF" font-family="Poppins, Arial, sans-serif" font-size="52" font-weight="800">N</text>
+  <text x="246" y="146" fill="#12243B" font-family="Poppins, Arial, sans-serif" font-size="52" font-weight="800">NOUNCOMPASS</text>
+  <text x="246" y="188" fill="#0E7A3E" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="700" letter-spacing="4">INDEPENDENT STUDENT GUIDANCE</text>
+  <rect x="120" y="248" width="186" height="44" rx="22" fill="#12243B"/>
+  <text x="213" y="276" text-anchor="middle" fill="#FFFFFF" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="700">Course Registration</text>
+  <text x="118" y="384" fill="#12243B" font-family="Poppins, Arial, sans-serif" font-size="84" font-weight="800">How To Register NOUN Courses</text>
+  <text x="118" y="446" fill="#567089" font-family="Inter, Arial, sans-serif" font-size="30" font-weight="500">Premium branded system preview</text>
+  <rect x="1010" y="234" width="408" height="332" rx="34" fill="#FFFFFF" stroke="#D5E0EA" stroke-width="2"/>
+  <rect x="1052" y="276" width="324" height="214" rx="26" fill="#EAF6EE"/>
+  <circle cx="1314" cy="520" r="20" fill="#D6A21D"/>
+  <rect x="1112" y="334" width="204" height="126" rx="26" fill="#12243B"/>
+  <rect x="1130" y="352" width="168" height="92" rx="20" fill="#FFFFFF"/>
+  <rect x="1162" y="474" width="104" height="18" rx="9" fill="#D6A21D"/>
+  <text x="160" y="684" fill="#FFFFFF" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="700">Premium branded cover preview</text>
+  <defs>
+    <linearGradient id="wash" x1="0" y1="0" x2="1600" y2="900" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFFFF"/>
+      <stop offset=".55" stop-color="#EEF6F1"/>
+      <stop offset="1" stop-color="#EFF3F8"/>
+    </linearGradient>
+    <linearGradient id="badge" x1="102" y1="98" x2="218" y2="214" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#12243B"/>
+      <stop offset="1" stop-color="#0E7A3E"/>
+    </linearGradient>
+  </defs>
+</svg>

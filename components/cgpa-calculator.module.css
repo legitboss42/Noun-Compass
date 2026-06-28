@@ -1,0 +1,279 @@
+.calculator { display: grid; gap: 28px; }
+.introCard,
+.panel,
+.results,
+.guideCard {
+  border: 1px solid var(--line);
+  background: white;
+}
+.introCard,
+.panel,
+.results {
+  padding: 28px;
+}
+.introCard h2,
+.panel h3,
+.results h2,
+.guideCard h3 {
+  margin: 10px 0 10px;
+  letter-spacing: -.04em;
+}
+.introCard p,
+.panel p,
+.guideCard p,
+.resultNote,
+.bandList li,
+.exampleList li {
+  color: var(--muted);
+  line-height: 1.7;
+}
+.statsRow,
+.summaryGrid,
+.bandGrid,
+.exampleGrid,
+.actions,
+.resultMeta,
+.footerLinks,
+.breakdownGrid,
+.semesterMetaGrid,
+.semesterSummary {
+  display: grid;
+  gap: 16px;
+}
+.statsRow,
+.summaryGrid,
+.breakdownGrid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.statsRow div,
+.summaryGrid article,
+.bandGrid article,
+.breakdownGrid article,
+.guideCard {
+  border: 1px solid var(--line);
+  padding: 18px;
+  background: #fbfcfb;
+}
+.statsRow strong,
+.summaryGrid strong,
+.breakdownGrid strong {
+  display: block;
+  font-size: 1.8rem;
+  letter-spacing: -.05em;
+  color: var(--ink);
+}
+.statsRow span,
+.summaryGrid span,
+.breakdownGrid span,
+.bandGrid span,
+.guideCard span {
+  display: block;
+  color: var(--muted);
+  line-height: 1.5;
+}
+.panelHeader {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 16px;
+  align-items: start;
+  margin-bottom: 18px;
+}
+.panelNumber {
+  color: #0e7a3e;
+  font-family: var(--font-geist-mono);
+  font-size: .8rem;
+}
+.tableWrap {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+}
+.table {
+  width: 100%;
+  min-width: 820px;
+  border-collapse: collapse;
+}
+.table th,
+.table td {
+  padding: 14px 12px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+  text-align: left;
+}
+.table th {
+  color: var(--muted);
+  font-size: .84rem;
+  font-weight: 700;
+}
+.table input {
+  width: 100%;
+  border: 1px solid var(--line);
+  padding: 10px 12px;
+  font: inherit;
+}
+.semesterMetaGrid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-bottom: 18px;
+}
+.semesterMetaGrid label {
+  display: grid;
+  gap: 8px;
+}
+.semesterMetaGrid span {
+  color: var(--muted);
+  font-size: .82rem;
+  font-weight: 700;
+}
+.semesterMetaGrid input {
+  width: 100%;
+  border: 1px solid var(--line);
+  padding: 12px 14px;
+  font: inherit;
+  background: white;
+}
+.table button,
+.addRowButton,
+.ghostButton,
+.secondaryButton {
+  border: 1px solid var(--line);
+  background: white;
+  color: var(--ink);
+  font: inherit;
+  cursor: pointer;
+}
+.table button,
+.ghostButton,
+.secondaryButton {
+  padding: 10px 12px;
+}
+.addRowButton {
+  padding: 12px 16px;
+}
+.actions {
+  grid-template-columns: repeat(4, minmax(0, max-content));
+  align-items: center;
+}
+.actions .button,
+.actions .ghostButton,
+.actions .secondaryButton,
+.addRowButton { justify-self: start; }
+.warning {
+  border: 1px solid #e6d9a2;
+  background: #fff9e4;
+  color: #6f5a11;
+  padding: 14px 16px;
+}
+.summaryGrid article small,
+.breakdownGrid article small,
+.guideCard small {
+  display: block;
+  margin-top: 6px;
+  color: var(--muted);
+}
+.gradeCell strong,
+.classCell strong {
+  display: block;
+  font-size: 1.1rem;
+}
+.gradeCell span,
+.classCell span {
+  color: var(--muted);
+}
+.resultHeader {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: end;
+  margin-bottom: 22px;
+}
+.resultMeta {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  min-width: 280px;
+}
+.resultMeta article {
+  border: 1px solid var(--line);
+  padding: 16px;
+  background: #fbfcfb;
+}
+.resultMeta strong {
+  display: block;
+  font-size: 1.5rem;
+  letter-spacing: -.05em;
+}
+.semesterSummary {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 18px;
+}
+.semesterSummary article {
+  border: 1px solid var(--line);
+  padding: 16px;
+  background: #fbfcfb;
+}
+.semesterSummary strong {
+  display: block;
+  font-size: 1.4rem;
+  letter-spacing: -.05em;
+}
+.semesterSummary span,
+.semesterSummary small {
+  color: var(--muted);
+}
+.bandGrid,
+.exampleGrid,
+.footerLinks { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.bandGrid h4,
+.guideCard h3 { margin: 8px 0; }
+.bandList,
+.exampleList {
+  margin: 0;
+  padding-left: 18px;
+}
+.resultNote,
+.exampleIntro {
+  margin-top: 10px;
+}
+.footerLinks a {
+  border: 1px solid var(--line);
+  padding: 18px;
+  color: inherit;
+  background: #fbfcfb;
+}
+.footerLinks strong,
+.footerLinks span {
+  display: block;
+}
+.footerLinks strong { margin-bottom: 6px; }
+.totalCard {
+  background: #12243b !important;
+  color: white;
+}
+.totalCard strong,
+.totalCard span,
+.totalCard small { color: white !important; }
+
+@media (max-width: 980px) {
+  .statsRow,
+  .summaryGrid,
+  .breakdownGrid,
+  .semesterMetaGrid,
+  .semesterSummary,
+  .bandGrid,
+  .exampleGrid,
+  .footerLinks,
+  .actions,
+  .resultMeta { grid-template-columns: 1fr 1fr; }
+  .resultHeader { flex-direction: column; align-items: start; }
+}
+
+@media (max-width: 680px) {
+  .statsRow,
+  .summaryGrid,
+  .breakdownGrid,
+  .semesterMetaGrid,
+  .semesterSummary,
+  .bandGrid,
+  .exampleGrid,
+  .footerLinks,
+  .actions,
+  .resultMeta { grid-template-columns: 1fr; }
+  .introCard,
+  .panel,
+  .results { padding: 22px; }
+}

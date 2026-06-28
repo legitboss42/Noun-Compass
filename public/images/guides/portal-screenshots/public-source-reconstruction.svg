@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">Educational official source reconstruction</title>
+  <desc id="desc">A reconstructed official-source checking layout for public pages.</desc>
+  <rect width="1200" height="675" fill="#eef5f0"/>
+  <rect x="70" y="50" width="1060" height="575" rx="14" fill="#fff" stroke="#dfe7e1"/>
+  <rect x="70" y="50" width="1060" height="56" fill="#08783f"/>
+  <text x="96" y="85" fill="#fff" font-family="Arial" font-size="21" font-weight="700">Educational reconstruction - official source check</text>
+  <text x="96" y="146" fill="#101713" font-family="Arial" font-size="31" font-weight="700">Verify the current public source before acting</text>
+  <text x="96" y="180" fill="#617067" font-family="Arial" font-size="17">Screenshot unavailable. Educational visual used. Public directories and course pages can change.</text>
+  <rect x="96" y="230" width="1008" height="58" fill="#f3f7f4"/><text x="120" y="266" fill="#101713" font-family="Arial" font-size="18" font-weight="700">1. Open official source link</text>
+  <rect x="96" y="312" width="1008" height="58" fill="#f3f7f4"/><text x="120" y="348" fill="#101713" font-family="Arial" font-size="18" font-weight="700">2. Check page date, programme, centre, or course code</text>
+  <rect x="96" y="394" width="1008" height="58" fill="#f3f7f4"/><text x="120" y="430" fill="#101713" font-family="Arial" font-size="18" font-weight="700">3. Compare with your own current student workflow</text>
+  <rect x="96" y="506" width="1008" height="44" rx="8" fill="#fff8e2" stroke="#f4c95d"/>
+  <text x="118" y="534" fill="#5c4a15" font-family="Arial" font-size="17">No outdated public screenshot is presented as a permanent official source.</text>
+</svg>

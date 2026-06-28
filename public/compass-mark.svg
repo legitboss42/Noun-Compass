@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" role="img" aria-label="NOUN Compass mark">
+  <rect width="48" height="48" rx="8" fill="#08783f"/>
+  <circle cx="24" cy="24" r="14" fill="none" stroke="#fff" stroke-width="2"/>
+  <path d="M29.5 18.5 26 26l-7.5 3.5L22 22z" fill="#fff"/>
+  <circle cx="24" cy="24" r="2" fill="#f4c95d"/>
+</svg>

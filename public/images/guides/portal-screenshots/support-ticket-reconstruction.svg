@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">Educational support ticket reconstruction</title>
+  <desc id="desc">A reconstructed support ticket form with personal fields redacted.</desc>
+  <rect width="1200" height="675" fill="#eef5f0"/>
+  <rect x="80" y="50" width="1040" height="575" rx="14" fill="#fff" stroke="#dfe7e1"/>
+  <rect x="80" y="50" width="1040" height="58" fill="#08783f"/>
+  <text x="108" y="86" fill="#fff" font-family="Arial" font-size="21" font-weight="700">Educational reconstruction - support ticket</text>
+  <text x="108" y="148" fill="#101713" font-family="Arial" font-size="31" font-weight="700">Support request with private fields hidden</text>
+  <text x="108" y="182" fill="#617067" font-family="Arial" font-size="17">Screenshot unavailable. Educational visual used. Do not expose passwords or payment credentials.</text>
+  <g font-family="Arial" font-size="17">
+    <rect x="108" y="230" width="460" height="56" fill="#f3f7f4"/><text x="130" y="264" fill="#29352e">Matric number</text><rect x="302" y="247" width="210" height="18" fill="#cfd8d2"/>
+    <rect x="632" y="230" width="460" height="56" fill="#f3f7f4"/><text x="654" y="264" fill="#29352e">Phone</text><rect x="782" y="247" width="210" height="18" fill="#cfd8d2"/>
+    <rect x="108" y="314" width="460" height="56" fill="#f3f7f4"/><text x="130" y="348" fill="#29352e">Category</text><rect x="302" y="331" width="210" height="18" fill="#cfd8d2"/>
+    <rect x="632" y="314" width="460" height="56" fill="#f3f7f4"/><text x="654" y="348" fill="#29352e">Subcategory</text><rect x="782" y="331" width="210" height="18" fill="#cfd8d2"/>
+    <rect x="108" y="410" width="984" height="96" fill="#fff" stroke="#dfe7e1"/><text x="130" y="445" fill="#29352e">Message summary</text><rect x="302" y="428" width="640" height="18" fill="#cfd8d2"/><rect x="302" y="462" width="520" height="18" fill="#cfd8d2"/>
+  </g>
+  <rect x="108" y="548" width="984" height="44" rx="8" fill="#fff8e2" stroke="#f4c95d"/>
+  <text x="130" y="576" fill="#5c4a15" font-family="Arial" font-size="17">No real ticket, identity detail, phone number, or support acknowledgement was fabricated.</text>
+</svg>

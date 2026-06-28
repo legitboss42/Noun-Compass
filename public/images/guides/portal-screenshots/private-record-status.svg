@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">Private record screenshot status</title>
+  <desc id="desc">An editorial notice explaining why a private successful record was not manufactured or published.</desc>
+  <rect width="1200" height="675" fill="#f3f7f4"/>
+  <rect x="72" y="72" width="1056" height="531" rx="20" fill="#fff" stroke="#08783f" stroke-width="3"/>
+  <rect x="72" y="72" width="1056" height="16" rx="8" fill="#08783f"/>
+  <circle cx="170" cy="205" r="54" fill="#e7f5ec"/>
+  <rect x="145" y="198" width="50" height="42" rx="7" fill="none" stroke="#08783f" stroke-width="8"/>
+  <path d="M157 198v-15c0-22 26-30 38-12 4 6 5 12 5 27" fill="none" stroke="#08783f" stroke-width="8" stroke-linecap="round"/>
+  <text x="260" y="185" fill="#08783f" font-family="Arial, sans-serif" font-size="24" font-weight="700" letter-spacing="2">PRIVACY AND ACCURACY NOTE</text>
+  <text x="260" y="245" fill="#101713" font-family="Arial, sans-serif" font-size="42" font-weight="700">No private success record was fabricated</text>
+  <text x="260" y="305" fill="#4f6257" font-family="Arial, sans-serif" font-size="25">NOUN Compass did not create a payment, registration, result, or support</text>
+  <text x="260" y="344" fill="#4f6257" font-family="Arial, sans-serif" font-size="25">submission solely to obtain a screenshot for this guide.</text>
+  <rect x="260" y="395" width="770" height="112" rx="12" fill="#e7f5ec" stroke="#08783f" stroke-width="2"/>
+  <text x="292" y="438" fill="#075c33" font-family="Arial, sans-serif" font-size="23" font-weight="700">Publication standard</text>
+  <text x="292" y="477" fill="#075c33" font-family="Arial, sans-serif" font-size="21">Only a genuine, permissioned, fully redacted example will replace this notice.</text>
+  <text x="260" y="558" fill="#617067" font-family="Arial, sans-serif" font-size="19">Checked 14 June 2026. Always verify your own current official record.</text>
+</svg>

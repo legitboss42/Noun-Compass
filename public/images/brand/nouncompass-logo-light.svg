@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="280" viewBox="0 0 1040 280" fill="none">
+  <rect width="1040" height="280" rx="28" fill="#F7F8FA"/>
+  <image href="/images/brand/nouncompass-icon.svg" x="34" y="24" width="232" height="232"/>
+  <text x="280" y="122" fill="#12243B" font-family="Poppins, Manrope, Arial, sans-serif" font-size="86" font-weight="800" letter-spacing="-2">NOUNCOMPASS</text>
+  <text x="280" y="172" fill="#0E7A3E" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="700" letter-spacing="3">Independent student guidance for NOUN success</text>
+  <path d="M280 198H916" stroke="#D9E1EA" stroke-width="2"/>
+  <text x="280" y="228" fill="#4E617A" font-family="Inter, Arial, sans-serif" font-size="22">Education • Navigation • Verification • Student support</text>
+</svg>

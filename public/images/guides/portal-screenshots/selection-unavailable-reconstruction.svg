@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">Educational selection unavailable reconstruction</title>
+  <desc id="desc">A reconstructed course or exam selection page with a semester-registration required notice.</desc>
+  <rect width="1200" height="675" fill="#eef5f0"/>
+  <rect x="70" y="50" width="1060" height="575" fill="#fff" stroke="#dfe7e1"/>
+  <rect x="70" y="50" width="1060" height="56" fill="#101713"/>
+  <text x="96" y="85" fill="#fff" font-family="Arial" font-size="21" font-weight="700">Educational reconstruction - blocked selection workflow</text>
+  <rect x="96" y="136" width="1008" height="52" fill="#f3f7f4"/>
+  <text x="118" y="168" fill="#101713" font-family="Arial" font-size="18" font-weight="700">Course code</text><text x="330" y="168" fill="#101713" font-family="Arial" font-size="18" font-weight="700">Course title</text><text x="760" y="168" fill="#101713" font-family="Arial" font-size="18" font-weight="700">Units</text><text x="900" y="168" fill="#101713" font-family="Arial" font-size="18" font-weight="700">Fee</text>
+  <rect x="96" y="188" width="1008" height="265" fill="#f7faf8" stroke="#dfe7e1"/>
+  <rect x="300" y="270" width="600" height="116" rx="10" fill="#fff" stroke="#08783f" stroke-width="3"/>
+  <text x="348" y="316" fill="#08783f" font-family="Arial" font-size="24" font-weight="700">Selection unavailable</text>
+  <text x="348" y="354" fill="#29352e" font-family="Arial" font-size="18">Semester registration had not been completed,</text>
+  <text x="348" y="382" fill="#29352e" font-family="Arial" font-size="18">so selectable rows were not displayed.</text>
+  <rect x="96" y="504" width="1008" height="44" rx="8" fill="#fff8e2" stroke="#f4c95d"/>
+  <text x="118" y="532" fill="#5c4a15" font-family="Arial" font-size="17">Screenshot unavailable. Educational visual used. This is not a fabricated registration.</text>
+</svg>

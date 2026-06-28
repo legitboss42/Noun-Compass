@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">Educational profile update reconstruction</title>
+  <desc id="desc">A reconstructed student profile form with private fields redacted.</desc>
+  <rect width="1200" height="675" fill="#eef5f0"/>
+  <rect x="70" y="50" width="1060" height="575" rx="14" fill="#fff" stroke="#dfe7e1"/>
+  <rect x="70" y="50" width="1060" height="56" fill="#101713"/>
+  <text x="96" y="85" fill="#fff" font-family="Arial" font-size="21" font-weight="700">Educational reconstruction - profile review</text>
+  <text x="96" y="146" fill="#101713" font-family="Arial" font-size="31" font-weight="700">Student profile details with private fields hidden</text>
+  <text x="96" y="180" fill="#617067" font-family="Arial" font-size="17">Screenshot unavailable. Educational visual used. Do not expose identity data publicly.</text>
+  <g font-family="Arial" font-size="17">
+    <text x="96" y="240" fill="#101713" font-weight="700">Personal details</text>
+    <rect x="96" y="260" width="460" height="54" fill="#f3f7f4"/><text x="118" y="293" fill="#29352e">Name</text><rect x="260" y="278" width="230" height="18" fill="#cfd8d2"/>
+    <rect x="624" y="260" width="480" height="54" fill="#f3f7f4"/><text x="646" y="293" fill="#29352e">Matric number</text><rect x="815" y="278" width="210" height="18" fill="#cfd8d2"/>
+    <rect x="96" y="338" width="460" height="54" fill="#f3f7f4"/><text x="118" y="371" fill="#29352e">Phone</text><rect x="260" y="356" width="230" height="18" fill="#cfd8d2"/>
+    <rect x="624" y="338" width="480" height="54" fill="#f3f7f4"/><text x="646" y="371" fill="#29352e">Email</text><rect x="815" y="356" width="210" height="18" fill="#cfd8d2"/>
+    <rect x="96" y="436" width="1008" height="54" fill="#fff8e2" stroke="#f4c95d"/><text x="118" y="469" fill="#5c4a15">Only update details through the official portal or authorized support route.</text>
+  </g>
+  <text x="96" y="558" fill="#617067" font-family="Arial" font-size="17">No real student profile, phone number, email address, or identity record was fabricated.</text>
+</svg>

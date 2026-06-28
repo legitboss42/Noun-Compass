@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">Educational payment record reconstruction</title>
+  <desc id="desc">A non-deceptive reconstructed payment record layout with redacted fields.</desc>
+  <rect width="1200" height="675" fill="#eef5f0"/>
+  <rect x="60" y="48" width="1080" height="579" rx="16" fill="#fff" stroke="#dfe7e1"/>
+  <rect x="60" y="48" width="1080" height="54" fill="#0b5f35"/>
+  <text x="88" y="82" fill="#fff" font-family="Arial" font-size="20" font-weight="700">Educational reconstruction - payment evidence view</text>
+  <text x="88" y="140" fill="#101713" font-family="Arial" font-size="30" font-weight="700">Payment or wallet transaction record</text>
+  <text x="88" y="174" fill="#617067" font-family="Arial" font-size="17">Screenshot unavailable. Educational visual used. Confirm real records through official NOUN channels.</text>
+  <g font-family="Arial" font-size="18">
+    <rect x="88" y="220" width="1024" height="52" fill="#f3f7f4"/>
+    <text x="110" y="252" fill="#101713" font-weight="700">Field</text><text x="440" y="252" fill="#101713" font-weight="700">Student-safe value</text><text x="835" y="252" fill="#101713" font-weight="700">Status</text>
+    <rect x="88" y="272" width="1024" height="60" fill="#fff" stroke="#dfe7e1"/><text x="110" y="309" fill="#29352e">Reference</text><rect x="440" y="291" width="250" height="20" fill="#cfd8d2"/><text x="835" y="309" fill="#08783f" font-weight="700">Verify</text>
+    <rect x="88" y="332" width="1024" height="60" fill="#fff" stroke="#dfe7e1"/><text x="110" y="369" fill="#29352e">Amount</text><rect x="440" y="351" width="170" height="20" fill="#cfd8d2"/><text x="835" y="369" fill="#08783f" font-weight="700">Do not guess</text>
+    <rect x="88" y="392" width="1024" height="60" fill="#fff" stroke="#dfe7e1"/><text x="110" y="429" fill="#29352e">Date</text><rect x="440" y="411" width="210" height="20" fill="#cfd8d2"/><text x="835" y="429" fill="#08783f" font-weight="700">Save evidence</text>
+    <rect x="88" y="452" width="1024" height="60" fill="#fff" stroke="#dfe7e1"/><text x="110" y="489" fill="#29352e">Outcome</text><rect x="440" y="471" width="230" height="20" fill="#cfd8d2"/><text x="835" y="489" fill="#08783f" font-weight="700">Check portal</text>
+  </g>
+  <rect x="88" y="548" width="1024" height="42" rx="8" fill="#fff8e2" stroke="#f4c95d"/>
+  <text x="110" y="574" fill="#5c4a15" font-family="Arial" font-size="17">No real balance, RRR, matric number, receipt, or transaction was fabricated.</text>
+</svg>

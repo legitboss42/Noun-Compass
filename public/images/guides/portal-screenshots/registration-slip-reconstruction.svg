@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">Educational registration slip reconstruction</title>
+  <desc id="desc">A reconstructed course or exam registration slip with redacted student fields.</desc>
+  <rect width="1200" height="675" fill="#eef5f0"/>
+  <rect x="70" y="42" width="1060" height="591" fill="#fff" stroke="#dfe7e1"/>
+  <rect x="70" y="42" width="1060" height="58" fill="#101713"/>
+  <text x="96" y="78" fill="#fff" font-family="Arial" font-size="21" font-weight="700">Educational reconstruction - registration slip</text>
+  <text x="96" y="140" fill="#101713" font-family="Arial" font-size="31" font-weight="700">Course / exam registration record</text>
+  <text x="96" y="172" fill="#617067" font-family="Arial" font-size="17">Screenshot unavailable. Educational visual used. Use only your own official slip for clearance.</text>
+  <rect x="96" y="206" width="1008" height="52" fill="#f3f7f4"/>
+  <g font-family="Arial" font-size="17">
+    <text x="118" y="238" fill="#101713" font-weight="700">Course code</text><text x="330" y="238" fill="#101713" font-weight="700">Course title</text><text x="760" y="238" fill="#101713" font-weight="700">Units</text><text x="900" y="238" fill="#101713" font-weight="700">Status</text>
+    <g fill="#fff" stroke="#dfe7e1"><rect x="96" y="258" width="1008" height="58"/><rect x="96" y="316" width="1008" height="58"/><rect x="96" y="374" width="1008" height="58"/><rect x="96" y="432" width="1008" height="58"/></g>
+    <g fill="#cfd8d2"><rect x="118" y="278" width="120" height="18"/><rect x="330" y="278" width="300" height="18"/><rect x="760" y="278" width="44" height="18"/><rect x="900" y="278" width="120" height="18"/><rect x="118" y="336" width="120" height="18"/><rect x="330" y="336" width="330" height="18"/><rect x="760" y="336" width="44" height="18"/><rect x="900" y="336" width="120" height="18"/><rect x="118" y="394" width="120" height="18"/><rect x="330" y="394" width="280" height="18"/><rect x="760" y="394" width="44" height="18"/><rect x="900" y="394" width="120" height="18"/><rect x="118" y="452" width="120" height="18"/><rect x="330" y="452" width="315" height="18"/><rect x="760" y="452" width="44" height="18"/><rect x="900" y="452" width="120" height="18"/></g>
+  </g>
+  <rect x="96" y="530" width="1008" height="44" rx="8" fill="#fff8e2" stroke="#f4c95d"/>
+  <text x="118" y="558" fill="#5c4a15" font-family="Arial" font-size="17">No real student identity, course registration, exam registration, or clearance record was fabricated.</text>
+</svg>

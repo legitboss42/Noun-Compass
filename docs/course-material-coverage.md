@@ -1,0 +1,549 @@
+# Official Course Material Coverage
+
+Generated from captured semester course rows and the official NOUN eCourseware catalogue.
+
+- Official material links: **2,635**
+- Official course codes: **2,582**
+- Captured programme course rows checked: **6,921**
+- Rows with verified official material matches: **6,198 (89.6%)**
+- Distinct unmatched code/title pairs: **494**
+
+## Lowest-Coverage Programmes
+
+- **B.A. Arabic** (Faculty of Arts): 0/1 rows matched (0.0%)
+- **M.A. English** (Faculty of Arts): 0/1 rows matched (0.0%)
+- **M.Sc. Entrepreneurship** (Faculty of Management Sciences): 0/1 rows matched (0.0%)
+- **PGD Agricultural Extension Management** (Faculty of Agricultural Sciences): 0/1 rows matched (0.0%)
+- **PGD Criminology and Security Studies** (Faculty of Social Sciences): 0/1 rows matched (0.0%)
+- **PGD Economics** (Faculty of Social Sciences): 0/1 rows matched (0.0%)
+- **PhD Educational Planning** (Faculty of Education): 0/1 rows matched (0.0%)
+- **PhD Educational Technology** (Faculty of Education): 0/1 rows matched (0.0%)
+- **PhD English Language** (Faculty of Arts): 0/1 rows matched (0.0%)
+- **PhD Law** (Faculty of Law): 0/1 rows matched (0.0%)
+- **PhD Mathematics Education** (Faculty of Education): 0/1 rows matched (0.0%)
+- **PhD Science Education** (Faculty of Education): 0/1 rows matched (0.0%)
+- **MPhil/PhD Business Administration** (Faculty of Management Sciences): 2/9 rows matched (22.2%)
+- **PhD Business Administration** (Faculty of Management Sciences): 2/9 rows matched (22.2%)
+- **M.A. Christian Religious Studies** (Faculty of Arts): 5/21 rows matched (23.8%)
+- **B.A. Hausa** (Faculty of Arts): 43/96 rows matched (44.8%)
+- **B.A. French** (Faculty of Arts): 60/91 rows matched (65.9%)
+- **B.A. Yoruba** (Faculty of Arts): 51/74 rows matched (68.9%)
+- **B.NSc. Nursing Science** (Faculty of Health Sciences): 45/63 rows matched (71.4%)
+- **M.Sc. Business Administration** (Faculty of Management Science): 16/22 rows matched (72.7%)
+- **B.A.(ED) French** (Faculty of Education): 58/79 rows matched (73.4%)
+- **B.Agric Agricultural Economics & Agro-Business** (Faculty of Agricultural Sciences): 9/12 rows matched (75.0%)
+- **B.Agric Agricultural Extension & Rural Development** (Faculty of Agricultural Sciences): 9/12 rows matched (75.0%)
+- **B.Agric Animal Science** (Faculty of Agricultural Sciences): 9/12 rows matched (75.0%)
+- **B.Agric Crop Science** (Faculty of Agricultural Sciences): 9/12 rows matched (75.0%)
+- **B.A. Christian Religious Studies** (Faculty of Arts): 49/65 rows matched (75.4%)
+- **M.Sc. Information Technology** (Faculty of Computing): 14/18 rows matched (77.8%)
+- **M.Sc. Business Administration** (Faculty of Management Sciences): 11/14 rows matched (78.6%)
+- **B.Sc. Public Health** (Faculty of Health Sciences): 46/58 rows matched (79.3%)
+- **M.Ed. Science Education** (Faculty of Education): 12/15 rows matched (80.0%)
+- **PGD. Entrepreneurship** (Faculty of Management Science): 12/15 rows matched (80.0%)
+- **PGD. Peace Studies and Conflict Resolution** (Faculty of Social Sciences): 12/15 rows matched (80.0%)
+- **M.Sc. Peace Studies and Conflict Resolution** (Faculty of Social Sciences): 17/21 rows matched (81.0%)
+- **B.A. Igbo** (Faculty of Arts): 60/74 rows matched (81.1%)
+- **B.Agric agricultural Economics And Agro-Business** (Faculty of Agriculture): 65/80 rows matched (81.3%)
+- **M.ED. Guidance and Counselling** (Faculty of Education): 13/16 rows matched (81.3%)
+- **B.Sc. Information Technology** (Faculty of Computing): 61/74 rows matched (82.4%)
+- **B.Sc. Tourism Studies** (Faculty of Social Sciences): 53/63 rows matched (84.1%)
+- **Postgraduate Diploma In Education (PGDE)** (Faculty of Education): 16/19 rows matched (84.2%)
+- **B.LIS Library And Information Science** (Faculty of Education): 55/65 rows matched (84.6%)
+
+## Unmatched Course Code and Title Pairs
+
+- **ACC330:** IT/ SIWES
+- **ACC450:** Research Project
+- **ACC499:** Research Project
+- **ACP305:** Principles of Crop Protection
+- **ACP305:** Principles Of Crop Protection
+- **AEA251:** Introduction to Agricultural Economics
+- **AEA502:** Advanced Agri?Business Management
+- **AEA504:** Agric. Policy and Development
+- **AEM212:** Farm Practice
+- **AEM212:** FARM PRACTICE
+- **AEM773:** Management Of Non-ruminant Animals
+- **AGR101:** Mathematics for Agriculture I
+- **AGR101:** Mathematics For Agriculture I
+- **AGR102:** Mathematics for Agriculture II
+- **AGR204:** Computer Appreciation and Application to Agriculture
+- **AGR301:** Statistics and Field Experimentation
+- **AGR502:** Seminar
+- **AGR502:** Student Seminar
+- **AGR599:** Project
+- **ANP516:** Livestock Economics
+- **ANP599:** PROJECT
+- **ARA181:** Basic Arabic
+- **ARA182:** Arabic Reading I
+- **BED314:** SIWES
+- **BED314:** Siwes I
+- **BED412:** Seminar In Business Education
+- **BED413:** Siwes 11
+- **BED413:** Siwes Ii
+- **BFN330:** It/siwes
+- **BFN330:** IT/siwes
+- **BFN450:** Research Project
+- **BFN805:** Corporate Finance
+- **BGST302:** Business Creation and Growth
+- **BIO302:** Field Course 1
+- **BIO312:** Siwes
+- **BIO312:** SIWES
+- **BIO400:** Research Project
+- **BIO401:** Field Course Ii
+- **BIO401:** Field Course II
+- **BIO409:** Seminar
+- **BUS401:** Management Information System
+- **BUS401:** Management Infromation
+- **BUS401:** Mis (management Information System)
+- **BUS450:** Research Project
+- **BUS499:** Research Project
+- **BUS790:** Research Project
+- **BUS802:** Economic Theory
+- **BUS828:** Economy And Industry Analysis
+- **BUS887:** Msc Seminar
+- **BUS890:** Project [msc Dissertation]
+- **BUS901:** Management Thoughts And Philosophy
+- **BUS903:** Advanced Quantitative Techniques
+- **BUS905:** Imperatives Of Globalisation
+- **BUS907:** Seminar In Business Environment
+- **BUS909:** Management Of Change
+- **BUS913:** Government Business & Society
+- **CHM131:** Organic Chemistry for Agriculture I
+- **CHM131:** Organic Chemistry For Agriculture I
+- **CHM132:** Organic Chemistry for Agriculture II
+- **CHM394:** Industrial Training (siwes)
+- **CHM400:** Seminar
+- **CHM411:** Research Project
+- **CIT102/CIT104:** Software Application Skills
+- **CIT302:** Data Mining and Data Warehousing
+- **CIT302:** Data Mining And Data Warehousing
+- **CIT311 (OLD):** Computer Networks
+- **CIT316:** Principles and Techniques of Compilers (Compiler Construction I)
+- **CIT316:** Principles And Techniques Of Compilers (compiler Construction I)
+- **CIT322 (OLD):** Introduction To Internet Programming
+- **CIT341 (OLD):** Data Structures
+- **CIT364:** Management Information Systems (MIS)
+- **CIT381 (OLD):** File Processing And Management
+- **CIT389:** Industrial Training
+- **CIT389:** Industrial Training /siwes
+- **CIT389:** Industrial Training/siwes
+- **CIT392 (OLD):** Computer Laboratory Ii
+- **CIT403:** Measurement And Evaluation
+- **CIT403:** Seminar On Emerging Technologies
+- **CIT403:** Seminar On Emerging Technologies (seminar)
+- **CIT499:** Project
+- **CIT799:** Project
+- **CIT803:** Seminar on Emerging Technologies
+- **CIT854:** Network Design And Programming
+- **CIT899:** Research Project
+- **CLL305:** Banking Laws & Regulations
+- **CLL816:** Law Of Banking And Negotiable Instruments Ii (COMMERCIAL LAW)
+- **CMP300:** Introduction to Computer
+- **CMP301:** Application of Computer to Arts
+- **CRD101:** Principles and practice of co-operation
+- **CRD120:** Sociology of Co-operation
+- **CRD208:** Nigeria & International Cooperative
+- **CRD450:** Research Project
+- **CRP303:** Principles of Crop Protection
+- **CRP510:** Organic and Urban Farming
+- **CRS131:** Introduction To Philosophy
+- **CRS233:** Philosophy Of Religion
+- **CRS423:** Comparative Ethics in Pluralistic Society
+- **CRS432:** Applied Ethics
+- **CRS474:** Project
+- **CRS702:** Common Themes In Christianity And Islam
+- **CRS803:** Inter-religious Dialogue
+- **CRS805:** Postgraduate Seminar
+- **CRS812:** Theology Of The Pentateuch (ot)
+- **CRS817:** Gospels
+- **CRS818:** Hebrew Exegesis
+- **CRS819:** Greek Exegesis
+- **CRS821:** African Traditional Religious Mythology And Cosmology
+- **CRS821:** Pauline Theology and Epistles
+- **CRS823:** Further Greek
+- **CRS825:** Intertestamental Literature
+- **CRS825:** Religion And Social Change In Africa
+- **CRS826:** Ecclesiology
+- **CRS849:** The Rise And Growth Of Western Christianity In Africa
+- **CRS852:** Social Theories Of Religion
+- **CRS878:** Feminist Theology
+- **CSS431:** Field Observations
+- **CSS433:** Project
+- **CSS833:** Project
+- **CTH152:** Marriage And Family
+- **CTH202:** Comparative Study Of Religion
+- **CTH215:** Greek Grammar
+- **CTH231:** Christian Ethics
+- **CTH302:** Messianism
+- **CTH313:** Hebrew Grammar
+- **CTH314:** Inter-testamental Literature
+- **CTH412:** Gospel Of Matthew
+- **CTH423:** Comparative Ethics In A Pluralistic Society
+- **CTH441:** West African Church History
+- **CTH472:** Conflict Management
+- **CTH491:** African Traditional Religion And Culture
+- **CTH847:** African Church Leaders
+- **DAM344 (OLD):** Semantic Data Modelling
+- **DAM364 (OLD):** Management Information Systems (MIS)
+- **DAM382 (OLD):** Information Systems Management
+- **DES216:** Nigerian Economy in Perspective II
+- **DES310:** SIWES
+- **DES411:** Research Project
+- **DES499:** Research Project
+- **ECE212:** Language And Literacy In The Early Years
+- **ECE420:** Seminar In Early Chidhood Education
+- **ECE420:** Seminar In Early Childhood Educatio
+- **ECO231:** Microeconomic Theory I
+- **ECO415:** Research Project
+- **ECO499:** Research Project
+- **EDA823:** Seminar
+- **EDU220:** English Methods
+- **EDU300:** SIWES
+- **EDU300:** Siwes 1
+- **EDU300:** SIWES 1
+- **EDU322:** Curriculum and Instruction I
+- **EDU322:** Curriculum And Instruction I
+- **EDU400:** Siwes
+- **EDU400:** Siwes Ii
+- **EDU411:** Curriculum Instruction Ii
+- **EDU411:** Curriculum Instruction II
+- **EDU499:** Research Project
+- **EDU499/EDU420:** Research Project
+- **EDU714:** History Of Education In Nigeria
+- **EDU720:** English Methods
+- **EDU815/MED815:** Instructional Techniques Methods In Sch Maths Curriculum
+- **EGC810:** Graduate Seminar
+- **EGC815:** Sex And Family Counselling
+- **EHS307:** Primary Health Care
+- **EHS402:** Industrial Attachment (siwes)
+- **EHS411:** Environmental Toxicology
+- **EHS501:** Seminar
+- **EHS502:** Project
+- **ENG318:** African-American and Caribbean Literature
+- **ENG418:** Project/Long Essay
+- **ENG424:** New Nigerian Literature
+- **ENS310:** Cultural Change and Entrepreneurship
+- **ENT323:** Entrepreneurial Development and Small Business ManagemenT
+- **ENT323:** Entrepreneurial Development And Small Business Management
+- **ENT401:** E- Business
+- **ENT401:** E-business
+- **ENT402:** Management of Creativity and Innova
+- **ENT402:** Management Of Creativity And Innovation
+- **ENT450:** Research Project
+- **ENT499:** Research Project
+- **ENT709:** Start Up Funding
+- **ENT750:** Research Project
+- **ESM261:** Geo-chemistry
+- **ESM261:** Geo-Chemistry
+- **ESM273:** Earth and Earth Surface Processes
+- **ESM273:** Earth And Earth Surface Processes
+- **ESM299:** Siwes I
+- **ESM399:** Siwes Ii
+- **ESM399:** SIWES II
+- **ESM401:** Research Project
+- **ESM435:** Environmental Engineering Services
+- **FMC318:** Internship: Attachment to Film Production Company
+- **FMC418:** Research Project
+- **FMS201:** Introduction To Business Statistics 1
+- **FMS427:** Business Policy & Strategy 1
+- **FRE131:** Textual Analysis I
+- **FRE142:** Introduction to French Literary Genre II (Drama & Poetry)
+- **FRE201:** Advanced Studies in Oral and Written Comprehension in French I
+- **FRE222:** Creative Writing in French II
+- **FRE301:** Translation (FRE391)
+- **FRE301/FRE391:** Theory and Practice of Translation
+- **FRE302:** Translation (Theme et Version)
+- **FRE302/392:** Advanced Studies in Translation (Theme et Version)
+- **FRE311:** Advanced Formal and Informal Writing in French I
+- **FRE311:** Advanced Studies in French Phonetics (FRE331)
+- **FRE312:** Advanced Formal and Informal Writing in French II
+- **FRE312:** Introduction to Research
+- **FRE321:** Advanced Studies in French Language Structure I
+- **FRE322:** Advanced Studies in French Language Structure II
+- **FRE331:** Advanced Formal and Informal Writing in French I
+- **FRE331:** Advanced Studies in French Phonetics
+- **FRE332:** Advanced Formal and Informal Writing in French II
+- **FRE341:** Oral Communication Skills in French I
+- **FRE341:** Oral Communicative Skills in French I
+- **FRE342:** Oral Communication Skills in French II
+- **FRE351:** French Literature in the 18th Century
+- **FRE351:** The Francophone African Novel
+- **FRE352:** French Literature in the 19th Century
+- **FRE361:** Introduction to Francophone African Novel
+- **FRE361:** Introduction to French Novel
+- **FRE362:** Comparative African Literature in English & French
+- **FRE362:** Francophone African Culture and Civilisation
+- **FRE371:** Introduction to the French Novel
+- **FRE372:** The Caribbean Literature in French
+- **FRE391:** Theory and Practice of Translation (Theme et Version)
+- **FRE412:** Multilingualism and Language Contact
+- **FRE424:** Project in French
+- **FRE431:** Advanced Creative Writing in French
+- **FRE431:** Cultures & Civilization of Members Countries of the Francophonie
+- **FRE432:** Francophone African Literature (Theatre & Poetry)
+- **FRE432:** Francophone African Literature (Theatre and Poetry)
+- **FRE451:** 20th Century French Literature
+- **FRE451:** Advance Translation I
+- **FRE452:** 21st Century French Literature
+- **FRE452:** Advanced Translation II
+- **FRE454:** Nigerian Literature of French Expression
+- **FRE461:** Applied Linguistics
+- **FRE461:** Post-Independence Francophone African Literature: Prose and Drama
+- **GST211:** Environmental and Sustainable Development
+- **GST222:** Peace and Conflict Resolution
+- **GST223:** Introduction to Entrepreneurship
+- **GST224:** Leadership Skills
+- **GST311:** Entrepreneurship
+- **GST907:** A Study Guide For A Distance Learner
+- **GST907:** The Good Study Guide
+- **HAU109:** Introduction to Hausa Orthography
+- **HAU112:** Introduction to Linguistics II
+- **HAU209:** Introduction to Hausa Popular Fiction
+- **HAU305:** Hausa Dialects
+- **HAU306:** Hausa Morphology
+- **HAU307:** Hausa Semantics
+- **HAU308:** Stylistics I
+- **HAU309:** Introduction to Hausa Traditional Medicine
+- **HAU310:** Hausa in Social Media
+- **HAU311:** Naming in Hausa
+- **HAU312:** Literary Criticism
+- **HAU313:** Introduction to Hausa Culture
+- **HAU314:** Thoughts and Beliefs of the Hausa People
+- **HAU315:** General Linguistics
+- **HAU316:** The Hausa Prosody
+- **HAU317:** Hausa Social System
+- **HAU318:** Research Methodology
+- **HAU319:** Hausa Oral Poets
+- **HAU320:** Ajami Form of writing
+- **HAU321:** Figures of Speech
+- **HAU322:** Introduction to Hausa Popular plays (Drama)
+- **HAU401:** Advanced Hausa Phonology
+- **HAU402:** Social Institutions and Material Culture in Hausa
+- **HAU403:** Advanced Hausa Syntax
+- **HAU404:** Introduction to the Traditional Music of Hausa People
+- **HAU405:** Practical Stylistic II
+- **HAU406:** Textual Study of Hausa Oral songs
+- **HAU407:** Translation Theories and Practice
+- **HAU408:** Sociolinguistics
+- **HAU409:** Hausa Transformational Grammar
+- **HAU410:** Advanced Hausa Morphology
+- **HAU411:** Advanced Hausa Semantics
+- **HAU412:** Hausa Web Logs (Blogs)
+- **HAU413:** Advanced popular Prose Fiction in Hausa
+- **HAU414:** Advanced popular Poetry in Hausa
+- **HAU415:** Advanced popular Drama in Hausa
+- **HAU416:** Contrastive Studies in Hausa
+- **HAU417:** Hausa Culture and National Dev.
+- **HAU418:** Advanced Study of Hausa Medicine
+- **HAU419:** Advanced Hausa Literary Appreciation
+- **HAU420:** Culture and Dietary Habit
+- **HAU421:** Hausa in the International Radio Stations
+- **HAU422:** Hausa in the International Educational Institutions
+- **HAU423:** Language and Culture of the Hausa in Diaspora
+- **HED418:** Seminar in Health Education
+- **HED418:** Seminar In Health Education
+- **IGB312:** Naming in Igbo
+- **IGB316:** Introduction to the Culture of the Igbo People
+- **IGB318:** Thoughts and Beliefs of the Igbo People
+- **IGB332:** Stylistics I
+- **IGB412:** Project/Long Essay
+- **IGB413:** Social Institutions and Material Culture of the Igbo People
+- **IGB414:** Contemporary Poetry in Igbo
+- **IGB431:** Stylistics II
+- **IGB441:** Issues in the Phonology of Igbo
+- **IGB461:** Introduction to the Traditional Music of the Igbo People
+- **IGB472:** Contrastive Studies in Igbo
+- **IGB482:** Contemporary Prose Fiction in Igbo
+- **INR113:** Introduction to Peace Education
+- **INR309:** Field Trip
+- **INR421:** Seminar Presentation In International And Diplomatic Studies
+- **INR421:** Seminar Presentation In International Relation
+- **INR492:** Research Project In International R
+- **INR492:** Research Project In International Relations
+- **ISL499:** Project
+- **JIL342:** Criminal Law Ii
+- **JIL806:** Research Methodology
+- **JLS716:** Professional Project
+- **JLS816:** Research Project
+- **KHE214:** Prevention And Care Of Sports Injuries
+- **KHE331:** Skills Development And Techniques In Sports And Games Vi (swimming)
+- **KHE334:** Sports And Ageing
+- **KHE337:** Curriculum Studies In Physical And Health Education
+- **KHE339:** Computers In Human Kinetics And Health Education
+- **KHE432:** Advanced Training In Skills And Coaching
+- **KHE439:** Contemporary And African Dance Notations
+- **LAW101:** Introduction To Law
+- **LAW211(JLS211):** Nigerian Legal Systems I
+- **LAW212:** Nigerian Legal Systems Ii
+- **LAW241:** Human Rights 11
+- **LAW241:** Human Rights I
+- **LAW244:** Constitutional Law Ii
+- **LAW342:** Criminal Law Ii
+- **LIN116:** History of Linguistics
+- **LIN201:** Introduction to Phonology
+- **LIN203:** Morphology
+- **LIN211:** Introduction to Phonology
+- **LIN212:** Introduction to Morphology
+- **LIN312:** Research Methods in Linguistics � field methods, principles of transcription, translations, tonal an
+- **LIN314:** Contrastive Linguistics and Error Analysis
+- **LIN331:** Transformational Generative Grammar
+- **LIN413:** Historical/Comparative Linguistics
+- **LIN414:** Lexicography
+- **LIN416:** Psycholinguistics
+- **LIS204:** Business Information Systems& Services
+- **LIS206:** Introduction to InformationServices
+- **LIS206:** Serials Management
+- **LIS208:** Multimedia Application in Library & Information Centres
+- **LIS208:** Multimedia Application In Library & Information Centres
+- **LIS301:** Collection Development
+- **LIS301:** Knowledge Organisation (classification) 11
+- **LIS307:** Preservation and Security of Library and Information Systems and Resources
+- **LIS307:** Preservation And Security Of Library And Information Systems And Resources
+- **LIS312:** Management of Digital/ Virtual Library
+- **LIS405:** Government Publications
+- **LIS407:** Publishing and Book Trade
+- **LIS410:** Bibliography & Literature of Science and Technology
+- **MAC315:** Book/desktop Publishing
+- **MAC318:** Media Attachment
+- **MAC326:** Newspaper Management And Production
+- **MAC345:** Announcing & Performing
+- **MAC418:** Research Project
+- **MBA815:** Management Information System
+- **MBA837:** Seminar In Organizational Behaviour
+- **MBA890:** Project/dissertation
+- **MKT450:** Research Project
+- **MKT499:** Research Project
+- **MPA890:** Project/dissertation
+- **MTH499:** Project
+- **NOU107:** A study guide for a distance learner
+- **NOU107:** A Study Guide For A Distance Learner
+- **NOU107:** A study guide for a distance learner (BSC)
+- **NOU107:** A Study Guide For A Distance Learner (bsc)
+- **NOU107:** A Study Guide For Distance Learner
+- **NOU107:** A STUDY GUIDE FOR DISTANCE LEARNER
+- **NOU107:** A Study Guide for the Distance Lear
+- **NOU107:** A Study Guide for the Distance Learner
+- **NOU107:** A Study Guide For The Distance Learner
+- **NOU107:** Good Study Guide
+- **NOU107:** The Good Study Guide
+- **NOU107:** The Study Guide For The Distance Learner
+- **NOU707:** A Study Guide For A Distance Learner
+- **NOU707:** A Study Guide For A Distance Learner (pgd)
+- **NOU707:** A Study Guide for the Distance Learner
+- **NOU707:** A Study Guide For The Distance Learner
+- **NOU707:** The Good Study Guide
+- **NOU807:** A Study Guide For A Distance Learner
+- **NOU807:** A Study Guide For A Distance Learner (msc)
+- **NOU807:** A Study Guide for the Distance Learner
+- **NOU807:** A Study Guide For The Distance Learner
+- **NOU807:** The Good Study Guide
+- **NOU807:** The Good Study Guide (For Non-NOUN Graduates Only)
+- **NSC104:** Human Physiology I
+- **NSC203:** Human Physiology Ii
+- **NSC204:** Epidemiology
+- **NSC206:** Environmental Health
+- **NSC207:** Medical Biochemistry
+- **NSC307:** Clinical Pharmacology and Chemotherapy
+- **NSC307:** Clinical Pharmacology And Chemotherapy
+- **NSC307:** Clinical Pharmacology And Chemotherapy I
+- **NSC308:** Clinical Pharmacology And Chemotherapy Ii
+- **NSC318:** Medical Surgical Nursing Practicum
+- **NSC404:** Maternal And Child Health (abnormal Midwifery) Iii
+- **NSC406:** Maternal and Child Health Nursing Practicum
+- **NSC406:** Maternal And Child Health Nursing Practicum
+- **NSC410:** Public-community Health Nursing Iii
+- **NSC413:** Mental Health And Psychiatric Nursing I
+- **NSC417:** Public-community Health Nursing Ii
+- **NSC418:** Seminar in Nursing
+- **NSC418:** Seminar In Nursing
+- **NSC506:** Research Project
+- **NSC507:** Research Project
+- **NSC513:** Public-community Health Practicum
+- **NSC513:** Public-Community Health Practicum
+- **NSC514:** Intensive Care Nursing
+- **NSC515:** Oncology Nursing
+- **NSC516:** Nursing Specialty Clinical Practicum
+- **NSC518:** Ortho-rhino-laryngology (ent)
+- **NSC521:** Fundamentals Of Nursing Informatics
+- **NSC522:** Mental Health/psychiatric Nursing Iii
+- **NSC523:** Entrepreneurship In Nursing
+- **NSS311:** Primary Health Care I
+- **NSS409:** Medical Sociology
+- **PAD450:** Research Project
+- **PAD499:** Research Project
+- **PAD790:** Research Project
+- **PCR372:** Introduction to Early Warning Mecha
+- **PCR374:** Practical Exercises In Conflict Sim
+- **PCR412:** Globalisation And Peace
+- **PCR412:** Project
+- **PCR499:** Project
+- **PCR718:** Project (Long Essay)
+- **PED120:** Principles Of Family Living
+- **PED120:** PRINCIPLES OF FAMILY LIVING
+- **PED235:** Clothing And Textile
+- **PED235:** CLOTHING AND TEXTILE
+- **PED423:** Seminar In Primary Education
+- **PED423:** SEMINAR IN PRIMARY EDUCATION
+- **PHL301:** Symbolic Logic
+- **PHL413:** Metaphysical Anthropology
+- **PHL415:** Philosophy of History
+- **PHL422:** Intercultural Philosophy
+- **PHL435:** African Political Theorists
+- **PHL472:** Seminar
+- **PHL482:** Project
+- **PHS326:** Public Health Practical I (field Wo
+- **PHS326:** Public Health Practical I (field Work)
+- **PHS430:** Community Health Practical II (fiel
+- **PHS430:** Community Health Practical Ii (field Work)
+- **PHS512:** Seminars In Core Areas of Public He
+- **PHS512:** Seminars In Core Areas Of Public Health*
+- **PHS520:** Community Posting (internship)
+- **PHS599:** Research Project
+- **PHS899:** Research Project
+- **PHY121:** General Physics
+- **PHY399:** Siwes
+- **PHY499:** Project
+- **POL122:** Nigerian Constitutional Development
+- **POL123:** Introduction To Nigerian Constitutional Development
+- **POL218:** Introduction to Political Ideas
+- **POL218:** Political Ideas
+- **POL231:** Essential of International Relation
+- **POL337:** Principles of Administrative Law
+- **POL337:** Principles Of Administrative Law
+- **POL341:** Public Administration In Nigeria
+- **POL401:** Student Research Project
+- **POL434:** Civil-military Relations
+- **POL499:** Student Research Project (contd.)
+- **PUL303:** Environmental Laws and Policies
+- **PUL303:** Environmental Laws And Policies
+- **PUL844:** Administrative Law
+- **PULL743:** Administrative Law
+- **SED 322:** Energy And Matter II
+- **SED411:** Practice In Integration Of Science
+- **SED470:** Seminar In Integrated Science
+- **SED800:** Graduate Seminar
+- **SLM314:** Computer- based Terrain Analysis
+- **SMS206:** Introduction to Cost and Management Accounting
+- **SMS206/ACC206:** Introduction To Cost And Management Accounting
+- **TRS420:** Safety Issues and World Conflict Centres/Situations
+- **TSM144:** tourism Marketing
+- **TSM221:** Ecotourism
+- **TSM252:** Field Trip
+- **TSM310:** Field Trip (practical)
+- **TSM350:** Industrial Training/SIWES (6 months)
+- **TSM350:** Industrial Training/siwes (6months)
+- **TSM447:** Seminar In tourism Studies
+- **TSM447:** Seminar Tourism Studies
+- **TSM450:** Research Project
+- **TSM499:** Research Project
+- **VTE414:** Vocational Guidance
+- **YOR371:** Varieties of Poetry in Yoruba
+- **YOR412:** Project/Long Essay
+- **YOR413:** Social Institutions and Material Culture of the Yoruba People
+- **YOR414:** Contrastive Studies in Yoruba
+- **YOR431:** Stylistics II
+- **YOR441:** Issues in the Phonology of Yoruba
+- **YOR461:** Introduction to the Traditional Music of the Yoruba People
+- **YOR472:** Contemporary Poetry in Yoruba
+- **YOR482:** Contemporary Prose Fiction in Yoruba (including early major prose writers, e.g. Akintola, Awolowo)

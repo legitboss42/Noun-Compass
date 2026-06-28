@@ -1,0 +1,2721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+
+    <title>NOUN Registrable Courses & Fee Checker</title>
+
+    <!-- SEO & Meta Tags -->
+    <meta name="author" content="ExCorp">
+    <meta name="description" content="Use the NOUN Fee Checker to estimate your semester fees. Select your faculty, programme, level, and semester to see registrable courses and expected costs.">
+    <link rel="canonical" href="https://nounupdate.com/fee-check" />
+    <meta property="og:title" content="NOUN Fee Checker | Estimate Your Semester Fees"/>
+    <meta property="og:description" content="An automated tool to help NOUN students plan their semester fees and course registrations.">
+    <meta property="og:image" content="https://i.postimg.cc/Y9r1m82c/fee-check.jpg"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:url" content="https://nounupdate.com/fee-check" />
+    <meta name="twitter:card" content="summary_large_image"/>
+    <meta name="twitter:site" content="@updatenoun"/>
+    <meta name='robots' content='index, follow, max-image-preview:large'/>
+
+    <!-- Favicons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="./b-blog/assets/img/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./b-blog/assets/img/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./b-blog/assets/img/favicon-16x16.png">
+    <link rel="manifest" href="./b-blog/assets/img/site.webmanifest">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+    
+     <!-- Google Tag (gtag.js) -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9566024781213403" crossorigin="anonymous"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FCWGL3K5Q7"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-FCWGL3K5Q7');
+    </script>
+    
+    <!-- Frameworks & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Custom Modern Stylesheet -->
+    <style>
+        :root {
+            --primary-color: #0A9D89; /* A modern teal/green */
+            --primary-dark: #077A6C;
+            --secondary-color: #2E8B57; /* SeaGreen for accents */
+            --light-gray: #f8f9fa;
+            --dark-text: #343a40;
+            --light-text: #ffffff;
+            --border-color: #dee2e6;
+            --font-primary: 'Playfair Display', serif;
+            --font-secondary: 'Source Sans 3', sans-serif;
+        }
+        body { font-family: var(--font-secondary); color: var(--dark-text); background-color: #fdfdfd; }
+        h1, h2, h3, h4, h5, h6 { font-family: var(--font-primary); font-weight: 700; }
+        .hero-section { position: relative; color: var(--light-text); padding: 5rem 0; background-image: url('./b-blog/assets/img/demo/fee-check.jpg'); background-size: cover; background-position: center; }
+        .hero-section::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(90deg, rgba(10, 157, 137, 0.85) 0%, rgba(46, 139, 87, 0.75) 100%); z-index: 1; }
+        .hero-section .container { position: relative; z-index: 2; }
+        .hero-section h1 { font-size: 3rem; }
+        .fee-checker-card { border: none; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
+        .form-select-lg { padding: 0.75rem 1.25rem; font-size: 1.1rem; }
+        .form-step { transition: opacity 0.4s ease-in-out; }
+        .bouncing-arrow { display: inline-block; animation: bounce 2s infinite; }
+        @keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-15px); } 60% { transform: translateY(-7px); } }
+        .accordion-button { font-family: var(--font-primary); font-size: 1.2rem; }
+        .accordion-button:not(.collapsed) { background-color: rgba(10, 157, 137, 0.1); color: var(--primary-dark); }
+        .accordion-button:focus { box-shadow: 0 0 0 0.25rem rgba(10, 157, 137, 0.5); }
+        .accordion-body table { font-size: 0.9rem; }
+        .accordion-body table th { background-color: var(--light-gray); }
+        #back-to-top { position: fixed; bottom: 20px; right: 20px; width: 45px; height: 45px; background-color: var(--primary-color); color: var(--light-text); border-radius: 50%; display: none; z-index: 1000; transition: opacity 0.3s, transform 0.3s; opacity: 0; }
+        #back-to-top.show { opacity: 1; transform: translateY(0); }
+        
+         /* --- FOOTER STYLING (NEW & IMPROVED) --- */
+        .main-footer {
+            background-color: var(--surface-color); /* White background */
+            color: var(--text-light-color); /* Soft grey text */
+            padding: 2rem 0;
+            text-align: center;
+            border-top: 1px solid var(--border-color); /* Clean separator */
+            margin-top: 2rem;
+        }
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .footer-content p {
+            margin: 0;
+        }
+        .footer-content a {
+            color: var(--primary-color); /* Green link color */
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+        .footer-content a:hover {
+            color: var(--primary-color-dark);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm">
+      <div class="container">
+        <a class="navbar-brand" href="https://nounupdate.com">
+            <strong>NOUN</strong><span style="color: var(--primary-color);">UPDATE</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="mainNavbar">
+          <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+            <li class="nav-item"><a class="nav-link" href="personalized-timetable">Timetable</a></li>
+            <li class="nav-item"><a class="nav-link" href="cgpa-calculator">CGPA Calculator</a></li>
+            <li class="nav-item"><a class="nav-link active" href="fee-check">Fee Checker</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    
+    <!-- Hero Section -->
+    <header class="hero-section text-center text-lg-start">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <h1 class="mb-3">NOUN Fee Checker</h1>
+                    <p class="lead">
+                        Plan your semester with confidence. This automated tool helps you find your registrable courses and estimate the total fees for your specific programme, level, and semester.
+                    </p>
+                    <p>Simply make your selections below to get started.</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container py-5">
+        
+        <!-- Fee Checker Form Card -->
+        <section class="fee-checker-card p-4 p-md-5 mb-5">
+             <div class="text-center mb-4">
+                <h2 style="color: var(--primary-dark);">Calculate Your Semester Fees</h2>
+                <p class="text-muted">Select your faculty to begin the step-by-step process.</p>
+                <div class="bouncing-arrow fs-1 text-success mt-2">
+                    <i class="fa-solid fa-arrow-down"></i>
+                </div>
+             </div>
+
+            <form method="POST" action="fee-check-display.php" target="_blank">
+                <div class="row g-3 justify-content-center">
+                    
+                    <!-- STEP 1: FACULTY SELECTION (MODIFIED) -->
+                    <div class="col-md-10 col-lg-8 form-step" id="step1">
+                        <label for="faculty-select" class="form-label fs-5">Step 1: Select Your Faculty</label>
+                        <!-- 
+                            The options for this select are now generated dynamically by the JavaScript below.
+                            This prevents conflicts between hardcoded HTML values and the data source.
+                        -->
+                        <select class="form-select form-select-lg" id="faculty-select" name="category" required>
+                            <option value="" disabled selected>-- Loading Faculties... --</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-10 col-lg-8 form-step" id="step2" style="display:none; opacity:0;">
+                        <label for="programme-select" class="form-label fs-5">Step 2: Select Your Programme</label>
+                        <select class="form-select form-select-lg" id="programme-select" name="program" required></select>
+                    </div>
+
+                    <div class="col-md-10 col-lg-8 form-step" id="step3" style="display:none; opacity:0;">
+                        <label for="level-select" class="form-label fs-5">Step 3: Select Your Level</label>
+                        <select class="form-select form-select-lg" id="level-select" name="level" required></select>
+                    </div>
+
+                    <!-- *** NEW: CONDITIONAL ENTRY MODE FIELD *** -->
+                    <div class="col-md-10 col-lg-8 form-step" id="step-entry-mode" style="display:none; opacity:0;">
+                        <label class="form-label fs-5">Entry Mode</label>
+                        <div class="p-3 border rounded bg-light">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="entry_mode" id="entry_utme" value="UTME" checked>
+                                <label class="form-check-label" for="entry_utme">Normal Entry (From 100 Level)</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="entry_mode" id="entry_de" value="DE">
+                                <label class="form-check-label" for="entry_de">Direct Entry (DE)</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- *** NEW: CONDITIONAL MATRICULATION NUMBER FIELD *** -->
+                    <div class="col-md-10 col-lg-8 form-step" id="step-matric-no" style="display:none; opacity:0;">
+                        <label for="matric_no" class="form-label fs-5">Matriculation Number <span class="text-muted fw-normal">(Optional)</span></label>
+                        <input type="text" class="form-control form-control-lg" id="matric_no" name="matric_no" placeholder="e.g., NOU231234567">
+                        <div class="form-text">Required for 300-400 level students to check for recent fee updates.</div>
+                    </div>
+                    
+                    <div class="col-md-10 col-lg-8 form-step" id="step4" style="display:none; opacity:0;">
+                        <label for="semester-select" class="form-label fs-5">Step 4: Select Semester</label>
+                        <select class="form-select form-select-lg" id="semester-select" name="semester" required></select>
+                    </div>
+
+                    <div class="col-md-10 col-lg-8 text-center mt-4" id="submit-btn" style="display:none; opacity:0;">
+                        <button type="submit" class="btn btn-lg btn-success w-100" name="submit">
+                            <i class="fa-solid fa-magnifying-glass-dollar me-2"></i>Display Registrable Courses & Fees
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </section>
+
+        <!-- Informational Content Section -->
+        <section class="info-section">
+            <h2 class="text-center mb-4">Important Information</h2>
+            <div class="accordion" id="infoAccordion">
+                
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingNotice">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseNotice" aria-expanded="true" aria-controls="collapseNotice">
+                            <i class="fa-solid fa-circle-exclamation me-2"></i>Important Notices
+                        </button>
+                    </h2>
+                    <div id="collapseNotice" class="accordion-collapse collapse show" aria-labelledby="headingNotice" data-bs-parent="#infoAccordion">
+                        <div class="accordion-body">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">All students must pay Tertiary Institutions Social Health Insurance Programme (TISHIP) of ₦5,000 which is already added to your semester registration fee.</li>
+                                <li class="list-group-item">Semester fee total for 200/300 level direct entry students in their first semester is ₦65,250, not the value shown on some older schedules.</li>
+                                <li class="list-group-item">The standard semester fee for all returning students with matric number from NOU23 whose session started from 2023 2nd semester has been updated to ₦35,250.</li>
+                                <li class="list-group-item"> Those whose matric number are 2023 first semester downward are expected to pay  ₦26,750.</li>
+                                <li class="list-group-item">The maximum credit units for <b>exam registration</b> per semester is 24.</li>
+                                <li class="list-group-item">All core (compulsory) courses must be registered. At least one elective course is required.</li>
+                                <li class="list-group-item">This Fee Checker provides an estimate. The final, official fee is what is displayed on the nouonline.nou.edu.ng portal during your registration.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingSchedule">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSchedule" aria-expanded="false" aria-controls="collapseSchedule">
+                           <i class="fa-solid fa-table-list me-2"></i>Detailed Fee Schedule Breakdown
+                        </button>
+                    </h2>
+                    <div id="collapseSchedule" class="accordion-collapse collapse" aria-labelledby="headingSchedule" data-bs-parent="#infoAccordion">
+                        <div class="accordion-body">
+                           <p>Below is a general breakdown of fees. Your final total will depend on the specific courses you register.</p>
+                           <div class="table-responsive">
+    <table class="table table-bordered table-striped">
+        <caption class="caption-top fw-bold fs-5">Undergraduate - New Students</caption>
+        <thead>
+            <tr>
+                <th>Fee Description</th>
+                <th>Amount (₦)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td colspan="2" class="fw-bold">One-off payments for Under-graduate students</td>
+            </tr>
+            <tr>
+                <td>Acceptance Fee</td>
+                <td>7,500.00</td>
+            </tr>
+            <tr>
+                <td>Caution Fee</td>
+                <td>5,000.00</td>
+            </tr>
+            <tr>
+                <td>Identity Card</td>
+                <td>1,000.00</td>
+            </tr>
+            <tr>
+                <td>Matriculation Fee</td>
+                <td>2,500.00</td>
+            </tr>
+            <tr>
+                <td>Orientation Fee</td>
+                <td>3,000.00</td>
+            </tr>
+            <tr>
+                <td>Result Verification</td>
+                <td>10,000.00</td>
+            </tr>
+            <tr>
+                <td colspan="2" class="fw-bold">Session payments for Under-graduate students</td>
+            </tr>
+            <tr>
+                <td>Tertiary Institutions Social Health Insurance Programme (TISHIP)</td>
+                <td>5,000.00</td>
+            </tr>
+            <tr>
+                <td colspan="2" class="fw-bold">1st Semester payments for Under-graduate students</td>
+            </tr>
+            <tr>
+                <td>Biometric and Proctoring Fee</td>
+                <td>1,250.00</td>
+            </tr>
+            <tr>
+                <td>e-Facilitation</td>
+                <td>7,500.00</td>
+            </tr>
+            <tr>
+                <td>ICT Fee</td>
+                <td>7,500.00</td>
+            </tr>
+            <tr>
+                <td>Library Fee</td>
+                <td>4,000.00</td>
+            </tr>
+            <tr>
+                <td>Registration Fee</td>
+                <td>10,000.00</td>
+            </tr>
+            <tr class="fw-bold">
+                <td>Total</td>
+                <td>64,250.00</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+                           <div class="table-responsive">
+    <p class="alert alert-warning">The amount to be paid in addition to what is displayed below is determined by your programme and the number of courses to be registered for the semester</p>
+    <table class="table table-bordered table-striped">
+        <caption class="caption-top fw-bold fs-5">Undergraduate - Returning Students Semester Fee payable (2023_1 Downwards)</caption>
+        <thead>
+            <tr>
+                <th>Sn</th>
+                <th>Description</th>
+                <th>Amount (₦)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="table-group-divider">
+                <th colspan="3" class="text-center">Session payments for Under-graduate students</th>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>Tertiary Institutions Social Health Insurance Programme (TISHIP)</td>
+                <td>5,000.00</td>
+            </tr>
+            <tr class="table-group-divider">
+                <th colspan="3" class="text-center">1st Semester payments for Under-graduate students</th>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Biometric and Proctoring Fee</td>
+                <td>1,250.00</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>e-Facilitation</td>
+                <td>4,000.00</td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>ICT Fee</td>
+                <td>5,000.00</td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td>Library Fee</td>
+                <td>3,000.00</td>
+            </tr>
+             <tr>
+                <td>6</td>
+                <td>Registration Fee</td>
+                <td>8,500.00</td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr class="fw-bold table-group-divider">
+                <td colspan="2" class="text-end">Total</td>
+                <td>26,750.00</td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+                           <div class="table-responsive mt-4">
+    <table class="table table-bordered table-striped">
+        <caption class="caption-top fw-bold fs-5 text-dark">Master Degree Fee Schedule</caption>
+        <thead class="table-light">
+            <tr>
+                <th style="width: 50px;">Sn</th>
+                <th>Description</th>
+                <th class="text-end">Amount (₦)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Session Payments Header -->
+            <tr class="table-secondary">
+                <td colspan="3" class="fw-bold">Session payments for Master Degree</td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>Biometric and Proctoring Fee</td>
+                <td class="text-end">2,500.00</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Tertiary Institutions Social Health Insurance Programme (TISHIP)</td>
+                <td class="text-end">15,000.00</td>
+            </tr>
+
+            <!-- 1st Semester Payments Header -->
+            <tr class="table-secondary">
+                <td colspan="3" class="fw-bold">1st Semester payments for Master Degree</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>e-Facilitation</td>
+                <td class="text-end">7,500.00</td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>ICT Fee</td>
+                <td class="text-end">7,500.00</td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td>Library Fee</td>
+                <td class="text-end">5,000.00</td>
+            </tr>
+            <tr>
+                <td>6</td>
+                <td>Registration Fee</td>
+                <td class="text-end">12,500.00</td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr class="fw-bold border-top border-dark">
+                <td colspan="2" class="text-end">Total</td>
+                <td class="text-end">50,000.00</td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+                           <div class="table-responsive">
+    <p class="alert alert-warning">The amount to be paid in addition to what is displayed below is determined by your programme and the number of courses to be registered for the semester</p>
+    <table class="table table-bordered table-striped">
+        <caption class="caption-top fw-bold fs-5">Postgraduate - Returning Students Semester Fee payable</caption>
+        <thead>
+            <tr>
+                <th>Sn</th>
+                <th>Description</th>
+                <th>Amount (₦)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="table-group-divider">
+                <th colspan="3" class="text-center">Session payments for Master Degree</th>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>Tertiary Institutions Social Health Insurance Programme (TISHIP)</td>
+                <td>5,000.00</td>
+            </tr>
+            <tr class="table-group-divider">
+                <th colspan="3" class="text-center">1st Semester payments for Master Degree</th>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Biometric and Proctoring Fee</td>
+                <td>1,250.00</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>e-Facilitation</td>
+                <td>7,500.00</td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>ICT Fee</td>
+                <td>7,500.00</td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td>Library Fee</td>
+                <td>5,000.00</td>
+            </tr>
+             <tr>
+                <td>6</td>
+                <td>Registration Fee</td>
+                <td>12,500.00</td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr class="fw-bold table-group-divider">
+                <td colspan="2" class="text-end">Total</td>
+                <td>38,750.00</td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+    
+    <!-- Footer -->
+     <footer class="main-footer">
+        <div class="container footer-content">
+            <p>© <script>document.write(new Date().getFullYear())</script> <strong>NOUN</strong><span style="color: var(--primary-color);">UPDATE</span>. All Rights Reserved.</p>
+            <p>Made with <i class="fas fa-heart" style="color:#e74c3c;"></i> by <a href="https://wa.me/2349166272869" target="_blank">ExCorp</a></p>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <a href="#" id="back-to-top" class="btn btn-lg rounded-circle shadow-lg" title="Go to top">
+        <i class="fa-solid fa-arrow-up"></i>
+    </a>
+
+    <!-- Inline corrected programme data. This replaces fee-checks.php dependency. -->
+    <script>
+const data = {
+    "Faculty of Agricultural Sciences": {
+        "B.Agric Animal Science": {
+            "100": {
+                "First": {},
+                "Second": {}
+            },
+            "200": {
+                "First": {},
+                "Second": {}
+            },
+            "300": {
+                "First": {},
+                "Second": {}
+            },
+            "400": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "B.Agric Agricultural Extension & Rural Development": {
+            "100": {
+                "First": {},
+                "Second": {}
+            },
+            "200": {
+                "First": {},
+                "Second": {}
+            },
+            "300": {
+                "First": {},
+                "Second": {}
+            },
+            "400": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "B.Agric Agricultural Economics & Agro-Business": {
+            "100": {
+                "First": {},
+                "Second": {}
+            },
+            "200": {
+                "First": {},
+                "Second": {}
+            },
+            "300": {
+                "First": {},
+                "Second": {}
+            },
+            "400": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "B.Agric Crop Science": {
+            "100": {
+                "First": {},
+                "Second": {}
+            },
+            "200": {
+                "First": {},
+                "Second": {}
+            },
+            "300": {
+                "First": {},
+                "Second": {}
+            },
+            "400": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "PGD Agricultural Extension Management": {
+            "700": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "B.Agric Agricultural Economics & Agribusiness": {
+            "100": {
+                "First": {},
+                "Second": {}
+            },
+            "200": {
+                "First": {},
+                "Second": {}
+            },
+            "300": {
+                "First": {},
+                "Second": {}
+            },
+            "400": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "B.Agric Soil and Land Resources Management": {
+            "100": {
+                "First": {},
+                "Second": {}
+            },
+            "200": {
+                "First": {},
+                "Second": {}
+            },
+            "300": {
+                "First": {},
+                "Second": {}
+            },
+            "400": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "B.Sc. Agricultural Extension Management": {
+            "100": {
+                "First": {},
+                "Second": {}
+            },
+            "200": {
+                "First": {},
+                "Second": {}
+            },
+            "300": {
+                "First": {},
+                "Second": {}
+            },
+            "400": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "B.Sc. Hotel and Catering Management": {
+            "100": {
+                "First": {},
+                "Second": {}
+            },
+            "200": {
+                "First": {},
+                "Second": {}
+            },
+            "300": {
+                "First": {},
+                "Second": {}
+            },
+            "400": {
+                "First": {},
+                "Second": {}
+            }
+        }
+    },
+    "Faculty of Arts": {
+        "B.A. English": {
+            "100": {
+                "First": {},
+                "Second": {}
+            },
+            "200": {
+                "First": {},
+                "Second": {}
+            },
+            "300": {
+                "First": {},
+                "Second": {}
+            },
+            "400": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "B.A. Christian Religious Studies": {
+            "100": {
+                "First": {},
+                "Second": {}
+            },
+            "200": {
+                "First": {},
+                "Second": {}
+            },
+            "300": {
+                "First": {},
+                "Second": {}
+            },
+            "400": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "B.A. Islamic Studies": {
+            "100": {
+                "First": {},
+                "Second": {}
+            },
+            "200": {
+                "First": {},
+                "Second": {}
+            },
+            "300": {
+                "First": {},
+                "Second": {}
+            },
+            "400": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "B.A. French": {
+            "100": {
+                "First": {},
+                "Second": {}
+            },
+            "200": {
+                "First": {},
+                "Second": {}
+            },
+            "300": {
+                "First": {},
+                "Second": {}
+            },
+            "400": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "B.A. Arabic": {
+            "100": {
+                "First": {},
+                "Second": {}
+            },
+            "200": {
+                "First": {},
+                "Second": {}
+            },
+            "300": {
+                "First": {},
+                "Second": {}
+            },
+            "400": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "B.A. Hausa": {
+            "100": {
+                "First": {},
+                "Second": {}
+            },
+            "200": {
+                "First": {},
+                "Second": {}
+            },
+            "300": {
+                "First": {},
+                "Second": {}
+            },
+            "400": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "B.A. Igbo": {
+            "100": {
+                "First": {},
+                "Second": {}
+            },
+            "200": {
+                "First": {},
+                "Second": {}
+            },
+            "300": {
+                "First": {},
+                "Second": {}
+            },
+            "400": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "B.A. Yoruba": {
+            "100": {
+                "First": {},
+                "Second": {}
+            },
+            "200": {
+                "First": {},
+                "Second": {}
+            },
+            "300": {
+                "First": {},
+                "Second": {}
+            },
+            "400": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "B.A. Philosophy": {
+            "100": {
+                "First": {},
+                "Second": {}
+            },
+            "200": {
+                "First": {},
+                "Second": {}
+            },
+            "300": {
+                "First": {},
+                "Second": {}
+            },
+            "400": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "PGD Christian Religious Studies": {
+            "700": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "M.A. English": {
+            "800": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "M.A. Islamic Studies": {
+            "800": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "M.A. Christian Religious Studies": {
+            "800": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "PhD English Language": {
+            "900": {
+                "First": {},
+                "Second": {},
+                "Third": {},
+                "Fourth": {}
+            }
+        },
+        "PhD Christian Theology": {
+            "900": {
+                "First": {},
+                "Second": {},
+                "Third": {},
+                "Fourth": {}
+            }
+        }
+    },
+    "Faculty of Education": {
+        "B.A.(Ed.) Early Childhood Education": {
+            "100": {
+                "First": {},
+                "Second": {}
+            },
+            "200": {
+                "First": {},
+                "Second": {}
+            },
+            "300": {
+                "First": {},
+                "Second": {}
+            },
+            "400": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "B.A.(Ed.) English": {
+            "100": {
+                "First": {},
+                "Second": {}
+            },
+            "200": {
+                "First": {},
+                "Second": {}
+            },
+            "300": {
+                "First": {},
+                "Second": {}
+            },
+            "400": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "B.A.(Ed.) French": {
+            "100": {
+                "First": {},
+                "Second": {}
+            },
+            "200": {
+                "First": {},
+                "Second": {}
+            },
+            "300": {
+                "First": {},
+                "Second": {}
+            },
+            "400": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "B.A.(Ed.) Primary Education": {
+            "100": {
+                "First": {},
+                "Second": {}
+            },
+            "200": {
+                "First": {},
+                "Second": {}
+            },
+            "300": {
+                "First": {},
+                "Second": {}
+            },
+            "400": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "B.Sc.(Ed.) Business Education": {
+            "100": {
+                "First": {},
+                "Second": {}
+            },
+            "200": {
+                "First": {},
+                "Second": {}
+            },
+            "300": {
+                "First": {},
+                "Second": {}
+            },
+            "400": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "B.Sc.(Ed.) Agricultural Science": {
+            "100": {
+                "First": {},
+                "Second": {}
+            },
+            "200": {
+                "First": {},
+                "Second": {}
+            },
+            "300": {
+                "First": {},
+                "Second": {}
+            },
+            "400": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "B.Sc.(Ed.) Biology": {
+            "100": {
+                "First": {},
+                "Second": {}
+            },
+            "200": {
+                "First": {},
+                "Second": {}
+            },
+            "300": {
+                "First": {},
+                "Second": {}
+            },
+            "400": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "B.Sc.(Ed.) Chemistry": {
+            "100": {
+                "First": {},
+                "Second": {}
+            },
+            "200": {
+                "First": {},
+                "Second": {}
+            },
+            "300": {
+                "First": {},
+                "Second": {}
+            },
+            "400": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "B.Sc.(Ed.) Computer Science": {
+            "100": {
+                "First": {},
+                "Second": {}
+            },
+            "200": {
+                "First": {},
+                "Second": {}
+            },
+            "300": {
+                "First": {},
+                "Second": {}
+            },
+            "400": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "B.Sc.(Ed.) Integrated Science": {
+            "100": {
+                "First": {},
+                "Second": {}
+            },
+            "200": {
+                "First": {},
+                "Second": {}
+            },
+            "300": {
+                "First": {},
+                "Second": {}
+            },
+            "400": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "B.Sc.(Ed.) Mathematics": {
+            "100": {
+                "First": {},
+                "Second": {}
+            },
+            "200": {
+                "First": {},
+                "Second": {}
+            },
+            "300": {
+                "First": {},
+                "Second": {}
+            },
+            "400": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "B.Sc.(Ed.) Physics": {
+            "100": {
+                "First": {},
+                "Second": {}
+            },
+            "200": {
+                "First": {},
+                "Second": {}
+            },
+            "300": {
+                "First": {},
+                "Second": {}
+            },
+            "400": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "B.LIS Library and Information Science": {
+            "100": {
+                "First": {},
+                "Second": {}
+            },
+            "200": {
+                "First": {},
+                "Second": {}
+            },
+            "300": {
+                "First": {},
+                "Second": {}
+            },
+            "400": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "B.Sc.(Ed.) Health Education": {
+            "100": {
+                "First": {},
+                "Second": {}
+            },
+            "200": {
+                "First": {},
+                "Second": {}
+            },
+            "300": {
+                "First": {},
+                "Second": {}
+            },
+            "400": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "B.Sc.(Ed.) Human Kinetics": {
+            "100": {
+                "First": {},
+                "Second": {}
+            },
+            "200": {
+                "First": {},
+                "Second": {}
+            },
+            "300": {
+                "First": {},
+                "Second": {}
+            },
+            "400": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "Postgraduate Diploma In Education (PGDE)": {
+            "700": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "M.Ed. Educational Technology": {
+            "800": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "M.Ed. Science Education": {
+            "800": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "M.Ed. Administration and Planning": {
+            "800": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "M.Ed. Guidance and Counselling": {
+            "800": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "PhD Educational Administration": {
+            "900": {
+                "First": {},
+                "Second": {},
+                "Third": {},
+                "Fourth": {}
+            }
+        },
+        "PhD Educational Technology": {
+            "900": {
+                "First": {},
+                "Second": {},
+                "Third": {},
+                "Fourth": {}
+            }
+        },
+        "PhD Science Education": {
+            "900": {
+                "First": {},
+                "Second": {},
+                "Third": {},
+                "Fourth": {}
+            }
+        },
+        "PhD Educational Planning": {
+            "900": {
+                "First": {},
+                "Second": {},
+                "Third": {},
+                "Fourth": {}
+            }
+        },
+        "PhD Mathematics Education": {
+            "900": {
+                "First": {},
+                "Second": {},
+                "Third": {},
+                "Fourth": {}
+            }
+        }
+    },
+    "Faculty of Health Sciences": {
+        "B.NSc. Nursing Science": {
+            "200": {
+                "First": {},
+                "Second": {}
+            },
+            "300": {
+                "First": {},
+                "Second": {}
+            },
+            "400": {
+                "First": {},
+                "Second": {}
+            },
+            "500": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "B.Sc. Public Health": {
+            "200": {
+                "First": {},
+                "Second": {}
+            },
+            "300": {
+                "First": {},
+                "Second": {}
+            },
+            "400": {
+                "First": {},
+                "Second": {}
+            },
+            "500": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "B.Sc. Environmental Health Science": {
+            "200": {
+                "First": {},
+                "Second": {}
+            },
+            "300": {
+                "First": {},
+                "Second": {}
+            },
+            "400": {
+                "First": {},
+                "Second": {}
+            },
+            "500": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "M.Sc. Public Health": {
+            "800": {
+                "First": {},
+                "Second": {}
+            }
+        }
+    },
+    "Faculty of Law": {
+        "LLM Law": {
+            "800": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "PhD Law": {
+            "900": {
+                "First": {},
+                "Second": {},
+                "Third": {},
+                "Fourth": {}
+            }
+        },
+        "LL.B Law": {
+            "100": {
+                "First": {},
+                "Second": {}
+            },
+            "200": {
+                "First": {},
+                "Second": {}
+            },
+            "300": {
+                "First": {},
+                "Second": {}
+            },
+            "400": {
+                "First": {},
+                "Second": {}
+            },
+            "500": {
+                "First": {},
+                "Second": {}
+            }
+        }
+    },
+    "Faculty of Management Sciences": {
+        "B.Sc. Business Administration": {
+            "100": {
+                "First": {},
+                "Second": {}
+            },
+            "200": {
+                "First": {},
+                "Second": {}
+            },
+            "300": {
+                "First": {},
+                "Second": {}
+            },
+            "400": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "B.Sc. Public Administration": {
+            "100": {
+                "First": {},
+                "Second": {}
+            },
+            "200": {
+                "First": {},
+                "Second": {}
+            },
+            "300": {
+                "First": {},
+                "Second": {}
+            },
+            "400": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "B.Sc. Marketing": {
+            "100": {
+                "First": {},
+                "Second": {}
+            },
+            "200": {
+                "First": {},
+                "Second": {}
+            },
+            "300": {
+                "First": {},
+                "Second": {}
+            },
+            "400": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "B.Sc. Accounting": {
+            "100": {
+                "First": {},
+                "Second": {}
+            },
+            "200": {
+                "First": {},
+                "Second": {}
+            },
+            "300": {
+                "First": {},
+                "Second": {}
+            },
+            "400": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "B.Sc. Banking and Finance": {
+            "100": {
+                "First": {},
+                "Second": {}
+            },
+            "200": {
+                "First": {},
+                "Second": {}
+            },
+            "300": {
+                "First": {},
+                "Second": {}
+            },
+            "400": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "B.Sc. Entrepreneurship": {
+            "100": {
+                "First": {},
+                "Second": {}
+            },
+            "200": {
+                "First": {},
+                "Second": {}
+            },
+            "300": {
+                "First": {},
+                "Second": {}
+            },
+            "400": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "B.Sc. Cooperative and Rural Development": {
+            "100": {
+                "First": {},
+                "Second": {}
+            },
+            "200": {
+                "First": {},
+                "Second": {}
+            },
+            "300": {
+                "First": {},
+                "Second": {}
+            },
+            "400": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "PGD Business Administration": {
+            "700": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "PGD Entrepreneurship": {
+            "700": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "PGD Public Administration": {
+            "700": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "MBA Master of Business Administration": {
+            "800": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "MPA Master of Public Administration": {
+            "800": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "M.Sc. Business Administration": {
+            "800": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "M.Sc. Public Administration": {
+            "800": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "M.Sc. Entrepreneurship": {
+            "800": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "PhD Business Administration": {
+            "900": {
+                "First": {},
+                "Second": {},
+                "Third": {},
+                "Fourth": {}
+            }
+        },
+        "PhD Public Administration": {
+            "900": {
+                "First": {},
+                "Second": {},
+                "Third": {},
+                "Fourth": {}
+            }
+        },
+        "MPhil/PhD Business Administration": {
+            "900": {
+                "First": {},
+                "Second": {},
+                "Third": {},
+                "Fourth": {}
+            }
+        },
+        "PhD/MPhil Public Administration": {
+            "900": {
+                "First": {},
+                "Second": {},
+                "Third": {},
+                "Fourth": {}
+            }
+        }
+    },
+    "Faculty of Computing": {
+        "B.Sc. Computer Science": {
+            "100": {
+                "First": {},
+                "Second": {}
+            },
+            "200": {
+                "First": {},
+                "Second": {}
+            },
+            "300": {
+                "First": {},
+                "Second": {}
+            },
+            "400": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "B.Sc. Information Technology": {
+            "100": {
+                "First": {},
+                "Second": {}
+            },
+            "200": {
+                "First": {},
+                "Second": {}
+            },
+            "300": {
+                "First": {},
+                "Second": {}
+            },
+            "400": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "PGD Information Technology": {
+            "700": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "M.Sc. Information Technology": {
+            "800": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "PhD Information Technology": {
+            "900": {
+                "First": {},
+                "Second": {},
+                "Third": {},
+                "Fourth": {}
+            }
+        }
+    },
+    "Faculty of Sciences": {
+        "B.Sc. Environmental Science and Resource Management": {
+            "100": {
+                "First": {},
+                "Second": {}
+            },
+            "200": {
+                "First": {},
+                "Second": {}
+            },
+            "300": {
+                "First": {},
+                "Second": {}
+            },
+            "400": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "B.Sc. Mathematics": {
+            "100": {
+                "First": {},
+                "Second": {}
+            },
+            "200": {
+                "First": {},
+                "Second": {}
+            },
+            "300": {
+                "First": {},
+                "Second": {}
+            },
+            "400": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "B.Sc. Maths and Computer Science": {
+            "100": {
+                "First": {},
+                "Second": {}
+            },
+            "200": {
+                "First": {},
+                "Second": {}
+            },
+            "300": {
+                "First": {},
+                "Second": {}
+            },
+            "400": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "B.Sc. Biology": {
+            "100": {
+                "First": {},
+                "Second": {}
+            },
+            "200": {
+                "First": {},
+                "Second": {}
+            },
+            "300": {
+                "First": {},
+                "Second": {}
+            },
+            "400": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "B.Sc. Chemistry": {
+            "100": {
+                "First": {},
+                "Second": {}
+            },
+            "200": {
+                "First": {},
+                "Second": {}
+            },
+            "300": {
+                "First": {},
+                "Second": {}
+            },
+            "400": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "B.Sc. Physics": {
+            "100": {
+                "First": {},
+                "Second": {}
+            },
+            "200": {
+                "First": {},
+                "Second": {}
+            },
+            "300": {
+                "First": {},
+                "Second": {}
+            },
+            "400": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "B.Sc. Environmental Management and Toxicology": {
+            "100": {
+                "First": {},
+                "Second": {}
+            },
+            "200": {
+                "First": {},
+                "Second": {}
+            },
+            "300": {
+                "First": {},
+                "Second": {}
+            },
+            "400": {
+                "First": {},
+                "Second": {}
+            }
+        }
+    },
+    "Faculty of Social Sciences": {
+        "B.Sc. Economics": {
+            "100": {
+                "First": {},
+                "Second": {}
+            },
+            "200": {
+                "First": {},
+                "Second": {}
+            },
+            "300": {
+                "First": {},
+                "Second": {}
+            },
+            "400": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "B.Sc. International Relations": {
+            "100": {
+                "First": {},
+                "Second": {}
+            },
+            "200": {
+                "First": {},
+                "Second": {}
+            },
+            "300": {
+                "First": {},
+                "Second": {}
+            },
+            "400": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "B.Sc. Mass Communication": {
+            "100": {
+                "First": {},
+                "Second": {}
+            },
+            "200": {
+                "First": {},
+                "Second": {}
+            },
+            "300": {
+                "First": {},
+                "Second": {}
+            },
+            "400": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "B.Sc. Broadcast Journalism": {
+            "100": {
+                "First": {},
+                "Second": {}
+            },
+            "200": {
+                "First": {},
+                "Second": {}
+            },
+            "300": {
+                "First": {},
+                "Second": {}
+            },
+            "400": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "B.Sc. Film Production": {
+            "100": {
+                "First": {},
+                "Second": {}
+            },
+            "200": {
+                "First": {},
+                "Second": {}
+            },
+            "300": {
+                "First": {},
+                "Second": {}
+            },
+            "400": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "B.Sc. Political Science": {
+            "100": {
+                "First": {},
+                "Second": {}
+            },
+            "200": {
+                "First": {},
+                "Second": {}
+            },
+            "300": {
+                "First": {},
+                "Second": {}
+            },
+            "400": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "B.Sc. Tourism Studies": {
+            "100": {
+                "First": {},
+                "Second": {}
+            },
+            "200": {
+                "First": {},
+                "Second": {}
+            },
+            "300": {
+                "First": {},
+                "Second": {}
+            },
+            "400": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "B.Sc. Peace Studies and Conflict Resolution": {
+            "100": {
+                "First": {},
+                "Second": {}
+            },
+            "200": {
+                "First": {},
+                "Second": {}
+            },
+            "300": {
+                "First": {},
+                "Second": {}
+            },
+            "400": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "B.Sc. Criminology and Security Studies": {
+            "100": {
+                "First": {},
+                "Second": {}
+            },
+            "200": {
+                "First": {},
+                "Second": {}
+            },
+            "300": {
+                "First": {},
+                "Second": {}
+            },
+            "400": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "B.Sc. Development Studies": {
+            "100": {
+                "First": {},
+                "Second": {}
+            },
+            "200": {
+                "First": {},
+                "Second": {}
+            },
+            "300": {
+                "First": {},
+                "Second": {}
+            },
+            "400": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "PGD Economics": {
+            "700": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "PGD Mass Communication": {
+            "700": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "PGD Peace Studies and Conflict Resolution": {
+            "700": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "PGD Criminology and Security Studies": {
+            "700": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "M.Sc. Mass Communication": {
+            "800": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "M.Sc. Peace Studies and Conflict Resolution": {
+            "800": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "M.Sc. Criminology and Security Studies": {
+            "800": {
+                "First": {},
+                "Second": {}
+            }
+        },
+        "PhD Peace Studies and Conflict Resolution": {
+            "900": {
+                "First": {},
+                "Second": {},
+                "Third": {},
+                "Fourth": {}
+            }
+        },
+        "PhD Mass Communication": {
+            "900": {
+                "First": {},
+                "Second": {},
+                "Third": {},
+                "Fourth": {}
+            }
+        },
+        "PhD/MPhil Peace Studies and Conflict Resolution": {
+            "900": {
+                "First": {},
+                "Second": {},
+                "Third": {},
+                "Fourth": {}
+            }
+        },
+        "PhD Criminology and Security Studies": {
+            "900": {
+                "First": {},
+                "Second": {},
+                "Third": {},
+                "Fourth": {}
+            }
+        },
+        "PhD/MPhil Criminology and Security Studies": {
+            "900": {
+                "First": {},
+                "Second": {},
+                "Third": {},
+                "Fourth": {}
+            }
+        }
+    }
+};
+</script>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous" defer></script>
+    
+   
+
+    <script defer>
+document.addEventListener('DOMContentLoaded', function () {
+    // --- ELEMENT SELECTORS ---
+    const facultySelect = document.getElementById('faculty-select');
+    const programmeSelect = document.getElementById('programme-select');
+    const levelSelect = document.getElementById('level-select');
+    const semesterSelect = document.getElementById('semester-select');
+
+    const step2 = document.getElementById('step2');
+    const step3 = document.getElementById('step3');
+    const step4 = document.getElementById('step4');
+    const submitBtn = document.getElementById('submit-btn');
+    const stepEntryMode = document.getElementById('step-entry-mode');
+    const stepMatricNo = document.getElementById('step-matric-no');
+
+    // --- MODIFIED UI HELPER FUNCTIONS TO PREVENT RACE CONDITION ---
+
+    const fadeOut = (el) => {
+        // Clear any PREVIOUS fade-out timer on this element before starting a new one.
+        if (el.dataset.fadeTimeoutId) {
+            clearTimeout(parseInt(el.dataset.fadeTimeoutId));
+        }
+        el.style.opacity = 0;
+        // Set a new timer to hide the element and store its ID on the element itself.
+        el.dataset.fadeTimeoutId = setTimeout(() => {
+            el.style.display = 'none';
+        }, 400); // Hide after 400ms transition
+    };
+
+    const fadeIn = (el) => {
+        // *** THE CRITICAL FIX IS HERE ***
+        // Before fading in, check for and cancel any pending fade-out timer.
+        if (el.dataset.fadeTimeoutId) {
+            clearTimeout(parseInt(el.dataset.fadeTimeoutId));
+        }
+        el.style.display = 'block';
+        // Use a tiny delay to ensure the display property is set before the transition starts.
+        setTimeout(() => {
+            el.style.opacity = 1;
+        }, 10);
+    };
+    
+    // --- INITIALIZATION ---
+    if (typeof data === 'undefined' || data === null) {
+        facultySelect.innerHTML = '<option value="" disabled selected>-- ERROR: Data not found --</option>';
+        console.error("CRITICAL: The 'data' object from fee-checks.php is missing. Script cannot run.");
+        return; 
+    }
+    
+    // Build faculty dropdown directly from the available data object.
+    // This prevents "No programme data found" caused by old/incorrect faculty keys.
+    const facultyDisplayNames = {
+        'Faculty of Agricultural': 'Faculty of Agricultural Sciences',
+        'Faculty of Agricultural Sciences': 'Faculty of Agricultural Sciences',
+        'Faculty of Arts': 'Faculty of Arts',
+        'Faculty of Computing': 'Faculty of Computing',
+        'Faculty of Education': 'Faculty of Education',
+        'Faculty of Health Science': 'Faculty of Health Sciences',
+        'Faculty of Health Sciences': 'Faculty of Health Sciences',
+        'Faculty of Law': 'Faculty of Law',
+        'Faculty of Management Science': 'Faculty of Management Sciences',
+        'Faculty of Management Sciences': 'Faculty of Management Sciences',
+        'Faculty of Sciences': 'Faculty of Sciences',
+        'Faculty of Social Sciences': 'Faculty of Social Sciences'
+    };
+
+    facultySelect.innerHTML = '<option value="" disabled selected>-- Choose a Faculty --</option>';
+    Object.keys(data).sort().forEach(facultyKey => {
+        facultySelect.add(new Option(facultyDisplayNames[facultyKey] || facultyKey, facultyKey));
+    });
+
+    // --- EVENT LISTENERS (These will now work correctly) ---
+    facultySelect.addEventListener('change', function () {
+        const selectedFacultyKey = this.value;
+
+        // Reset all subsequent steps
+        programmeSelect.innerHTML = '<option value="" disabled selected>-- Choose a Programme --</option>';
+        fadeOut(step2);
+        fadeOut(step3);
+        fadeOut(stepEntryMode);
+        fadeOut(stepMatricNo);
+        fadeOut(step4);
+        fadeOut(submitBtn);
+
+        // Populate and show the next step
+        if (data[selectedFacultyKey]) {
+            Object.keys(data[selectedFacultyKey]).sort().forEach(programme => {
+                programmeSelect.add(new Option(programme, programme));
+            });
+            fadeIn(step2); // This will now correctly cancel the fadeOut timer
+        }
+    });
+
+    programmeSelect.addEventListener('change', function () {
+        const selectedFaculty = facultySelect.value;
+        const selectedProgramme = this.value;
+        levelSelect.innerHTML = '<option value="" disabled selected>-- Choose a Level --</option>';
+        fadeOut(step3);
+        fadeOut(stepEntryMode);
+        fadeOut(stepMatricNo);
+        fadeOut(step4);
+        fadeOut(submitBtn);
+        
+        if (data[selectedFaculty] && data[selectedFaculty][selectedProgramme]) {
+            Object.keys(data[selectedFaculty][selectedProgramme]).sort().forEach(level => {
+                levelSelect.add(new Option(level, level));
+            });
+            fadeIn(step3);
+        }
+    });
+
+    levelSelect.addEventListener('change', function () {
+        const selectedFaculty = facultySelect.value;
+        const selectedProgramme = programmeSelect.value;
+        const selectedLevel = this.value;
+        semesterSelect.innerHTML = '<option value="" disabled selected>-- Choose a Semester --</option>';
+        fadeOut(step4);
+        fadeOut(submitBtn);
+
+        if (selectedLevel === '200' || selectedLevel === '300') { fadeIn(stepEntryMode); } else { fadeOut(stepEntryMode); }
+        if (selectedLevel === '300' || selectedLevel === '400') { fadeIn(stepMatricNo); } else { fadeOut(stepMatricNo); }
+
+        if (data[selectedFaculty]?.[selectedProgramme]?.[selectedLevel]) {
+            Object.keys(data[selectedFaculty][selectedProgramme][selectedLevel]).sort().forEach(semester => {
+                semesterSelect.add(new Option(semester, semester));
+            });
+            fadeIn(step4);
+        }
+    });
+
+    semesterSelect.addEventListener('change', function () {
+        if (this.value) { fadeIn(submitBtn); } else { fadeOut(submitBtn); }
+    });
+
+    // --- BACK TO TOP BUTTON ---
+    const toTopBtn = document.getElementById('back-to-top');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 300) { toTopBtn.classList.add('show'); } else { toTopBtn.classList.remove('show'); }
+    });
+});
+</script>
+<!-- START OF TMA SHUTDOWN POPUP CODE -->
+
+<!-- 1. POPUP STYLES (CSS) --
+<style>
+    /* The main overlay covering the screen */
+    .tma-popup-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8); /* Dark semi-transparent background */
+        z-index: 9999;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 15px;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.4s ease, visibility 0s linear 0.4s;
+    }
+
+    /* Class to show the popup */
+    .tma-popup-overlay.show {
+        opacity: 1;
+        visibility: visible;
+        transition: opacity 0.4s ease;
+    }
+
+    /* The main popup container, styled like the image */
+    .tma-popup-container {
+        font-family: 'Roboto', 'Source Sans Pro', sans-serif;
+        background-color: #0a2a10; /* Dark green background */
+        color: white;
+        padding: 25px;
+        border-radius: 15px;
+        border: 2px solid #3cff3c;
+        width: 100%;
+        max-width: 480px;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(60, 255, 60, 0.2);
+        position: relative;
+        transform: scale(0.8);
+        transition: transform 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+    }
+
+    .tma-popup-overlay.show .tma-popup-container {
+        transform: scale(1);
+    }
+
+    /* Popup Title: "TMA SHUTDOWN 2025" */
+    .tma-popup-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #f0ff00; /* Yellow text */
+        margin: 0;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    /* Subtitle: "DISCOUNT COUNTDOWN" */
+    .tma-popup-subtitle {
+        font-size: 1rem;
+        font-weight: 500;
+        margin-bottom: 20px;
+        opacity: 0.9;
+    }
+
+    /* Countdown Timer Block */
+    .tma-countdown {
+        background: rgba(0, 0, 0, 0.3);
+        padding: 20px 10px;
+        border-radius: 10px;
+        margin-bottom: 25px;
+        border: 1px solid rgba(60, 255, 60, 0.5);
+    }
+
+    #tma-timer {
+        font-size: clamp(2.5rem, 12vw, 4.5rem); /* Responsive font size */
+        font-weight: 700;
+        color: #3cff3c; /* Bright green timer text */
+        line-height: 1;
+        margin: 0;
+    }
+
+    .tma-countdown .label {
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        opacity: 0.8;
+    }
+
+    /* Fee Section */
+    .tma-fees-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin-bottom: 25px;
+    }
+
+    .tma-fee-box {
+        background: rgba(0, 0, 0, 0.4);
+        padding: 15px;
+        border-radius: 8px;
+    }
+
+    .tma-fee-box h4 {
+        font-size: 0.9rem;
+        font-weight: 500;
+        margin: 0 0 5px 0;
+        text-transform: uppercase;
+        color: #f0ff00;
+    }
+
+    .tma-fee-box .price {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #3cff3c;
+    }
+
+    .tma-fee-box .old-price {
+        font-size: 1rem;
+        text-decoration: line-through;
+        opacity: 0.7;
+    }
+
+    /* WhatsApp Button */
+    .tma-whatsapp-btn {
+        display: inline-block;
+        background-color: #25D366;
+        color: white;
+        padding: 12px 25px;
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: background-color 0.3s, transform 0.3s;
+    }
+
+    .tma-whatsapp-btn:hover {
+        background-color: #1EBE57;
+        transform: scale(1.05);
+        color: white;
+    }
+
+    .tma-whatsapp-btn .fab {
+        margin-right: 8px;
+    }
+
+    /* Close Button */
+    .tma-close-btn {
+        position: absolute;
+        top: -10px;
+        right: -10px;
+        background-color: #f0ff00;
+        color: #0a2a10;
+        border: none;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+        line-height: 30px;
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    }
+</style>
+
+<!-- 2. POPUP CONTENT (HTML) --
+<div id="tmaShutdownPopup" class="tma-popup-overlay">
+    <div class="tma-popup-container">
+        <button id="tmaCloseBtn" class="tma-close-btn" aria-label="Close">&times;</button>
+        
+        <h2 class="tma-popup-title">TMA PROMO 2025</h2>
+        <p class="tma-popup-subtitle">DISCOUNT COUNTDOWN</p>
+        
+        <div class="tma-countdown">
+            <p id="tma-timer">00:00:00:00</p>
+            <p class="label">Days : Hours : Minutes : Seconds</p>
+        </div>
+        
+        <div class="tma-fees-grid">
+            <div class="tma-fee-box">
+                <h4>Undergraduate</h4>
+                <p class="price">₦1,250 <span class="old-price">₦1,500</span></p>
+            </div>
+            <div class="tma-fee-box">
+                <h4>Postgraduate</h4>
+                <p class="price">₦2,000 <span class="old-price">₦2,500</span></p>
+            </div>
+        </div>
+        
+        <a href="https://wa.me/2349166272869" target="_blank" class="tma-whatsapp-btn">
+            <i class="fab fa-whatsapp"></i> Chat to Book
+        </a>
+    </div>
+</div>
+
+<!-- 3. POPUP FUNCTIONALITY (JAVASCRIPT) --
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    
+    // --- ELEMENTS ---
+    const popupOverlay = document.getElementById('tmaShutdownPopup');
+    const closeBtn = document.getElementById('tmaCloseBtn');
+    const timerElement = document.getElementById('tma-timer');
+
+    // Prevent script from running if elements are not found
+    if (!popupOverlay || !closeBtn || !timerElement) {
+        console.error("TMA Popup elements not found. Aborting script.");
+        return;
+    }
+    
+    // --- POPUP DISPLAY LOGIC ---
+    // Show popup only once per browser session
+    if (!sessionStorage.getItem('tmaPopupShown')) {
+        // Show after a 2-second delay
+        setTimeout(() => {
+            popupOverlay.classList.add('show');
+            sessionStorage.setItem('tmaPopupShown', 'true');
+        }, 2000);
+    }
+
+    // Function to hide the popup
+    const hidePopup = () => {
+        popupOverlay.classList.remove('show');
+    };
+
+    // --- EVENT LISTENERS ---
+    closeBtn.addEventListener('click', hidePopup);
+    // Also hide if user clicks on the dark overlay background
+    popupOverlay.addEventListener('click', function(event) {
+        if (event.target === popupOverlay) {
+            hidePopup();
+        }
+    });
+
+    // --- COUNTDOWN TIMER LOGIC ---
+    // Set the date we're counting down to. [3]
+    const countDownDate = new Date("Aug 18, 2025 00:00:00").getTime();
+
+    // Update the count down every 1 second. [1]
+    const timerInterval = setInterval(function() {
+        // Get today's date and time
+        const now = new Date().getTime();
+        
+        // Find the distance between now and the count down date
+        const distance = countDownDate - now;
+        
+        // Time calculations for days, hours, minutes and seconds
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        
+        // Add leading zeros to numbers less than 10
+        const format = (num) => num < 10 ? '0' + num : num;
+
+        // Display the result in the element with id="tma-timer"
+        timerElement.innerHTML = `${format(days)}:${format(hours)}:${format(minutes)}:${format(seconds)}`;
+        
+        // If the count down is over, write some text and stop the timer
+        if (distance < 0) {
+            clearInterval(timerInterval);
+            timerElement.innerHTML = "EXPIRED";
+        }
+    }, 1000);
+
+});
+</script>
+
+<!-- END OF TMA SHUTDOWN POPUP CODE -->
+<!-- ======================================================= -->
+<!-- START: AI CHATBOT INTEGRATION -->
+<!-- ======================================================= -->
+
+<!-- 1. CHATBOX STYLES (CSS) -->
+<style>
+    :root {
+        --chatbot-primary: #28a745;
+        --chatbot-light: #f0fdf4;
+    }
+    .chat-bubble {
+        position: fixed;
+        bottom: 25px;
+        right: 25px;
+        background-color: var(--chatbot-primary);
+        color: white;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 28px;
+        cursor: pointer;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        z-index: 1050;
+        transition: transform 0.3s ease;
+    }
+    .chat-bubble:hover {
+        transform: scale(1.1);
+    }
+    .chat-window {
+        position: fixed;
+        bottom: 100px;
+        right: 25px;
+        width: 90%;
+        max-width: 400px;
+        height: 70vh;
+        max-height: 600px;
+        background-color: white;
+        border-radius: 15px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        z-index: 1049;
+        transform: scale(0.95) translateY(20px);
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+    }
+    .chat-window.open {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+        visibility: visible;
+    }
+    .chat-header {
+        background-color: var(--chatbot-primary);
+        color: white;
+        padding: 15px;
+        font-weight: bold;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .chat-header .close-chat {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 24px;
+        cursor: pointer;
+    }
+    .chat-body {
+        flex-grow: 1;
+        padding: 15px;
+        overflow-y: auto;
+        background-color: #f4f7f6;
+    }
+    .chat-message {
+        margin-bottom: 15px;
+        max-width: 85%;
+        display: flex;
+        flex-direction: column;
+    }
+    .chat-message.user {
+        margin-left: auto;
+        align-items: flex-end;
+    }
+    .chat-message.ai {
+        margin-right: auto;
+        align-items: flex-start;
+    }
+    .chat-message .bubble {
+        padding: 10px 15px;
+        border-radius: 20px;
+        line-height: 1.5;
+    }
+    .chat-message.user .bubble {
+        background-color: var(--chatbot-primary);
+        color: white;
+        border-bottom-right-radius: 5px;
+    }
+    .chat-message.ai .bubble {
+        background-color: #e9ecef;
+        color: #333;
+        border-bottom-left-radius: 5px;
+    }
+    .chat-message.ai .bubble a {
+        color: var(--chatbot-primary);
+        font-weight: bold;
+    }
+    .chat-message.typing .bubble {
+        background-color: #e9ecef;
+        padding: 10px 15px;
+        border-radius: 20px;
+    }
+    .typing-indicator span {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        background-color: #999;
+        border-radius: 50%;
+        margin: 0 2px;
+        animation: bounce 1.4s infinite ease-in-out both;
+    }
+    .typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
+    .typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
+    @keyframes bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1.0); } }
+
+    .chat-footer {
+        padding: 10px;
+        border-top: 1px solid #ddd;
+        display: flex;
+        gap: 10px;
+    }
+    .chat-footer input {
+        flex-grow: 1;
+        border: 1px solid #ccc;
+        border-radius: 20px;
+        padding: 10px 15px;
+        outline: none;
+    }
+    .chat-footer button {
+        background-color: var(--chatbot-primary);
+        color: white;
+        border: none;
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        font-size: 18px;
+        cursor: pointer;
+    }
+    @media (max-width: 480px) {
+        .chat-window {
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            max-height: 100%;
+            border-radius: 0;
+        }
+    }
+</style>
+
+<!-- 2. CHATBOX MARKUP (HTML) -->
+<div id="aiChatBubble" class="chat-bubble">
+    <i class="fas fa-robot"></i>
+</div>
+
+<div id="aiChatWindow" class="chat-window">
+    <div class="chat-header">
+        <span>NOUN UPDATE Assistant</span>
+        <button id="closeChatBtn" class="close-chat">&times;</button>
+    </div>
+    <div id="chatBody" class="chat-body">
+        <!-- AI Welcome Message -->
+        <div class="chat-message ai">
+            <div class="bubble">
+                Hello! I'm Jake. How can I help you with NOUN today?
+            </div>
+        </div>
+    </div>
+    <div class="chat-footer">
+        <input type="text" id="chatInput" placeholder="Ask a question...">
+        <button id="sendChatBtn"><i class="fas fa-paper-plane"></i></button>
+    </div>
+</div>
+
+<!-- 3. CHATBOX LOGIC (JAVASCRIPT) -->
+<script>
+// NEW: Make the CSRF token from PHP available to our script.
+// IMPORTANT: This requires you to add a PHP snippet to the page where this chatbox is embedded.
+// See the instructions below the code block.
+const CSRF_TOKEN = '610eea7b923be4ec8e3578c714d1823090017cec78119dec382420e812204b73';
+
+document.addEventListener('DOMContentLoaded', () => {
+    const chatBubble = document.getElementById('aiChatBubble');
+    const chatWindow = document.getElementById('aiChatWindow');
+    const closeChatBtn = document.getElementById('closeChatBtn');
+    const chatBody = document.getElementById('chatBody');
+    const chatInput = document.getElementById('chatInput');
+    const sendChatBtn = document.getElementById('sendChatBtn');
+
+    // --- Basic UI Toggle ---
+    chatBubble.addEventListener('click', () => chatWindow.classList.toggle('open'));
+    closeChatBtn.addEventListener('click', () => chatWindow.classList.remove('open'));
+
+    // --- Send message logic ---
+    const sendMessage = async () => {
+        const query = chatInput.value.trim();
+        if (query === "") return;
+
+        displayMessage(query, 'user');
+        chatInput.value = "";
+        showTypingIndicator();
+
+        try {
+            // MODIFIED: Simplified the context gathering. We no longer need the knowledge_base.txt file.
+            const context = document.body.innerText.substring(0, 5000);
+            
+            // Get the AI's response from the backend
+            const aiResponse = await askGemini(query, context);
+            
+            displayMessage(aiResponse, 'ai');
+
+        } catch (error) {
+            console.error("Error communicating with AI:", error);
+            // MODIFIED: Provide a more helpful error message
+            displayMessage("Sorry, I'm having trouble connecting to my brain right now. Please check your connection or try again in a moment.", 'ai');
+        } finally {
+            hideTypingIndicator();
+        }
+    };
+
+    sendChatBtn.addEventListener('click', sendMessage);
+    chatInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') sendMessage();
+    });
+
+    // --- Display functions ---
+    
+    // NEW: Function to convert Markdown links like [text](url) to clickable HTML <a> tags.
+    function convertMarkdownToHTML(text) {
+        const linkRegex = /\[([^\]]+)\]\((https?:\/\/[^\)]+)\)/g;
+        return text.replace(linkRegex, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+    }
+
+    function displayMessage(message, sender) {
+        let finalMessage = message;
+
+        // MODIFIED: Process the AI message for Markdown links first.
+        if (sender === 'ai') {
+            finalMessage = convertMarkdownToHTML(finalMessage);
+        }
+
+        const serviceKeywords = ['service', 'help', 'assist', 'contact', 'TMA', 'project', 'seminar', 'admission'];
+        if (sender === 'ai' && serviceKeywords.some(keyword => message.toLowerCase().includes(keyword))) {
+            const whatsappLink = 'https://wa.me/2349166272869';
+            // Use the already-processed 'finalMessage' variable.
+            finalMessage += `<br><br>For direct assistance, you can <a href="${whatsappLink}" target="_blank">chat with us on WhatsApp</a>.`;
+        }
+
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `chat-message ${sender}`;
+        // IMPORTANT: Using innerHTML is safe here because we are controlling the content.
+        messageDiv.innerHTML = `<div class="bubble">${finalMessage}</div>`; 
+        chatBody.appendChild(messageDiv);
+        chatBody.scrollTop = chatBody.scrollHeight;
+    }
+
+    function showTypingIndicator() {
+        // Unchanged...
+        const typingDiv = document.createElement('div');
+        typingDiv.className = 'chat-message ai typing';
+        typingDiv.id = 'typingIndicator';
+        typingDiv.innerHTML = `
+            <div class="bubble">
+                <div class="typing-indicator"><span></span><span></span><span></span></div>
+            </div>`;
+        chatBody.appendChild(typingDiv);
+        chatBody.scrollTop = chatBody.scrollHeight;
+    }
+
+    function hideTypingIndicator() {
+        // Unchanged...
+        const indicator = document.getElementById('typingIndicator');
+        if (indicator) indicator.remove();
+    }
+
+    // --- Backend Communication ---
+
+    // REMOVED: The getContextFromSite() function is no longer needed, its logic was moved inline.
+
+    async function askGemini(query, context) {
+        const response = await fetch('gemini-proxy.php', {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json',
+                // NEW & CRITICAL: Send the security token in the headers.
+                'X-CSRF-Token': CSRF_TOKEN 
+            },
+            body: JSON.stringify({ query: query, context: context })
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json(); // Try to get the JSON error from the server
+            console.error('Server responded with an error:', errorData);
+            throw new Error(`Server error: ${response.statusText}`);
+        }
+        const data = await response.json();
+        // Handle case where AI response is empty but request was successful
+        if (!data.reply) {
+            console.warn("Received a successful response but no reply from the AI.", data);
+            return "I'm not sure how to respond to that. Can you try asking another way?";
+        }
+        return data.reply;
+    }
+});
+</script>
+<script src="tracking.js"></script></body>
+</html>
