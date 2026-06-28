@@ -38,6 +38,12 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const googleAnalyticsId = "G-TVWNP6J0GF";
+  const scrollResetScript = `(() => {
+if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+const resetScroll = () => window.scrollTo(0, 0);
+window.addEventListener('load', resetScroll, { once: true });
+window.addEventListener('pageshow', resetScroll);
+})();`;
   const organization = {
     "@context": "https://schema.org",
     "@type": "Organization",
@@ -67,7 +73,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       "query-input": "required name=search_term_string",
     },
   };
-  return <html lang="en" className={`${inter.variable} ${poppins.variable}`}><head><script async src={`https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsId}`} /><script dangerouslySetInnerHTML={{ __html: `window.dataLayer = window.dataLayer || [];
+  return <html lang="en" className={`${inter.variable} ${poppins.variable}`}><head><script dangerouslySetInnerHTML={{ __html: scrollResetScript }} /><script async src={`https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsId}`} /><script dangerouslySetInnerHTML={{ __html: `window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', '${googleAnalyticsId}');` }} /></head><body><a className="skip-link" href="#main-content">Skip to content</a><Header />{children}<Footer /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organization) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(website) }} /></body></html>;
