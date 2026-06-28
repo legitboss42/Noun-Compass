@@ -18,7 +18,7 @@ export default function FeesPage() {
     name: "NOUN School Fees Checker",
     applicationCategory: "EducationalApplication",
     operatingSystem: "Any",
-    url: "https://nouncompass.me/fees",
+    url: "https://www.nouncompass.me/fees",
     description: "Check NOUN fee breakdowns and browse semester course lists with the NounCompass fees checker.",
   };
 

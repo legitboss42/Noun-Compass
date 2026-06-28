@@ -60,10 +60,12 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
   const url = `${site.url}/articles/${slug}`;
   const image = `${url}/opengraph-image`;
+  const seoTitle = article.seoTitle ?? article.title;
+  const seoDescription = article.seoDescription ?? article.description;
 
   return {
-    title: article.title,
-    description: article.description,
+    title: seoTitle,
+    description: seoDescription,
     keywords: [article.primaryKeyword, ...article.secondaryKeywords],
     authors: [
       {
@@ -76,8 +78,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     category: article.category,
     alternates: { canonical: url },
     openGraph: {
-      title: article.title,
-      description: article.description,
+      title: seoTitle,
+      description: seoDescription,
       url,
       type: "article",
       publishedTime: article.publishedAt,
@@ -88,8 +90,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     },
     twitter: {
       card: "summary_large_image",
-      title: article.title,
-      description: article.description,
+      title: seoTitle,
+      description: seoDescription,
       images: [image],
     },
   };

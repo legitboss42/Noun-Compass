@@ -4,8 +4,10 @@ import matter from "gray-matter";
 
 export type ArticleMeta = {
   title: string;
+  seoTitle?: string;
   slug: string;
   description: string;
+  seoDescription?: string;
   category: string;
   primaryKeyword: string;
   secondaryKeywords: string[];
