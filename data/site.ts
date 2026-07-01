@@ -75,8 +75,8 @@ export type Category = {
 export const categories: Category[] = [
   { slug: "admission", name: "Admissions", eyebrow: "Start well", description: "Understand eligibility, application steps, documents, and what to do after receiving an admission offer." },
   { slug: "fees", name: "School Fees", eyebrow: "Plan your payments", description: "Clear guides to compulsory fees, semester charges, payment steps, and budgeting for your programme." },
-  { slug: "portal", name: "Portal & Registration", eyebrow: "Get tasks done", description: "Practical help for the student portal, course registration, support tickets, and common account issues." },
-  { slug: "results", name: "Results", eyebrow: "Track progress", description: "Learn how to check results, understand grades, and take the right next step when something looks wrong." },
+  { slug: "portal", name: "Portal & Registration", eyebrow: "Get tasks done", description: "Guides for NOUN portal login, password reset, profile updates, course registration, support tickets, and common account issues." },
+  { slug: "results", name: "Results", eyebrow: "Track progress", description: "Check NOUN results, My Progress, CGPA, outstanding courses, and result statements, and know the right next step when something looks wrong." },
   { slug: "examinations", name: "Examinations", eyebrow: "Prepare calmly", description: "Student-first guidance for exam registration, timetables, venues, rules, and effective preparation." },
   { slug: "study-centres", name: "Study Centres", eyebrow: "Find local support", description: "Location guides and practical tips for contacting and using NOUN study centres across Nigeria." },
   { slug: "gst", name: "GST Courses", eyebrow: "Master the essentials", description: "Original study summaries and learning guides for General Studies courses, without past-question repositories." },

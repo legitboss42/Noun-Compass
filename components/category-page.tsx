@@ -106,6 +106,21 @@ export function CategoryPage({
 
           <div className="seo-intro">
             <h2>How NOUN Compass approaches {category.name.toLowerCase()}</h2>
+            {category.slug === "portal" && (
+              <p>
+                Start with the exact task you need to finish. For most account issues, that means
+                checking the current <Link href="/articles/nouonline-student-dashboard">student dashboard</Link>,
+                then using the right guide for <Link href="/articles/noun-portal-password-reset">password reset</Link>,
+                <Link href="/articles/update-profile-nouonline"> profile updates</Link>, or the next
+                registration step.
+              </p>
+            )}
+            {category.slug === "results" && (
+              <p>
+                Start with <Link href="/articles/how-to-find-noun-results-on-my-progress">My progress</Link>,
+                continue to <Link href="/articles/how-to-open-your-noun-result-statement-from-the-support-portal">Result statement</Link> when you need the deeper academic record, and use the <Link href="/tools/cgpa-calculator">CGPA calculator</Link> only for planning before you compare it with your official NOUN result page.
+              </p>
+            )}
             <p>
               {category.description} We start with the task a student is trying to finish, explain
               the records and decisions involved, and point out what still needs to be checked on

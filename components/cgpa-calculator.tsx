@@ -78,7 +78,10 @@ function getGradeBand(score: number) {
 }
 
 function getClassOfDegree(value: number) {
-  return classBands.find((band) => value >= band.min && value <= band.max)?.label ?? "Below third class range";
+  return (
+    classBands.find((band) => value >= band.min && value <= band.max)?.label ??
+    "Below third class range"
+  );
 }
 
 export function CgpaCalculator() {
@@ -106,7 +109,10 @@ export function CgpaCalculator() {
 
       const completeRows = normalizedRows.filter((row) => row.isComplete);
       const totalUnits = completeRows.reduce((sum, row) => sum + (row.units ?? 0), 0);
-      const totalQualityPoints = completeRows.reduce((sum, row) => sum + row.qualityPoints, 0);
+      const totalQualityPoints = completeRows.reduce(
+        (sum, row) => sum + row.qualityPoints,
+        0,
+      );
       const gpa = totalUnits ? totalQualityPoints / totalUnits : 0;
 
       return {
@@ -117,12 +123,20 @@ export function CgpaCalculator() {
         totalQualityPoints,
         gpa,
         roundedGpa: Number(gpa.toFixed(2)),
-        classOfDegree: totalUnits ? getClassOfDegree(gpa) : "Enter your courses to calculate",
+        classOfDegree: totalUnits
+          ? getClassOfDegree(gpa)
+          : "Enter your courses to calculate",
       };
     });
 
-    const totalUnits = normalizedSemesters.reduce((sum, semester) => sum + semester.totalUnits, 0);
-    const totalQualityPoints = normalizedSemesters.reduce((sum, semester) => sum + semester.totalQualityPoints, 0);
+    const totalUnits = normalizedSemesters.reduce(
+      (sum, semester) => sum + semester.totalUnits,
+      0,
+    );
+    const totalQualityPoints = normalizedSemesters.reduce(
+      (sum, semester) => sum + semester.totalQualityPoints,
+      0,
+    );
     const cgpa = totalUnits ? totalQualityPoints / totalUnits : 0;
 
     return {
@@ -131,26 +145,45 @@ export function CgpaCalculator() {
       totalQualityPoints,
       cgpa,
       roundedCgpa: Number(cgpa.toFixed(2)),
-      classOfDegree: totalUnits ? getClassOfDegree(cgpa) : "Enter your courses to calculate",
-      completedCourses: normalizedSemesters.reduce((sum, semester) => sum + semester.completeRows.length, 0),
+      classOfDegree: totalUnits
+        ? getClassOfDegree(cgpa)
+        : "Enter your courses to calculate",
+      completedCourses: normalizedSemesters.reduce(
+        (sum, semester) => sum + semester.completeRows.length,
+        0,
+      ),
       invalidRows: normalizedSemesters.flatMap((semester) =>
-        semester.rows.filter((row) => row.code.trim() || row.units !== null || row.score !== null).filter((row) => !row.isComplete),
+        semester.rows
+          .filter((row) => row.code.trim() || row.units !== null || row.score !== null)
+          .filter((row) => !row.isComplete),
       ),
     };
   }, [semesters]);
 
   const addSemester = () => {
-    const nextId = semesters.length ? Math.max(...semesters.map((semester) => semester.id)) + 1 : 1;
+    const nextId = semesters.length
+      ? Math.max(...semesters.map((semester) => semester.id)) + 1
+      : 1;
     setSemesters((current) => [...current, emptySemesterBlock(nextId)]);
   };
 
   const removeSemester = (semesterId: number) => {
-    setSemesters((current) => (current.length === 1 ? current : current.filter((semester) => semester.id !== semesterId)));
+    setSemesters((current) =>
+      current.length === 1
+        ? current
+        : current.filter((semester) => semester.id !== semesterId),
+    );
   };
 
-  const updateSemesterField = (semesterId: number, field: "sessionLabel" | "semesterLabel", value: string) => {
+  const updateSemesterField = (
+    semesterId: number,
+    field: "sessionLabel" | "semesterLabel",
+    value: string,
+  ) => {
     setSemesters((current) =>
-      current.map((semester) => (semester.id === semesterId ? { ...semester, [field]: value } : semester)),
+      current.map((semester) =>
+        semester.id === semesterId ? { ...semester, [field]: value } : semester,
+      ),
     );
   };
 
@@ -158,7 +191,9 @@ export function CgpaCalculator() {
     setSemesters((current) =>
       current.map((semester) => {
         if (semester.id !== semesterId) return semester;
-        const nextRowId = semester.rows.length ? Math.max(...semester.rows.map((row) => row.id)) + 1 : 1;
+        const nextRowId = semester.rows.length
+          ? Math.max(...semester.rows.map((row) => row.id)) + 1
+          : 1;
         return { ...semester, rows: [...semester.rows, emptyRow(nextRowId)] };
       }),
     );
@@ -169,18 +204,28 @@ export function CgpaCalculator() {
       current.map((semester) => {
         if (semester.id !== semesterId) return semester;
         if (semester.rows.length === 1) return semester;
-        return { ...semester, rows: semester.rows.filter((row) => row.id !== rowId) };
+        return {
+          ...semester,
+          rows: semester.rows.filter((row) => row.id !== rowId),
+        };
       }),
     );
   };
 
-  const updateRow = (semesterId: number, rowId: number, field: keyof Omit<CourseRow, "id">, value: string) => {
+  const updateRow = (
+    semesterId: number,
+    rowId: number,
+    field: keyof Omit<CourseRow, "id">,
+    value: string,
+  ) => {
     setSemesters((current) =>
       current.map((semester) =>
         semester.id === semesterId
           ? {
               ...semester,
-              rows: semester.rows.map((row) => (row.id === rowId ? { ...row, [field]: value } : row)),
+              rows: semester.rows.map((row) =>
+                row.id === rowId ? { ...row, [field]: value } : row,
+              ),
             }
           : semester,
       ),
@@ -196,22 +241,23 @@ export function CgpaCalculator() {
         <span className="eyebrow">Version 2 calculator</span>
         <h2>Calculate semester GPA and cumulative CGPA across multiple semesters</h2>
         <p>
-          Add as many sessions and semesters as you need. For each semester, enter the course code,
-          credit unit, and final score out of 100. The calculator works out each semester GPA and
-          then combines all semesters into one cumulative CGPA.
+          Add as many sessions and semesters as you need. For each semester,
+          enter the course code, credit unit, and final score out of 100. The
+          calculator works out each semester GPA and then combines all semesters
+          into one cumulative CGPA.
         </p>
         <div className={styles.statsRow}>
           <div>
             <strong>70 - 100</strong>
-            <span>A grade · 5 points</span>
+            <span>A grade - 5 points</span>
           </div>
           <div>
             <strong>60 - 69</strong>
-            <span>B grade · 4 points</span>
+            <span>B grade - 4 points</span>
           </div>
           <div>
             <strong>50 - 59</strong>
-            <span>C grade · 3 points</span>
+            <span>C grade - 3 points</span>
           </div>
           <div>
             <strong>0 - 49</strong>
@@ -226,27 +272,52 @@ export function CgpaCalculator() {
           <div>
             <h3>Build your academic history</h3>
             <p>
-              Create one block for each semester you want included in the calculation. This makes
-              it easier for a 300-level or 400-level student to combine several semesters into one
-              running CGPA.
+              Create one block for each semester you want included in the
+              calculation. This makes it easier for a 300-level or 400-level
+              student to combine several semesters into one running CGPA.
             </p>
           </div>
         </div>
 
         <div className={styles.actions}>
-          <button type="button" className="button" onClick={addSemester}>Add semester block</button>
-          <button type="button" className={styles.ghostButton} onClick={loadExample}>Load worked example</button>
-          <button type="button" className={styles.secondaryButton} onClick={clearAll}>Clear everything</button>
+          <button type="button" className="button" onClick={addSemester}>
+            Add semester block
+          </button>
+          <button
+            type="button"
+            className={styles.ghostButton}
+            onClick={loadExample}
+          >
+            Load worked example
+          </button>
+          <button
+            type="button"
+            className={styles.secondaryButton}
+            onClick={clearAll}
+          >
+            Clear everything
+          </button>
         </div>
       </section>
 
       {computed.semesters.map((semester, index) => (
         <section key={semester.id} className={styles.panel}>
           <div className={styles.panelHeader}>
-            <span className={styles.panelNumber}>{String(index + 1).padStart(2, "0")}</span>
+            <span className={styles.panelNumber}>
+              {String(index + 1).padStart(2, "0")}
+            </span>
             <div>
-              <h3>{semester.sessionLabel || semester.semesterLabel ? `${semester.sessionLabel || "Unnamed session"} · ${semester.semesterLabel || "Unnamed semester"}` : "New semester block"}</h3>
-              <p>Enter the session, semester, and the courses that belong to this semester only.</p>
+              <h3>
+                {semester.sessionLabel || semester.semesterLabel
+                  ? `${semester.sessionLabel || "Unnamed session"} - ${
+                      semester.semesterLabel || "Unnamed semester"
+                    }`
+                  : "New semester block"}
+              </h3>
+              <p>
+                Enter the session, semester, and the courses that belong to this
+                semester only.
+              </p>
             </div>
           </div>
 
@@ -255,7 +326,13 @@ export function CgpaCalculator() {
               <span>Session</span>
               <input
                 value={semester.sessionLabel}
-                onChange={(event) => updateSemesterField(semester.id, "sessionLabel", event.target.value)}
+                onChange={(event) =>
+                  updateSemesterField(
+                    semester.id,
+                    "sessionLabel",
+                    event.target.value,
+                  )
+                }
                 placeholder="2025/2026 Session"
               />
             </label>
@@ -263,15 +340,33 @@ export function CgpaCalculator() {
               <span>Semester</span>
               <input
                 value={semester.semesterLabel}
-                onChange={(event) => updateSemesterField(semester.id, "semesterLabel", event.target.value)}
+                onChange={(event) =>
+                  updateSemesterField(
+                    semester.id,
+                    "semesterLabel",
+                    event.target.value,
+                  )
+                }
                 placeholder="Second Semester"
               />
             </label>
           </div>
 
           <div className={styles.actions}>
-            <button type="button" className="button" onClick={() => addRow(semester.id)}>Add course to this semester</button>
-            <button type="button" className={styles.secondaryButton} onClick={() => removeSemester(semester.id)}>Remove semester block</button>
+            <button
+              type="button"
+              className="button"
+              onClick={() => addRow(semester.id)}
+            >
+              Add course to this semester
+            </button>
+            <button
+              type="button"
+              className={styles.secondaryButton}
+              onClick={() => removeSemester(semester.id)}
+            >
+              Remove semester block
+            </button>
           </div>
 
           <div className={styles.tableWrap}>
@@ -283,7 +378,7 @@ export function CgpaCalculator() {
                   <th>Score / 100</th>
                   <th>Grade</th>
                   <th>Points</th>
-                  <th>Units × Points</th>
+                  <th>Units x Points</th>
                   <th>Action</th>
                 </tr>
               </thead>
@@ -293,7 +388,14 @@ export function CgpaCalculator() {
                     <td>
                       <input
                         value={row.code}
-                        onChange={(event) => updateRow(semester.id, row.id, "code", event.target.value)}
+                        onChange={(event) =>
+                          updateRow(
+                            semester.id,
+                            row.id,
+                            "code",
+                            event.target.value,
+                          )
+                        }
                         placeholder="GST 105"
                       />
                     </td>
@@ -303,7 +405,14 @@ export function CgpaCalculator() {
                         min="1"
                         step="1"
                         value={row.units ?? ""}
-                        onChange={(event) => updateRow(semester.id, row.id, "units", event.target.value)}
+                        onChange={(event) =>
+                          updateRow(
+                            semester.id,
+                            row.id,
+                            "units",
+                            event.target.value,
+                          )
+                        }
                         placeholder="3"
                       />
                     </td>
@@ -314,7 +423,14 @@ export function CgpaCalculator() {
                         max="100"
                         step="1"
                         value={row.score ?? ""}
-                        onChange={(event) => updateRow(semester.id, row.id, "score", event.target.value)}
+                        onChange={(event) =>
+                          updateRow(
+                            semester.id,
+                            row.id,
+                            "score",
+                            event.target.value,
+                          )
+                        }
                         placeholder="71"
                       />
                     </td>
@@ -325,7 +441,12 @@ export function CgpaCalculator() {
                     <td>{row.band?.points ?? "-"}</td>
                     <td>{row.isComplete ? row.qualityPoints : "-"}</td>
                     <td>
-                      <button type="button" onClick={() => removeRow(semester.id, row.id)}>Remove</button>
+                      <button
+                        type="button"
+                        onClick={() => removeRow(semester.id, row.id)}
+                      >
+                        Remove
+                      </button>
                     </td>
                   </tr>
                 ))}
@@ -336,7 +457,11 @@ export function CgpaCalculator() {
           <div className={styles.semesterSummary}>
             <article>
               <span>Semester GPA</span>
-              <strong>{semester.completeRows.length ? semester.roundedGpa.toFixed(2) : "0.00"}</strong>
+              <strong>
+                {semester.completeRows.length
+                  ? semester.roundedGpa.toFixed(2)
+                  : "0.00"}
+              </strong>
               <small>{semester.classOfDegree}</small>
             </article>
             <article>
@@ -355,8 +480,8 @@ export function CgpaCalculator() {
 
       {computed.invalidRows.length > 0 && (
         <p className={styles.warning}>
-          Some rows are incomplete or contain a score outside 0 to 100. Complete those rows or
-          clear them before relying on the final result.
+          Some rows are incomplete or contain a score outside 0 to 100.
+          Complete those rows or clear them before relying on the final result.
         </p>
       )}
 
@@ -366,14 +491,19 @@ export function CgpaCalculator() {
             <span className="eyebrow">Calculated result</span>
             <h2>Your cumulative CGPA estimate</h2>
             <p className={styles.resultNote}>
-              Each semester GPA is calculated separately first, then the cumulative CGPA is worked
-              out from the total quality points and total units across all completed semesters.
+              Each semester GPA is calculated separately first, then the
+              cumulative CGPA is worked out from the total quality points and
+              total units across all completed semesters.
             </p>
           </div>
           <div className={styles.resultMeta}>
             <article>
               <span>Final CGPA</span>
-              <strong>{computed.completedCourses ? computed.roundedCgpa.toFixed(2) : "0.00"}</strong>
+              <strong>
+                {computed.completedCourses
+                  ? computed.roundedCgpa.toFixed(2)
+                  : "0.00"}
+              </strong>
             </article>
             <article>
               <span>Class</span>
@@ -400,7 +530,11 @@ export function CgpaCalculator() {
           </article>
           <article className={styles.totalCard}>
             <span>Formula used</span>
-            <strong>{computed.totalUnits ? `${computed.totalQualityPoints} ÷ ${computed.totalUnits}` : "Add courses"}</strong>
+            <strong>
+              {computed.totalUnits
+                ? `${computed.totalQualityPoints} / ${computed.totalUnits}`
+                : "Add courses"}
+            </strong>
             <small>Total quality points divided by total units.</small>
           </article>
         </div>
@@ -409,8 +543,16 @@ export function CgpaCalculator() {
           {computed.semesters.map((semester) => (
             <article key={semester.id}>
               <span>{semester.sessionLabel || "Unnamed session"}</span>
-              <strong>{semester.completeRows.length ? semester.roundedGpa.toFixed(2) : "0.00"}</strong>
-              <small>{semester.semesterLabel || "Unnamed semester"} · {semester.totalUnits} units · {semester.totalQualityPoints} quality points</small>
+              <strong>
+                {semester.completeRows.length
+                  ? semester.roundedGpa.toFixed(2)
+                  : "0.00"}
+              </strong>
+              <small>
+                {semester.semesterLabel || "Unnamed semester"} -{" "}
+                {semester.totalUnits} units - {semester.totalQualityPoints} quality
+                points
+              </small>
             </article>
           ))}
         </div>
@@ -431,7 +573,8 @@ export function CgpaCalculator() {
             <ul className={styles.bandList}>
               {gradeBands.map((band) => (
                 <li key={band.letter}>
-                  {band.min} - {band.max} = {band.letter} ({band.points} point{band.points === 1 ? "" : "s"}) · {band.meaning}
+                  {band.min} - {band.max} = {band.letter} ({band.points} point
+                  {band.points === 1 ? "" : "s"}) - {band.meaning}
                 </li>
               ))}
             </ul>
@@ -453,7 +596,10 @@ export function CgpaCalculator() {
           <span className={styles.panelNumber}>03</span>
           <div>
             <h3>Worked example from your note</h3>
-            <p>This still follows the same calculation path, even when you add more semesters.</p>
+            <p>
+              This still follows the same calculation path, even when you add
+              more semesters.
+            </p>
           </div>
         </div>
 
@@ -462,7 +608,8 @@ export function CgpaCalculator() {
             <span>Step 1</span>
             <h3>Convert score to grade point</h3>
             <p className={styles.exampleIntro}>
-              Example: `GST 105` scored `71`, so it falls into `A`, which is `5 points`.
+              Example: `GST 105` scored `71`, so it falls into `A`, which is `5
+              points`.
             </p>
             <ul className={styles.exampleList}>
               <li>`ENG 114` 56 = C = 3 points</li>
@@ -474,12 +621,12 @@ export function CgpaCalculator() {
             <span>Step 2</span>
             <h3>Multiply units by points</h3>
             <p className={styles.exampleIntro}>
-              Example: `3 units × 5 points = 15 quality points`.
+              Example: `3 units x 5 points = 15 quality points`.
             </p>
             <ul className={styles.exampleList}>
-              <li>`ENG 114` = 2 × 3 = 6</li>
-              <li>`GST 105` = 3 × 5 = 15</li>
-              <li>`FMC 224` = 2 × 5 = 10</li>
+              <li>`ENG 114` = 2 x 3 = 6</li>
+              <li>`GST 105` = 3 x 5 = 15</li>
+              <li>`FMC 224` = 2 x 5 = 10</li>
             </ul>
           </article>
           <article className={styles.guideCard}>
@@ -490,7 +637,7 @@ export function CgpaCalculator() {
           <article className={styles.guideCard}>
             <span>Step 4</span>
             <h3>Divide by total units</h3>
-            <p>`66 ÷ 18 = 3.666`, which rounds to `3.66`.</p>
+            <p>`66 / 18 = 3.666`, which rounds to `3.66`.</p>
           </article>
         </div>
       </section>
@@ -499,10 +646,11 @@ export function CgpaCalculator() {
         <span>Use it well</span>
         <h3>What this calculator can and cannot do</h3>
         <p>
-          This tool helps you estimate semester GPA and cumulative CGPA from the scores and units
-          you enter across several semesters. It does not connect to your NOUN portal, verify
-          official grades, or decide your final academic standing. Always compare the final outcome
-          with your official result record.
+          This tool helps you estimate semester GPA and cumulative CGPA from the
+          scores and units you enter across several semesters. It does not
+          connect to your NOUN portal, verify official grades, or decide your
+          final academic standing. Always compare the final outcome with your
+          official result record.
         </p>
         <div className={styles.footerLinks}>
           <Link href="/results">
