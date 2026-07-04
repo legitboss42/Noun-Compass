@@ -1,6 +1,6 @@
 export const site = {
   name: "NOUN Compass",
-  url: "https://www.nouncompass.me",
+  url: "https://nouncompass.me",
   contactEmail: "support@nouncompass.me",
   searchPath: "/student-guides",
   tagline: "Navigate NOUN with confidence",

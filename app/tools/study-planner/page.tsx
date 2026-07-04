@@ -17,7 +17,7 @@ export default function StudyPlannerPage() {
     name: "NOUN Study Planner",
     applicationCategory: "EducationalApplication",
     operatingSystem: "Any",
-    url: "https://www.nouncompass.me/tools/study-planner",
+    url: "https://nouncompass.me/tools/study-planner",
     description:
       "Generate a weekly reading timetable for NOUN courses using student availability, workdays, and suggested course data already available on NounCompass.",
   };

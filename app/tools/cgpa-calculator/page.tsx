@@ -15,7 +15,7 @@ export default function CgpaCalculatorPage() {
     name: "NOUN CGPA Calculator",
     applicationCategory: "EducationalApplication",
     operatingSystem: "Any",
-    url: "https://www.nouncompass.me/tools/cgpa-calculator",
+    url: "https://nouncompass.me/tools/cgpa-calculator",
     description:
       "Calculate your NOUN CGPA from course units and final scores using the current grade-point bands and class-of-degree ranges.",
   };
