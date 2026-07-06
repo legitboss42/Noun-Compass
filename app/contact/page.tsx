@@ -1,4 +1,5 @@
 import { TrustPage } from "@/components/trust-page";
+import { ContactForm } from "@/components/contact-form";
 import { createMetadata } from "@/lib/metadata";
 import { site } from "@/data/site";
 export const metadata = createMetadata(
@@ -27,13 +28,16 @@ export default function Page() {
       },
     },
   };
-  return <TrustPage title="Contact us" eyebrow="We listen" intro="Send a correction, suggest a guide, report a material problem, or ask a general question.">
+  return <TrustPage title="Contact us" eyebrow="We listen" intro="Send a correction, suggest a guide, report a material problem, ask for student-help support, or contact us about admissions guidance.">
     <h2>Before you contact us</h2>
     <p>NOUN Compass cannot log into your student portal, process payments, change results, or speak for NOUN. If the issue is tied to your personal account, your study centre or the relevant NOUN support channel is still the right final stop.</p>
     <div className="contact-grid">
       <div><h2>Editorial and corrections</h2><p>Email <a href={`${mailto}?subject=NOUN%20Compass%20editorial%20request`}>{site.contactEmail}</a> with the page URL, the detail that needs attention, and a supporting source if you have one.</p><a className="button" href={`${mailto}?subject=NOUN%20Compass%20correction`}>Email the editorial team</a></div>
-      <div><h2>Copyright and material reports</h2><p>Use the same support address for copyright, broken-link, outdated-material, or wrong-listing reports. Add enough detail for us to check the page quickly.</p><a className="button" href={`${mailto}?subject=NOUN%20Compass%20material%20report`}>Report a material concern</a></div>
+      <div><h2>Admissions and student-help enquiries</h2><p>Use the form below if you need help understanding NOUN admission steps, portal guidance, or a practical next step on a NounCompass page. We will reply from <strong>{site.contactEmail}</strong>.</p><a className="button" href="#contact-form">Open the support form</a></div>
     </div>
+    <h2 id="contact-form">Send a message</h2>
+    <p>NounCompass is an independent student-help platform and is not the official NOUN website.</p>
+    <ContactForm />
     <h2>Include useful context</h2>
     <p>For corrections, include the affected page URL, the exact line or material in question, the better information, and a source where available. Never email passwords, one-time codes, full payment-card details, or unnecessary identity documents.</p>
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(contactSchema) }} />
