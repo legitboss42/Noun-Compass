@@ -8,6 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "marketing:daily": "node scripts/marketing/run-daily-agent.mjs",
     "seo:audit": "node scripts/seo-audit/index.mjs",
     "seo:audit:nouncompass": "node scripts/seo-audit/index.mjs https://nouncompass.me",
     "seo:audit:webgrowth": "node scripts/seo-audit/index.mjs https://nouncompass.me"

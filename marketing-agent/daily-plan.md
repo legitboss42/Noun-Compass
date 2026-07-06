@@ -1,260 +1,172 @@
 # Daily Marketing Agent Plan
 
-## Daily workflow
+## Run Date
 
-1. Review the last entries in `marketing-memory.json`.
-2. Check recent Search Console winners, current audit issues, and the strongest student-help pages on the site.
-3. Pick one campaign theme that can drive traffic, trust, and leads at the same time.
-4. Generate one admission post, one traffic post, one helpful educational post, one FAQ post, one engagement post, one Pinterest idea, and one short video idea.
-5. Prepare the creative brief for each post.
-6. Default to premium flyer-style creatives with logo, contact details, and a strong CTA.
-7. Publish directly once the drafts are ready unless a platform requires manual intervention.
-8. Update `daily-marketing-report.md` and `marketing-memory.json`.
+2026-07-06
 
-## Inputs the agent should use each day
+## Selected Campaign Theme
 
-- `marketing-memory.json`
-- Search Console top pages and queries
-- Strongest current student-help pages on the site
-- Current seasonal needs such as admission, fees, registration, results, or TMA concerns
-- Platform-specific behavior and link limitations
+Portal and registration recovery
 
-## Content selection rules
+## Why This Theme Won Today
 
-- Favor topics students clearly need now.
-- Reuse evergreen topics only when the angle is new.
-- Connect each post to a page that can absorb traffic and help the user.
-- Prefer content that can be reused across Facebook, Instagram, Pinterest, X, TikTok, LinkedIn, and Shorts.
-- Avoid repeating the same admission angle too often without a new hook.
+- Student problem: Students cannot find the right next portal step.
+- Main outcome: Traffic + trust
+- Platform focus: Facebook, X, Instagram Stories
+- Primary links: https://nouncompass.me/portal, https://nouncompass.me/articles/noun-portal-password-reset, https://nouncompass.me/articles/how-to-register-noun-courses
 
-## Daily campaign decision logic
+## Daily Workflow
 
-Choose the theme that best matches one or more of these conditions:
+1. Review the latest entries in `marketing-memory.json`.
+2. Use the selected theme for today's post batch.
+3. Generate premium flyer-style creatives with logo, website, and contact details.
+4. Publish to the strongest priority platforms first.
+5. Record live post URLs in `daily-marketing-report.md` and `marketing-memory.json` after publishing.
 
-- Admission questions are likely rising.
-- Students are confused about fees, portal, registration, or results.
-- A guide article already shows traction and can be amplified.
-- A trust-building post can reduce friction before a lead CTA.
-- A visual evergreen guide can work well on Pinterest and Instagram.
+## Today's Post Batch
 
-## Recommended landing page priorities
-
-Pages already present:
-
-- Course Materials
-- School Fees Guide
-- Student Portal Guide
-- Exam Preparation
-- Contact
-- About
-- Disclaimer
-- Privacy Policy
-
-Recommended missing or underdeveloped landing pages:
-
-- Admission Assistance
-- TMA Guide
-- Dedicated admission contact or lead form section
-- Link-in-bio style social landing page if multiple platforms become active
-
-## Phase 1 first-run account priorities
-
-1. Facebook Page
-2. X/Twitter
-3. Instagram Business
-4. Pinterest Business
-
-## Publishing workflow
-
-- Prepare the draft.
-- Publish directly when the content is ready and the account is already logged in.
-- Pause only for login, 2FA, CAPTCHA, billing, account-risk prompts, or other manual-only gates.
-- Record the resulting post URLs after publishing.
-
-## Manual setup notes
-
-- Social account creation and login require manual user input.
-- Never automate passwords, CAPTCHA, or 2FA.
-- Save account URLs, usernames, and setup status once each platform is configured.
-- If browser control is not stable, pause and resume setup in a fresh controlled browser pass rather than pretending the action was completed.
-
-## 2026-07-06 selected campaign theme
-
-Safe NOUN payment and admission clarity
-
-Why this theme won today:
-
-- Live Search Console data now exists and shows traction around payment and Remita-related queries.
-- Fees and payment content can drive traffic immediately.
-- Admission confusion remains the best direct lead angle.
-- Both topics build trust because they solve real mistakes students are trying to avoid.
-
-## 2026-07-06 complete daily batch
-
-### 1. Admission service post
+### 1. Admission Service Post
 
 - Platforms: Facebook, Instagram
-- Student problem: applicants are confused about where to start and what to prepare
+- Topic: Portal And Registration Recovery admission help
+- Student problem: Students cannot find the right next portal step.
 - Caption:
-  Confused about NOUN admission steps, documents, or what to do first?
+  Need clearer NOUN help around portal and registration recovery?
   
-  NounCompass breaks the process into simple guidance for applicants who want clear next steps without guesswork.
+  NounCompass explains the next step in simple language so you can move forward with less guesswork.
   
   Need help with NOUN admission? Contact NounCompass for guidance.
   
   NounCompass is an independent student-help platform and is not the official NOUN website.
-- Image brief:
-  Headline: Need help with NOUN admission?
-  Subheadline: Clear next-step guidance for confused applicants
-  CTA: Contact NounCompass
-  Visual direction: calm student-help layout, checklist feel, phone plus laptop, no official logos
-  Size: 1080x1350
+- Image brief: Premium flyer with logo, contact details, short headline, and one student problem in focus.
 - CTA: Need help with NOUN admission? Contact NounCompass for guidance.
-- Hashtags: #NounCompass #NOUNAdmission #StudentHelp #AdmissionGuide #NOUNStudents
+- Hashtags: #NounCompass #NOUNAdmission #StudentHelp #NOUNStudents
 - Link target: https://nouncompass.me/admission
-- Best format: Facebook image post, Instagram feed post
-- Reason: direct lead-generation post anchored in a common student pain point
+- Best format: Facebook image post and Instagram feed post
+- Reason: Keeps lead generation active even when the theme is broader than admission.
 - Expected goal: leads
 
-### 2. Website traffic post
+### 2. Website Traffic Post
 
-- Platforms: Facebook, X, Pinterest
-- Student problem: students want to pay fees but do not know how to generate Remita correctly
+- Platforms: Facebook, X, Instagram Stories
+- Topic: Portal and registration recovery
+- Student problem: Students cannot find the right next portal step.
 - Caption:
-  Trying to pay NOUN fees and not sure how to generate Remita correctly?
+  Students are asking about portal and registration recovery right now.
   
-  This guide walks you through the process step by step so you can avoid preventable payment mistakes.
+  This guide gives the clearer next step without the usual confusion.
   
-  Read it here: https://nouncompass.me/articles/how-to-generate-remita-for-noun
+  Read more: https://nouncompass.me/portal
   
   NounCompass is an independent student-help platform and is not the official NOUN website.
-- Image brief:
-  Headline: How to generate Remita for NOUN
-  Subheadline: Avoid payment mistakes before you pay
-  CTA: Read the guide
-  Visual direction: bold text, simple payment flow icons, clean background
-  Size: 1200x628 and 1000x1500
+- Image brief: Premium flyer with logo, website, support email, and one strong practical promise.
 - CTA: Read the full guide on NounCompass.
-- Hashtags: #NounCompass #NOUNFees #Remita #StudentGuide #NOUNStudents
-- Link target: https://nouncompass.me/articles/how-to-generate-remita-for-noun
-- Best format: link post on Facebook and X, vertical pin on Pinterest
-- Reason: this topic already shows live search traction and can pull more clicks
+- Hashtags: #NounCompass #StudentGuide #NOUNStudents #NOUNHelp
+- Link target: https://nouncompass.me/portal
+- Best format: Traffic post linked to the strongest page for the theme
+- Reason: Pushes the theme's strongest educational URL.
 - Expected goal: traffic
 
-### 3. Helpful educational post
+### 3. Helpful Educational Post
 
-- Platforms: Instagram carousel, Facebook
-- Student problem: students rush into payment without checking the right details
+- Platforms: Facebook, Instagram
+- Topic: Portal and registration recovery checklist
+- Student problem: Students cannot find the right next portal step.
 - Caption:
-  Before you pay any NOUN fee, check these 3 things first:
+  Before you act on portal and registration recovery, check these 3 things first:
   
-  1. Confirm what the fee is actually for
-  2. Confirm the session or semester details
-  3. Confirm the payment path you are using
+  1. Confirm the exact task
+  2. Confirm the right page or guide
+  3. Confirm the final step before you submit or pay
   
-  Save this post before you make a payment.
-  
-  Full fees help: https://nouncompass.me/fees
-- Image brief:
-  Headline: 3 checks before you pay any NOUN fee
-  Subheadline: A quick student-safe checklist
-  CTA: Save this
-  Visual direction: clean numbered carousel, minimal icons, high contrast
-  Size: 1080x1350
+  Save this for later.
+- Image brief: Premium checklist flyer with mobile-first readability and contact details.
 - CTA: Save this for later.
-- Hashtags: #NounCompass #NOUNFees #StudentChecklist #NOUNGuide #StudySmart
-- Link target: https://nouncompass.me/fees
-- Best format: Instagram carousel, Facebook carousel-style graphic
-- Reason: helpful, low-pressure, trust-building content tied to a strong site page
+- Hashtags: #NounCompass #StudentChecklist #NOUNGuide #StudySmart
+- Link target: https://nouncompass.me/portal
+- Best format: Single graphic or carousel
+- Reason: Keeps the batch useful even before the stronger traffic CTA.
 - Expected goal: trust
 
-### 4. FAQ-style post
+### 4. FAQ-Style Trust Post
 
-- Platforms: X, Facebook
-- Student problem: people may not know whether NounCompass is official
+- Platforms: Facebook, X
+- Topic: Portal and registration recovery FAQ
+- Student problem: Students keep repeating the same clarification questions.
 - Caption:
-  FAQ: Is NounCompass the official NOUN website?
+  Quick FAQ: Where should students start when they are confused about portal and registration recovery?
   
-  No. NounCompass is an independent student-help platform that explains NOUN-related processes in simple language.
+  Start with a clear guide, then confirm the final step on the official NOUN page.
   
-  If you want a guide before taking action, start here: https://nouncompass.me/student-guides
-- Image brief:
-  Headline: Is NounCompass official?
-  Subheadline: No. It is an independent student-help platform.
-  CTA: Start with the guides
-  Visual direction: simple trust card, plain typography, no clutter
-  Size: 1200x628
-- CTA: Start with the guides.
-- Hashtags: #NounCompass #StudentFAQ #NOUNGuide #StudentHelp
-- Link target: https://nouncompass.me/student-guides
-- Best format: short text post, single-card graphic
-- Reason: builds trust and protects brand clarity
+  https://nouncompass.me/portal
+- Image brief: Premium trust-style FAQ card with logo and disclaimer.
+- CTA: Start with the guide.
+- Hashtags: #NounCompass #StudentFAQ #NOUNGuide
+- Link target: https://nouncompass.me/portal
+- Best format: Short text post or simple FAQ card
+- Reason: Builds trust and keeps the brand useful.
 - Expected goal: trust
 
-### 5. Engagement post or poll
+### 5. Engagement Post
 
 - Platforms: Facebook, Instagram Stories, X
-- Student problem: students have different immediate blockers
+- Topic: Portal and registration recovery poll
+- Student problem: Students need a low-friction way to signal what they need next.
 - Caption:
-  What are you most stuck on right now?
+  Which of these do you need help with most right now?
   
-  A. Admission
-  B. School fees
-  C. Portal or registration
-  D. Results or TMA
+  A. Portal and registration recovery
+  B. Admission
+  C. School fees
+  D. Portal or results
   
-  Comment with the letter, or tell us the exact issue.
-- Image brief:
-  Headline: What do you need help with right now?
-  Subheadline: Admission, fees, portal, results, or TMA?
-  CTA: Comment your answer
-  Visual direction: clean poll card, bold letters, mobile-first readability
-  Size: 1080x1080
+  Comment with the letter or tell us the exact issue.
+- Image brief: Premium poll flyer with bold blocks and contact details.
 - CTA: Comment with your answer.
-- Hashtags: #NounCompass #NOUNStudents #StudentSupport #NOUNHelp
+- Hashtags: #NounCompass #NOUNStudents #StudentSupport
 - Link target: https://nouncompass.me/contact
-- Best format: Facebook text-plus-graphic, X poll-style question, Instagram story poll
-- Reason: collects future content signals and increases engagement
+- Best format: Poll or engagement graphic
+- Reason: Collects tomorrow's content inputs.
 - Expected goal: engagement
 
-### 6. Pinterest evergreen pin idea
+### 6. Pinterest Evergreen Pin
 
 - Platforms: Pinterest
-- Student problem: students search evergreen fee-payment help
+- Topic: Portal and registration recovery evergreen pin
+- Student problem: Students cannot find the right next portal step.
 - Caption:
-  How to generate Remita for NOUN school fees without avoidable mistakes. Open the full guide on NounCompass.
-- Image brief:
-  Headline: How to generate Remita for NOUN
-  Subheadline: A simple student guide before you pay
-  CTA: Open the guide
-  Visual direction: tall infographic pin with 3-step teaser
-  Size: 1000x1500
+  Save this NOUN guide for later if you need help with portal and registration recovery.
+- Image brief: Tall premium flyer pin with logo, website, and a practical one-line promise.
 - CTA: Open the guide.
-- Hashtags: #NOUNFees #Remita #StudentGuide #NounCompass
-- Link target: https://nouncompass.me/articles/how-to-generate-remita-for-noun
-- Best format: vertical evergreen pin
-- Reason: strong fit for persistent search and save behavior
+- Hashtags: #NounCompass #StudentGuide #NOUNStudents
+- Link target: https://nouncompass.me/portal
+- Best format: Vertical evergreen pin
+- Reason: Keeps Pinterest active with searchable educational content.
 - Expected goal: traffic
 
-### 7. Short video idea for TikTok, Instagram Reels, or YouTube Shorts
+### 7. Short Video Idea
 
 - Platforms: Instagram Reels, TikTok, YouTube Shorts
-- Student problem: students make avoidable payment mistakes
+- Topic: Portal and registration recovery short video
+- Student problem: Students cannot find the right next portal step.
 - Caption:
-  3 mistakes students make before paying NOUN fees
+  Still confused about portal and registration recovery?
   
-  If you want the safer step-by-step version, check NounCompass.
+  Here is one mistake to avoid and one safer next step.
   
-  Link in bio or visit nouncompass.me
-- Image brief:
-  Headline: 3 NOUN fee mistakes to avoid
-  Subheadline: Check these before you pay
-  CTA: Check the guide
-  Visual direction: short face-to-camera or text-led reel with large captions
-  Size: 1080x1920
+  Visit nouncompass.me for the full guide.
+- Image brief: Premium vertical short opener with big captions, logo, and website.
 - CTA: Check the guide.
-- Hashtags: #NounCompass #NOUNFees #StudentHelp #NOUNGuide #StudySmart
-- Link target: https://nouncompass.me/articles/how-to-generate-remita-for-noun
-- Best format: 20 to 30 second vertical short
-- Reason: easy to repurpose across three platforms and tied to a traffic-worthy topic
+- Hashtags: #NounCompass #StudentHelp #NOUNGuide #NOUNStudents
+- Link target: https://nouncompass.me/portal
+- Best format: 20 to 30 second short
+- Reason: Creates one reusable short-form content asset for three channels.
 - Expected goal: awareness
+
+## Publishing Note
+
+- Publish directly if the account is already logged in and no manual-only platform gate appears.
+- Pause only for login, 2FA, CAPTCHA, or other forced manual intervention.
+- Keep using this disclaimer where confusion is possible:
+
+NounCompass is an independent student-help platform and is not the official NOUN website.

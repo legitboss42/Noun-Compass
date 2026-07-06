@@ -1,46 +1,29 @@
 # Admission Service Promo
 
-## Campaign goal
+- Platforms: Facebook, Instagram
+- Topic: Portal And Registration Recovery admission help
+- Link target: https://nouncompass.me/admission
+- CTA: Need help with NOUN admission? Contact NounCompass for guidance.
+- Hashtags: #NounCompass #NOUNAdmission #StudentHelp #NOUNStudents
 
-Generate admission assistance leads while building trust.
+## Caption
 
-## Today’s version
+Need clearer NOUN help around portal and registration recovery?
 
-Confused about NOUN admission steps, documents, or where to start?
-
-NounCompass breaks the process into simple guidance for applicants who want help understanding what to do next without guesswork.
+NounCompass explains the next step in simple language so you can move forward with less guesswork.
 
 Need help with NOUN admission? Contact NounCompass for guidance.
 
 NounCompass is an independent student-help platform and is not the official NOUN website.
 
-## Image brief
+## Image Brief
 
-- Headline: Need help with NOUN admission?
-- Subheadline: Clear next-step guidance for confused applicants
-- CTA: Get guidance today
-- Visual direction: clean student-focused layout, NounCompass colors, admission documents, laptop, phone, simple icons
-- Size recommendation: 1080 x 1350 for Instagram and Facebook
-- Platform recommendation: Facebook Page, Instagram feed
+Premium flyer with logo, contact details, short headline, and one student problem in focus.
 
-## Hashtags
+## Posting Format
 
-- #NOUNCompass
-- #NOUNAdmission
-- #StudentHelp
-- #AdmissionGuide
-- #NOUNStudents
+Facebook image post and Instagram feed post
 
-## Link target
+## Reason
 
-- https://nouncompass.me/admission
-
-## Expected goal
-
-- Leads
-
-## Reason this is the current lead post
-
-- Admission remains the strongest direct service offer.
-- The post solves a real confusion problem instead of sounding promotional for no reason.
-- The disclaimer keeps the brand clear and compliant.
+Keeps lead generation active even when the theme is broader than admission.
