@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">How to Generate Remita for NOUN Payments</title>
+  <desc id="desc">Branded cover for the NOUN Remita payment guide.</desc>
+  <rect width="1600" height="900" fill="#0d1f1a"/>
+  <rect x="72" y="72" width="1456" height="756" rx="40" fill="#f5f1e8"/>
+  <rect x="120" y="120" width="420" height="660" rx="28" fill="#145c43"/>
+  <circle cx="330" cy="290" r="92" fill="#e0b64b"/>
+  <rect x="208" y="434" width="244" height="30" rx="15" fill="#f5f1e8"/>
+  <rect x="208" y="490" width="196" height="22" rx="11" fill="#bdd8c6"/>
+  <rect x="208" y="530" width="230" height="22" rx="11" fill="#bdd8c6"/>
+  <rect x="208" y="600" width="184" height="72" rx="18" fill="#0d1f1a"/>
+  <text x="620" y="248" fill="#145c43" font-family="Arial, sans-serif" font-size="28" font-weight="700" letter-spacing="4">NOUN COMPASS</text>
+  <text x="620" y="344" fill="#0d1f1a" font-family="Arial, sans-serif" font-size="72" font-weight="700">Generate Remita</text>
+  <text x="620" y="424" fill="#0d1f1a" font-family="Arial, sans-serif" font-size="72" font-weight="700">Without Guesswork</text>
+  <text x="620" y="516" fill="#4c5e56" font-family="Arial, sans-serif" font-size="32">Use the official portal route, save the RRR, and verify payment reflection.</text>
+  <rect x="620" y="602" width="360" height="74" rx="37" fill="#e0b64b"/>
+  <text x="675" y="648" fill="#0d1f1a" font-family="Arial, sans-serif" font-size="28" font-weight="700">Official portal first</text>
+</svg>

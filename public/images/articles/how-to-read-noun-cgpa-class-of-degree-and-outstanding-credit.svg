@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">How to Read NOUN CGPA, Class of Degree, and Outstanding Credit</title>
+  <desc id="desc">Branded cover for the NOUN CGPA and academic-record guide.</desc>
+  <rect width="1600" height="900" fill="#0e2431"/>
+  <rect x="80" y="80" width="1440" height="740" rx="38" fill="#f6f8fb"/>
+  <rect x="132" y="128" width="430" height="644" rx="28" fill="#1b4b69"/>
+  <rect x="196" y="192" width="302" height="516" rx="24" fill="#f6f8fb"/>
+  <circle cx="280" cy="582" r="44" fill="#dcb760"/>
+  <rect x="352" y="510" width="78" height="120" rx="18" fill="#1b4b69"/>
+  <rect x="228" y="258" width="238" height="26" rx="13" fill="#bfd1df"/>
+  <rect x="228" y="314" width="206" height="26" rx="13" fill="#bfd1df"/>
+  <rect x="228" y="390" width="88" height="196" rx="16" fill="#cfe1ed"/>
+  <rect x="334" y="458" width="88" height="128" rx="16" fill="#dcb760"/>
+  <text x="620" y="238" fill="#1b4b69" font-family="Arial, sans-serif" font-size="28" font-weight="700" letter-spacing="4">NOUN COMPASS</text>
+  <text x="620" y="332" fill="#0e2431" font-family="Arial, sans-serif" font-size="64" font-weight="700">Read CGPA and</text>
+  <text x="620" y="406" fill="#0e2431" font-family="Arial, sans-serif" font-size="64" font-weight="700">Academic Standing</text>
+  <text x="620" y="502" fill="#566674" font-family="Arial, sans-serif" font-size="32">Understand class of degree, earned credit, and outstanding credit on the right page.</text>
+  <rect x="620" y="602" width="394" height="74" rx="37" fill="#dcb760"/>
+  <text x="684" y="648" fill="#0e2431" font-family="Arial, sans-serif" font-size="28" font-weight="700">ERP metrics explained</text>
+</svg>

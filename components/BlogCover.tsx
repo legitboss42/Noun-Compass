@@ -88,7 +88,7 @@ export function BlogCover({
           <h2>{title}</h2>
           <p>{subtitle}</p>
         </div>
-        <CoverPattern theme={palette} image={image} imageAlt={imageAlt ?? `${title} illustration`} compact={compact} />
+        <CoverPattern theme={palette} image={image} imageAlt={imageAlt ?? `${title} illustration`} compact={compact} priorityImage={priorityImage} />
       </div>
       <div className="blog-cover-footer">
         <div className="blog-cover-ribbon" />

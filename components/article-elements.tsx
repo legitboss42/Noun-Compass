@@ -4,6 +4,7 @@ import { createElement, type HTMLAttributes, type ReactNode } from "react";
 import type { ArticleMeta } from "@/lib/articles";
 import { formatDate } from "@/lib/articles";
 import type { ArticleFaq } from "@/lib/article-faqs";
+import { getEditorialProfile } from "@/lib/editorial";
 
 export function Breadcrumbs({ items }: { items: { label: string; href?: string }[] }) {
   return <nav className="breadcrumbs" aria-label="Breadcrumb">{items.map((item, index) => <span key={item.label}>{index > 0 && <i>/</i>}{item.href ? <Link href={item.href}>{item.label}</Link> : item.label}</span>)}</nav>;
@@ -54,12 +55,28 @@ export function FAQBlock({ faqs }: { faqs: ArticleFaq[] }) {
 }
 
 export function AuthorBox({ author, reviewer }: { author: string; reviewer: string }) {
-  const authorHref = author === "Victor Chinukwue" ? "/authors/victor" : "/authors/editorial-team";
-  return <aside className="author-box"><div className="author-avatar">NC</div><div><span className="eyebrow">About this guide</span><h2>Written by <Link href={authorHref}>{author}</Link></h2><p>Our editorial team turns complex student processes into clear, verifiable steps. Reviewed by {reviewer} for clarity and student usefulness.</p><Link href="/editorial-policy">Read our editorial policy</Link></div></aside>;
+  const authorProfile = getEditorialProfile(author);
+  const reviewerProfile = getEditorialProfile(reviewer);
+  return <aside className="author-box"><div className="author-avatar">NC</div><div><span className="eyebrow">About this guide</span><h2>Written by <Link href={authorProfile.href}>{author}</Link></h2><p>Written by {author}. Reviewed by <Link href={reviewerProfile.href}>{reviewer}</Link> for source clarity, student risk, and workflow accuracy before publication.</p><Link href="/editorial-policy">Read our editorial policy</Link></div></aside>;
 }
 
 export function DisclaimerBox() {
   return <aside className="disclaimer-box"><strong>Independent resource disclaimer</strong><p>NOUN Compass is independent and is not officially connected to NOUN. Check official NOUN channels before you act on fees, admission details, deadlines, or course-material information.</p></aside>;
+}
+
+export function SourceReviewBox({
+  summary,
+  reviewedSources,
+  reviewHighlights,
+  reviewedAt,
+}: {
+  summary?: string;
+  reviewedSources?: { label: string; url: string }[];
+  reviewHighlights?: string[];
+  reviewedAt: string;
+}) {
+  if (!summary && !reviewedSources?.length && !reviewHighlights?.length) return null;
+  return <aside className="source-review-box"><strong>Source review</strong>{summary ? <p>{summary}</p> : null}<p><strong>Last reviewed:</strong> {formatDate(reviewedAt)}.</p>{reviewHighlights?.length ? <ul>{reviewHighlights.map((item) => <li key={item}>{item}</li>)}</ul> : null}{reviewedSources?.length ? <div className="source-review-links">{reviewedSources.map((item) => <a key={item.url} href={item.url} target="_blank" rel="noopener noreferrer">{item.label}</a>)}</div> : null}</aside>;
 }
 
 export function RelatedReads({ articles }: { articles: ArticleMeta[] }) {

@@ -13,6 +13,7 @@ import {
   LastCheckedBox,
   MdxHeading,
   RelatedReads,
+  SourceReviewBox,
   SourceNote,
   TableOfContents,
   slugifyHeading,
@@ -20,6 +21,7 @@ import {
 import { BlogCover } from "@/components/BlogCover";
 import { getAllArticles, getArticle, formatDate } from "@/lib/articles";
 import { getArticleFaqs } from "@/lib/article-faqs";
+import { getEditorialProfile } from "@/lib/editorial";
 import { getCategory, site } from "@/data/site";
 
 export function generateStaticParams() {
@@ -128,6 +130,8 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
   const categoryLabel = category?.name ?? article.category.replace("-", " ");
   const articleUrl = `${site.url}/articles/${article.slug}`;
   const categoryUrl = `${site.url}/${article.category}`;
+  const authorProfile = getEditorialProfile(article.author);
+  const reviewerProfile = getEditorialProfile(article.reviewer);
 
   const articleSchema = {
     "@context": "https://schema.org",
@@ -141,16 +145,28 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
     isAccessibleForFree: true,
     keywords: [article.primaryKeyword, ...article.secondaryKeywords].join(", "),
     articleSection: categoryLabel,
-    author:
-      article.author === "Victor Chinukwue"
-        ? { "@type": "Person", name: article.author, url: authorUrl }
-        : { "@type": "Organization", name: article.author, url: authorUrl },
+    author: {
+      "@type": authorProfile.type,
+      name: article.author,
+      url: authorUrl,
+      description: authorProfile.description,
+    },
+    editor: {
+      "@type": reviewerProfile.type,
+      name: reviewerProfile.name,
+      url: `${site.url}${reviewerProfile.href}`,
+      description: reviewerProfile.description,
+    },
     publisher: {
       "@type": "Organization",
       name: site.name,
       url: site.url,
       logo: { "@type": "ImageObject", url: `${site.url}/images/brand/nouncompass-icon.png` },
     },
+    citation: [
+      article.officialSourceUrl,
+      ...(article.reviewedSources?.map((item) => item.url) ?? []),
+    ].filter((value, index, list) => list.indexOf(value) === index),
     mainEntityOfPage: {
       "@type": "WebPage",
       "@id": articleUrl,
@@ -221,7 +237,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
                 By <strong>{article.author}</strong>
               </span>
               <span>
-                Reviewed by <strong>{article.reviewer}</strong>
+                Reviewed by <Link href={reviewerProfile.href}><strong>{article.reviewer}</strong></Link>
               </span>
               <span>Updated {formatDate(article.updatedAt)}</span>
               <span>{article.readingTime}</span>
@@ -244,6 +260,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
                 image={article.image}
                 imageAlt={article.title}
                 mode="feature"
+                priorityImage
               />
               <figcaption>
                 Branded cover image for this guide. Check the official NOUN pages for final dates,
@@ -252,6 +269,12 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
             </figure>
 
             <LastCheckedBox date={article.updatedAt} />
+            <SourceReviewBox
+              summary={article.sourceReviewSummary}
+              reviewedSources={article.reviewedSources}
+              reviewHighlights={article.reviewHighlights}
+              reviewedAt={article.updatedAt}
+            />
 
             <div className="summary-box">
               <strong>Quick take</strong>

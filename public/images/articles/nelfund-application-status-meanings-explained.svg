@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">NELFUND Application Status Meanings Explained</title>
+  <desc id="desc">Branded cover for the NELFUND status guide.</desc>
+  <rect width="1600" height="900" fill="#102117"/>
+  <rect x="76" y="76" width="1448" height="748" rx="42" fill="#f4f6ef"/>
+  <rect x="120" y="120" width="430" height="660" rx="30" fill="#1b5d39"/>
+  <rect x="186" y="190" width="298" height="140" rx="24" fill="#f4f6ef"/>
+  <rect x="186" y="370" width="298" height="140" rx="24" fill="#d8e8dc"/>
+  <rect x="186" y="550" width="298" height="140" rx="24" fill="#f0d680"/>
+  <text x="246" y="276" fill="#1b5d39" font-family="Arial, sans-serif" font-size="36" font-weight="700">Verified</text>
+  <text x="232" y="458" fill="#1b5d39" font-family="Arial, sans-serif" font-size="36" font-weight="700">Missing Info</text>
+  <text x="238" y="638" fill="#3c3112" font-family="Arial, sans-serif" font-size="36" font-weight="700">Use Caution</text>
+  <text x="620" y="240" fill="#1b5d39" font-family="Arial, sans-serif" font-size="28" font-weight="700" letter-spacing="4">NOUN COMPASS</text>
+  <text x="620" y="334" fill="#102117" font-family="Arial, sans-serif" font-size="66" font-weight="700">NELFUND Status</text>
+  <text x="620" y="410" fill="#102117" font-family="Arial, sans-serif" font-size="66" font-weight="700">Meanings Explained</text>
+  <text x="620" y="508" fill="#566358" font-family="Arial, sans-serif" font-size="32">Separate verified stages from repeated claims that the reviewed evidence did not settle.</text>
+  <rect x="620" y="602" width="362" height="74" rx="37" fill="#f0d680"/>
+  <text x="682" y="648" fill="#102117" font-family="Arial, sans-serif" font-size="28" font-weight="700">Verified vs unverified</text>
+</svg>

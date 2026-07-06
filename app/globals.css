@@ -245,6 +245,11 @@ button, a, input, textarea { outline-offset: 4px; }
 .summary-box, .source-note, .disclaimer-box { margin-block: 28px; padding: 22px; background: var(--soft); border-left: 4px solid var(--green); }
 .summary-box p, .source-note p, .disclaimer-box p { margin-bottom: 0; color: var(--muted); line-height: 1.65; }
 .source-note a { display: inline-block; margin-top: 14px; color: var(--green); font-size: .8rem; font-weight: 800; }
+.source-review-box { margin-block: 28px; padding: 22px; background: #f5fbf7; border: 1px solid rgba(14, 122, 62, 0.14); border-left: 4px solid var(--green); }
+.source-review-box p { margin-bottom: 12px; color: var(--muted); line-height: 1.65; }
+.source-review-box ul { margin: 0 0 14px 18px; color: var(--muted); }
+.source-review-links { display: flex; flex-wrap: wrap; gap: 10px; }
+.source-review-links a { color: var(--green); font-size: .8rem; font-weight: 800; }
 .prose { color: #29352e; font-size: 1rem; line-height: 1.85; }
 .prose h2 { scroll-margin-top: 155px; margin: 46px 0 14px; color: var(--ink); font-size: 2rem; line-height: 1.15; letter-spacing: -.05em; }
 .prose h3 { margin: 34px 0 8px; color: var(--ink); font-size: 1.35rem; letter-spacing: -.035em; }

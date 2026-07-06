@@ -20,6 +20,9 @@ export type ArticleMeta = {
   relatedArticles: string[];
   image: string;
   featured?: boolean;
+  sourceReviewSummary?: string;
+  reviewHighlights?: string[];
+  reviewedSources?: { label: string; url: string }[];
 };
 
 export type Article = ArticleMeta & { content: string };

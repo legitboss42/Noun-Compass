@@ -1,0 +1,46 @@
+NOUN Compass
+https://nouncompass.me
+
+Purpose:
+- Independent NOUN student-help website
+- Plain-language guides for admission, fees, portal tasks, results, study centres, GST, TMA, and student support
+- Always directs students back to official NOUN or NELFUND sources for final account-specific confirmation
+
+Priority sections:
+- /admission
+- /fees
+- /portal
+- /results
+- /student-guides
+- /course-materials
+- /study-centres
+- /tools
+
+High-trust pages:
+- /about
+- /editorial-policy
+- /corrections-policy
+- /copyright-policy
+- /takedown-policy
+- /privacy-policy
+- /terms
+- /disclaimer
+
+Author and reviewer profiles:
+- /authors/victor
+- /authors/editorial-team
+- /reviewers/student-workflow
+- /reviewers/student-finance
+
+Editorial stance:
+- Independent resource, not an official NOUN property
+- Student-help explanations should not override official account records
+- Sensitive payment, deadline, admission, registration, and academic-record claims should be checked against official sources
+
+Best starting points:
+- /articles/how-to-pay-noun-school-fees
+- /articles/how-to-register-noun-courses
+- /articles/how-to-check-noun-results
+- /articles/how-to-open-your-noun-result-statement-from-the-support-portal
+- /articles/how-to-submit-tma-on-noun-elearn
+- /articles/nelfund-application-status-meanings-explained

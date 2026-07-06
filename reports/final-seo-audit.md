@@ -4,7 +4,7 @@
 - Target: http://127.0.0.1:3005
 - Crawled pages: 30
 - Sitemap URLs: 81
-- Lighthouse average score: 0.9625
+- Lighthouse average score: 0.95
 - PageSpeed average score: Unavailable
 - Search Console status: Connected
 
@@ -129,7 +129,7 @@
 - https://nouncompass.me/portal | position 14.00 | impressions 18
 
 ## Core Web Vitals
-- LCP: 3.4 s
+- LCP: 3.5 s
 - CLS: 0
 - INP: Unavailable
 
@@ -152,7 +152,15 @@
 - No major internal linking issues detected in the sampled crawl.
 
 ## Image Optimization Issues
-- No major image issues detected in the sampled crawl.
+- http://127.0.0.1:3005/ includes an image with non-lazy loading: http://127.0.0.1:3005/_next/image?url=%2Fimages%2Farticles%2Fhow-to-pay-noun-school-fees.jpg&w=3840&q=75
+- http://127.0.0.1:3005/ includes an image with non-lazy loading: http://127.0.0.1:3005/_next/image?url=%2Fimages%2Farticles%2Fhow-to-register-noun-courses.jpg&w=3840&q=75
+- http://127.0.0.1:3005/articles/is-noun-eligible-for-nelfund includes an image with non-lazy loading: http://127.0.0.1:3005/_next/image?url=%2Fimages%2Farticles%2Fnoun-financial-statement.webp&w=3840&q=75
+- http://127.0.0.1:3005/articles/noun-course-materials-pdf includes an image with non-lazy loading: http://127.0.0.1:3005/_next/image?url=%2Fimages%2Farticles%2Fnoun-course-materials-pdf.webp&w=3840&q=75
+- http://127.0.0.1:3005/articles/noun-graduation-clearance-fee-convocation-costs includes an image with non-lazy loading: http://127.0.0.1:3005/_next/image?url=%2Fimages%2Farticles%2Fnoun-graduation-clearance-fee-convocation-costs.webp&w=3840&q=75
+- http://127.0.0.1:3005/articles/noun-support-ticket-guide includes an image with non-lazy loading: http://127.0.0.1:3005/_next/image?url=%2Fimages%2Farticles%2Fnoun-support-ticket-guide.jpg&w=3840&q=75
+- http://127.0.0.1:3005/articles/common-noun-tma-mistakes includes an image with non-lazy loading: http://127.0.0.1:3005/_next/image?url=%2Fimages%2Farticles%2Fnoun-support-ticket-guide.jpg&w=3840&q=75
+- http://127.0.0.1:3005/articles/how-to-submit-tma-on-noun-elearn includes an image with non-lazy loading: http://127.0.0.1:3005/images/articles/how-to-submit-tma-on-noun-elearn.svg
+- http://127.0.0.1:3005/articles/noun-elearn-and-tma-guide includes an image with non-lazy loading: http://127.0.0.1:3005/_next/image?url=%2Fimages%2Farticles%2Fnouonline-student-dashboard.webp&w=3840&q=75
 
 ## AdSense Readiness Checks
 - /about: present

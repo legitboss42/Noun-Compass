@@ -8,15 +8,21 @@ export function categoryMetadata(slug: string): Metadata {
   const category = getCategory(slug)!;
   const categoryTitles: Record<string, string> = {
     admission: "NOUN Admission Guides",
-    portal: "NOUN Portal Help and Registration Guides",
-    results: "NOUN Results, CGPA, and Result Statement Guides",
+    portal: "NOUN Portal Help, Login, and Registration Guides",
+    results: "NOUN Results, CGPA, and Academic Record Guides",
     examinations: "NOUN Examination Guides",
     "study-centres": "NOUN Study Centre Guides",
     gst: "NOUN GST Course Guides",
     "student-guides": "NOUN Student Guides",
   };
+  const categoryDescriptions: Record<string, string> = {
+    portal:
+      "Fix NOUN portal login, password reset, registration, dashboard, TMA, and account workflow problems with clear student guides.",
+    results:
+      "Check NOUN results, CGPA, outstanding courses, result statements, and academic records with clearer student guides.",
+  };
   const title = categoryTitles[slug] ?? (/guide/i.test(category.name) ? category.name : `NOUN ${category.name} Guides`);
-  return createMetadata(title, category.description, `/${slug}`);
+  return createMetadata(title, categoryDescriptions[slug] ?? category.description, `/${slug}`);
 }
 
 export function CategoryRoute({ slug, query = "" }: { slug: string; query?: string }) {

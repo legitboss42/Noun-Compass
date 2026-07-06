@@ -6,6 +6,7 @@ type CoverPatternProps = {
   image?: string;
   imageAlt?: string;
   compact?: boolean;
+  priorityImage?: boolean;
 };
 
 function Illustration({ theme, compact }: { theme: CoverTheme; compact: boolean }) {
@@ -31,7 +32,7 @@ function Illustration({ theme, compact }: { theme: CoverTheme; compact: boolean 
   );
 }
 
-export function CoverPattern({ theme, image, imageAlt, compact = false }: CoverPatternProps) {
+export function CoverPattern({ theme, image, imageAlt, compact = false, priorityImage = false }: CoverPatternProps) {
   return (
     <div className="cover-visual">
       <div className="cover-orb cover-orb-a" style={{ background: theme.accentSoft }} />
@@ -58,6 +59,7 @@ export function CoverPattern({ theme, image, imageAlt, compact = false }: CoverP
             fill
             sizes={compact ? "320px" : "500px"}
             className="cover-image"
+            priority={priorityImage}
           />
           <div className="cover-image-tint" />
         </div>

@@ -9,7 +9,18 @@ export const metadata = createMetadata("NOUN Student Guides for Admission, Fees,
 
 export default function Home() {
   const articles = getAllArticles();
-  const highlightedArticles = articles.slice(0, 6);
+  const homepagePrioritySlugs = [
+    "how-to-pay-noun-school-fees",
+    "how-to-register-noun-courses",
+    "how-to-check-noun-results",
+    "how-to-open-your-noun-result-statement-from-the-support-portal",
+    "how-to-submit-tma-on-noun-elearn",
+    "nelfund-application-status-meanings-explained",
+  ];
+  const highlightedArticles = homepagePrioritySlugs
+    .map((slug) => articles.find((article) => article.slug === slug))
+    .filter(Boolean) as typeof articles;
+  const latestArticles = articles.filter((article) => !homepagePrioritySlugs.includes(article.slug)).slice(0, 3);
   const homeSchema = {
     "@context": "https://schema.org",
     "@type": "WebPage",
@@ -31,5 +42,5 @@ export default function Home() {
       name: article.title,
     })),
   };
-  return <main id="main-content"><SearchHero /><StartHerePaths /><FeaturedGrid articles={articles} /><section className="band"><div className="container"><div className="section-heading"><div><span className="eyebrow">Find the right path</span><h2>Help by student task</h2></div></div><div className="category-grid">{categories.slice(0, 6).map((category) => <CategoryCard key={category.slug} {...category} />)}</div><div className="band-link-row"><Link href="/student-guides">Browse all student guide categories -&gt;</Link></div></div></section><div className="container content-sidebar"><LatestArticles articles={articles.slice(0, 3)} /><HomeSupportAside /></div><section className="section container"><div className="section-heading"><div><span className="eyebrow">Useful tools</span><h2>Plan your next step</h2></div><Link href="/tools">View available tools -&gt;</Link></div><div className="tool-grid tool-grid-single"><Link href="/fees"><span>01</span><h3>School Fees Checker</h3><p>Review an estimated semester breakdown by programme, level, and semester before confirming the final amount officially.</p></Link></div></section><NewsletterBlock /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(homeSchema) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(featuredGuidesSchema) }} /></main>;
+  return <main id="main-content"><SearchHero /><StartHerePaths /><FeaturedGrid articles={highlightedArticles.length ? highlightedArticles : articles} /><section className="band"><div className="container"><div className="section-heading"><div><span className="eyebrow">Find the right path</span><h2>Help by student task</h2></div></div><div className="category-grid">{categories.slice(0, 6).map((category) => <CategoryCard key={category.slug} {...category} />)}</div><div className="band-link-row"><Link href="/student-guides">Browse all student guide categories -&gt;</Link></div></div></section><div className="container content-sidebar"><LatestArticles articles={latestArticles} /><HomeSupportAside /></div><section className="section container"><div className="section-heading"><div><span className="eyebrow">Useful tools</span><h2>Plan your next step</h2></div><Link href="/tools">View available tools -&gt;</Link></div><div className="tool-grid tool-grid-single"><Link href="/fees"><span>01</span><h3>School Fees Checker</h3><p>Review an estimated semester breakdown by programme, level, and semester before confirming the final amount officially.</p></Link></div></section><NewsletterBlock /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(homeSchema) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(featuredGuidesSchema) }} /></main>;
 }

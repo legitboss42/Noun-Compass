@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">How to Submit TMA on NOUN eLearn</title>
+  <desc id="desc">Branded cover for the NOUN eLearn TMA submission guide.</desc>
+  <rect width="1600" height="900" fill="#111f34"/>
+  <rect x="82" y="82" width="1436" height="736" rx="40" fill="#f7f7fb"/>
+  <rect x="132" y="128" width="430" height="644" rx="28" fill="#213f67"/>
+  <rect x="190" y="210" width="314" height="228" rx="22" fill="#f7f7fb"/>
+  <rect x="214" y="250" width="266" height="22" rx="11" fill="#c6d6e8"/>
+  <rect x="214" y="298" width="222" height="22" rx="11" fill="#c6d6e8"/>
+  <rect x="214" y="356" width="266" height="52" rx="16" fill="#dfbf6a"/>
+  <rect x="190" y="486" width="314" height="188" rx="22" fill="#dce8f3"/>
+  <text x="620" y="238" fill="#213f67" font-family="Arial, sans-serif" font-size="28" font-weight="700" letter-spacing="4">NOUN COMPASS</text>
+  <text x="620" y="334" fill="#111f34" font-family="Arial, sans-serif" font-size="66" font-weight="700">Submit TMA on</text>
+  <text x="620" y="410" fill="#111f34" font-family="Arial, sans-serif" font-size="66" font-weight="700">eLearn the Safe Way</text>
+  <text x="620" y="508" fill="#5b6675" font-family="Arial, sans-serif" font-size="32">Check opened and closed times, attempt limits, and the final summary before moving on.</text>
+  <rect x="620" y="602" width="392" height="74" rx="37" fill="#dfbf6a"/>
+  <text x="678" y="648" fill="#111f34" font-family="Arial, sans-serif" font-size="28" font-weight="700">Review before submitting</text>
+</svg>

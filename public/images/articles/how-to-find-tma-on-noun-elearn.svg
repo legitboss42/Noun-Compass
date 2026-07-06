@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">How to Find TMA on NOUN eLearn</title>
+  <desc id="desc">Branded cover for the NOUN eLearn TMA location guide.</desc>
+  <rect width="1600" height="900" fill="#162329"/>
+  <rect x="80" y="80" width="1440" height="740" rx="38" fill="#f5f8f7"/>
+  <rect x="132" y="128" width="430" height="644" rx="28" fill="#295463"/>
+  <rect x="190" y="190" width="314" height="520" rx="24" fill="#f5f8f7"/>
+  <circle cx="264" cy="278" r="36" fill="#d9ba66"/>
+  <circle cx="430" cy="278" r="36" fill="#c9dadd"/>
+  <rect x="228" y="356" width="238" height="24" rx="12" fill="#c9dadd"/>
+  <rect x="228" y="410" width="180" height="24" rx="12" fill="#c9dadd"/>
+  <rect x="228" y="490" width="238" height="144" rx="18" fill="#dbe8eb"/>
+  <text x="620" y="238" fill="#295463" font-family="Arial, sans-serif" font-size="28" font-weight="700" letter-spacing="4">NOUN COMPASS</text>
+  <text x="620" y="334" fill="#162329" font-family="Arial, sans-serif" font-size="66" font-weight="700">Find TMA on</text>
+  <text x="620" y="410" fill="#162329" font-family="Arial, sans-serif" font-size="66" font-weight="700">eLearn Faster</text>
+  <text x="620" y="508" fill="#58666a" font-family="Arial, sans-serif" font-size="32">Use the dashboard, course page, and course index instead of guessing where the activity lives.</text>
+  <rect x="620" y="602" width="386" height="74" rx="37" fill="#d9ba66"/>
+  <text x="686" y="648" fill="#162329" font-family="Arial, sans-serif" font-size="28" font-weight="700">Verified route options</text>
+</svg>
