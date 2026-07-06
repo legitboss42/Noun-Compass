@@ -45,8 +45,7 @@ export function BrandLogo({
       <div className={`brand-wordmark brand-wordmark-${tone} ${className ?? ""}`.trim()}>
         <Image
           src="/images/brand/nouncompass-icon.svg"
-          alt=""
-          aria-hidden="true"
+          alt="NOUN Compass logo mark"
           width={512}
           height={512}
           priority={priority}
@@ -62,8 +61,7 @@ export function BrandLogo({
       <div className={`brand-lockup brand-lockup-${tone} ${className ?? ""}`.trim()}>
         <Image
           src="/images/brand/nouncompass-icon.svg"
-          alt=""
-          aria-hidden="true"
+          alt="NOUN Compass logo mark"
           width={512}
           height={512}
           priority={priority}
@@ -83,7 +81,7 @@ export function BrandLogo({
   return (
     <Image
       src={src}
-      alt="NOUN Compass"
+      alt="NOUN Compass logo"
       width={size.width}
       height={size.height}
       priority={priority}

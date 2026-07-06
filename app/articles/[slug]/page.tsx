@@ -242,6 +242,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
                 subtitle={article.description}
                 category={article.category}
                 image={article.image}
+                imageAlt={article.title}
                 mode="feature"
               />
               <figcaption>

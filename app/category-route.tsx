@@ -8,7 +8,7 @@ export function categoryMetadata(slug: string): Metadata {
   const category = getCategory(slug)!;
   const categoryTitles: Record<string, string> = {
     admission: "NOUN Admission Guides",
-    portal: "NOUN Portal Help, Password Reset, and Registration Guides",
+    portal: "NOUN Portal and Registration Help",
     results: "NOUN Results, CGPA, and Result Statement Guides",
     examinations: "NOUN Examination Guides",
     "study-centres": "NOUN Study Centre Guides",

@@ -2,7 +2,11 @@ import { TrustPage } from "@/components/trust-page";
 import { createMetadata } from "@/lib/metadata";
 import { site } from "@/data/site";
 
-export const metadata = createMetadata("Victor Chinukwue", "Founder and editor of NOUN Compass.", "/authors/victor");
+export const metadata = createMetadata(
+  "Victor Chinukwue",
+  "Meet Victor Chinukwue, the founder and editor of NOUN Compass, and learn how he oversees student-help content and technical accuracy.",
+  "/authors/victor",
+);
 
 export default function Page() {
   const personSchema = {

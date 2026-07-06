@@ -1,7 +1,11 @@
 import { TrustPage } from "@/components/trust-page";
 import { createMetadata } from "@/lib/metadata";
 import { site } from "@/data/site";
-export const metadata = createMetadata("Contact", "Contact NOUN Compass with corrections, questions, or partnership enquiries.", "/contact");
+export const metadata = createMetadata(
+  "Contact NOUN Compass Support and Editorial Team",
+  "Contact NOUN Compass for corrections, editorial questions, material reports, and practical student-help enquiries.",
+  "/contact",
+);
 export default function Page() {
   const mailto = `mailto:${site.contactEmail}`;
   const contactSchema = {

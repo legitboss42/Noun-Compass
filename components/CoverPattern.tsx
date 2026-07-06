@@ -4,6 +4,7 @@ import type { CoverTheme } from "@/lib/brand";
 type CoverPatternProps = {
   theme: CoverTheme;
   image?: string;
+  imageAlt?: string;
   compact?: boolean;
 };
 
@@ -30,23 +31,21 @@ function Illustration({ theme, compact }: { theme: CoverTheme; compact: boolean 
   );
 }
 
-export function CoverPattern({ theme, image, compact = false }: CoverPatternProps) {
+export function CoverPattern({ theme, image, imageAlt, compact = false }: CoverPatternProps) {
   return (
     <div className="cover-visual">
       <div className="cover-orb cover-orb-a" style={{ background: theme.accentSoft }} />
       <div className="cover-orb cover-orb-b" style={{ background: theme.gold }} />
       <Image
         src="/images/brand/patterns/compass-pattern.svg"
-        alt=""
-        aria-hidden="true"
+        alt="Decorative compass pattern"
         width={240}
         height={240}
         className="cover-pattern-grid"
       />
       <Image
         src="/images/brand/patterns/paper-texture.svg"
-        alt=""
-        aria-hidden="true"
+        alt="Decorative paper texture"
         width={320}
         height={320}
         className="cover-paper-texture"
@@ -55,8 +54,7 @@ export function CoverPattern({ theme, image, compact = false }: CoverPatternProp
         <div className="cover-image-shell">
           <Image
             src={image}
-            alt=""
-            aria-hidden="true"
+            alt={imageAlt ?? "Guide cover illustration"}
             fill
             sizes={compact ? "320px" : "500px"}
             className="cover-image"

@@ -2,7 +2,11 @@ import Link from "next/link";
 import { TrustPage } from "@/components/trust-page";
 import { site } from "@/data/site";
 import { createMetadata } from "@/lib/metadata";
-export const metadata = createMetadata("About", "Learn why NOUN Compass exists and how we help NOUN students.", "/about");
+export const metadata = createMetadata(
+  "About NOUN Compass and Our Student Guides",
+  "Learn why NOUN Compass exists, how we research NOUN student guides, and the standards we use to keep help practical and independent.",
+  "/about",
+);
 export default function Page() {
   const aboutSchema = {
     "@context": "https://schema.org",

@@ -1,0 +1,162 @@
+{
+  "schemaVersion": 1,
+  "brand": {
+    "name": "NounCompass",
+    "website": "https://nouncompass.me",
+    "contactEmail": "support@nouncompass.me",
+    "disclaimer": "NounCompass is an independent student-help platform and is not the official NOUN website."
+  },
+  "rules": {
+    "maxTopicRepetitionWindowDays": 7,
+    "avoidSamePrimaryAngleBackToBack": true,
+    "requirePlatformSpecificAdaptation": true
+  },
+  "currentPriorities": [
+    "Admission assistance leads",
+    "Fees and Remita guidance traffic",
+    "Trust-building student-help content",
+    "Facebook, X, Instagram, and Pinterest growth"
+  ],
+  "entries": [
+    {
+      "date": "2026-07-06",
+      "platform": "X",
+      "postType": "traffic",
+      "topic": "How to generate Remita for NOUN fees",
+      "caption": "Not sure how to generate Remita for NOUN fees correctly?\n\nThis step-by-step guide helps you avoid preventable payment mistakes before you pay.\n\nRead: https://nouncompass.me/articles/how-to-generate-remita-for-noun\n\nIndependent student-help platform. Not the official NOUN website.",
+      "cta": "Read the guide.",
+      "hashtags": [
+        "#NounCompass",
+        "#NOUNFees",
+        "#Remita",
+        "#StudentGuide",
+        "#NOUNStudents"
+      ],
+      "link": "https://nouncompass.me/articles/how-to-generate-remita-for-noun",
+      "postUrl": "https://x.com/NounCompass/status/2074021550550839390",
+      "performanceNotes": "Fresh account; no meaningful performance data yet.",
+      "whatWorked": [
+        "Premium IMGGEN flyer matched the new branding direction.",
+        "Traffic-focused caption fit the account's first useful public post."
+      ],
+      "whatShouldBeRepeated": [
+        "Premium flyer-style educational traffic posts with clear website and contact details."
+      ],
+      "whatShouldBeAvoided": [
+        "Plain low-fidelity text graphics."
+      ]
+    },
+    {
+      "date": "2026-07-06",
+      "platform": "Instagram",
+      "postType": "lead",
+      "topic": "NOUN admission guidance",
+      "caption": "Confused about NOUN admission steps, documents, or where to start?\n\nNounCompass breaks the process into simple guidance for applicants who want help understanding what to do next without guesswork.\n\nNeed help with NOUN admission? Contact NounCompass for guidance.\n\nNounCompass is an independent student-help platform and is not the official NOUN website.\n\n#NounCompass #NOUNAdmission #StudentHelp #AdmissionGuide #NOUNStudents",
+      "cta": "Contact NounCompass for guidance.",
+      "hashtags": [
+        "#NounCompass",
+        "#NOUNAdmission",
+        "#StudentHelp",
+        "#AdmissionGuide",
+        "#NOUNStudents"
+      ],
+      "link": "https://nouncompass.me/admission",
+      "postUrl": "https://www.instagram.com/nouncompass/p/DacSimSAM_3/",
+      "performanceNotes": "Fresh profile; no performance data yet.",
+      "whatWorked": [
+        "Premium admission flyer created a stronger first-impression post.",
+        "Lead-focused caption stayed clear without sounding official."
+      ],
+      "whatShouldBeRepeated": [
+        "Polished flyer-style lead posts with clear contact prompts."
+      ],
+      "whatShouldBeAvoided": [
+        "Generic quote-card style social graphics."
+      ]
+    },
+    {
+      "date": "2026-07-06",
+      "platform": "Facebook",
+      "postType": "lead",
+      "topic": "NOUN admission guidance",
+      "caption": "Confused about NOUN admission steps, documents, or what to do first?\n\nNounCompass breaks the process into simple guidance for applicants who want clear next steps without guesswork.\n\nNeed help with NOUN admission? Contact NounCompass for guidance.\n\nNounCompass is an independent student-help platform and is not the official NOUN website.",
+      "cta": "Contact NounCompass for guidance.",
+      "hashtags": [
+        "#NounCompass",
+        "#NOUNAdmission",
+        "#StudentHelp",
+        "#AdmissionGuide",
+        "#NOUNStudents"
+      ],
+      "link": "https://nouncompass.me/admission",
+      "postUrl": "https://web.facebook.com/share/p/1LhFUbxWv4/",
+      "performanceNotes": "Fresh page with the first public branded admission post now confirmed live.",
+      "whatWorked": [
+        "Premium flyer styling looks strong on the page feed.",
+        "The independent-platform disclaimer stays clear even in a lead-focused post."
+      ],
+      "whatShouldBeRepeated": [
+        "Lead-generation flyers with clear help-focused CTAs."
+      ],
+      "whatShouldBeAvoided": [
+        "Assuming a Meta post failed before checking farther down the live page feed."
+      ]
+    },
+    {
+      "date": "2026-07-06",
+      "platform": "Facebook",
+      "postType": "traffic",
+      "topic": "NOUN portal password reset and recovery help",
+      "caption": "Locked out of the NOUN portal or not sure what to do next?\n\nThis guide helps you reset access, recover your account, and avoid the usual mistakes students make when they rush.\n\nRead it here: https://nouncompass.me/articles/noun-portal-password-reset\n\nNounCompass is an independent student-help platform and is not the official NOUN website.",
+      "cta": "Read the portal help guide.",
+      "hashtags": [
+        "#NounCompass",
+        "#NOUNPortal",
+        "#StudentHelp",
+        "#PasswordReset",
+        "#NOUNStudents"
+      ],
+      "link": "https://nouncompass.me/articles/noun-portal-password-reset",
+      "postUrl": "https://web.facebook.com/nouncompass/",
+      "performanceNotes": "The post is visible live on the page feed, but Meta did not expose a clean direct permalink during the composer return flow.",
+      "whatWorked": [
+        "Premium flyer plus practical portal angle makes the page look more active and useful.",
+        "Traffic-focused copy stayed clear without sounding official."
+      ],
+      "whatShouldBeRepeated": [
+        "Task-specific problem-solution posts tied to strong help articles."
+      ],
+      "whatShouldBeAvoided": [
+        "Relying on Meta's post-compose return state for permalink capture."
+      ]
+    },
+    {
+      "date": "2026-07-06",
+      "platform": "Pinterest",
+      "postType": "traffic",
+      "topic": "How to generate Remita for NOUN fees",
+      "caption": "Trying to pay NOUN fees and not sure how to generate Remita correctly? This guide walks you through the process step by step so you can avoid preventable payment mistakes. Read the full guide on NounCompass. NounCompass is an independent student-help platform and is not the official NOUN website.",
+      "cta": "Read the full guide.",
+      "hashtags": [
+        "#NounCompass",
+        "#NOUNFees",
+        "#Remita",
+        "#StudentGuide",
+        "#NOUNStudents"
+      ],
+      "link": "https://nouncompass.me/articles/how-to-generate-remita-for-noun",
+      "postUrl": "https://www.pinterest.com/pin/1144547692829360406/",
+      "performanceNotes": "The first live board and pin are now published on the profile.",
+      "whatWorked": [
+        "Creating the board first made the publish flow more stable.",
+        "The premium flyer direction still fits Pinterest's evergreen traffic use case."
+      ],
+      "whatShouldBeRepeated": [
+        "Evergreen payment and study-help pins linked to strong educational guides."
+      ],
+      "whatShouldBeAvoided": [
+        "Leaving Pinterest as an empty profile with no boards."
+      ]
+    }
+  ]
+}

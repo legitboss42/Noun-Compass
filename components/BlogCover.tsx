@@ -9,8 +9,10 @@ type BlogCoverProps = {
   subtitle: string;
   category: string;
   image?: string;
+  imageAlt?: string;
   theme?: CoverThemeName;
   mode?: "feature" | "card" | "hero" | "og";
+  priorityImage?: boolean;
 };
 
 export function BlogCover({
@@ -18,8 +20,10 @@ export function BlogCover({
   subtitle,
   category,
   image,
+  imageAlt,
   theme,
   mode = "feature",
+  priorityImage = false,
 }: BlogCoverProps) {
   const palette = coverThemes[theme ?? resolveCoverTheme(category, title)];
   const compact = mode === "card";
@@ -40,11 +44,11 @@ export function BlogCover({
           {image ? (
             <Image
               src={image}
-              alt=""
-              aria-hidden="true"
+              alt={imageAlt ?? `${title} cover image`}
               fill
               sizes="(max-width: 680px) 100vw, 380px"
               className="blog-cover-card-photo"
+              priority={priorityImage}
             />
           ) : (
             <CoverPattern theme={palette} compact />
@@ -84,7 +88,7 @@ export function BlogCover({
           <h2>{title}</h2>
           <p>{subtitle}</p>
         </div>
-        <CoverPattern theme={palette} image={image} compact={compact} />
+        <CoverPattern theme={palette} image={image} imageAlt={imageAlt ?? `${title} illustration`} compact={compact} />
       </div>
       <div className="blog-cover-footer">
         <div className="blog-cover-ribbon" />

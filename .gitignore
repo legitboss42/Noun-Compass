@@ -31,12 +31,11 @@ yarn-error.log*
 .pnpm-debug.log*
 .playwright-cli/
 .commitshow/
-next
-npm
-noun-compass@0.1.0
+.codex-temp/
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
 
 # vercel
 .vercel
@@ -44,3 +43,9 @@ noun-compass@0.1.0
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local audit/debug output
+reports/seo-audit-debug.json
+
+# local marketing/browser captures
+marketing-agent/*.png

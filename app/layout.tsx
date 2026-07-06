@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Poppins } from "next/font/google";
+import Script from "next/script";
 import { Footer, Header } from "@/components/site-shell";
 import { site } from "@/data/site";
 import "./globals.css";
@@ -73,8 +74,8 @@ window.addEventListener('pageshow', resetScroll);
       "query-input": "required name=search_term_string",
     },
   };
-  return <html lang="en" className={`${inter.variable} ${poppins.variable}`}><head><script dangerouslySetInnerHTML={{ __html: scrollResetScript }} /><script async src={`https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsId}`} /><script dangerouslySetInnerHTML={{ __html: `window.dataLayer = window.dataLayer || [];
+  return <html lang="en" className={`${inter.variable} ${poppins.variable}`}><head><Script id="scroll-reset" strategy="beforeInteractive">{scrollResetScript}</Script><Script src={`https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsId}`} strategy="lazyOnload" /><Script id="google-analytics" strategy="lazyOnload">{`window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
-gtag('config', '${googleAnalyticsId}');` }} /></head><body><a className="skip-link" href="#main-content">Skip to content</a><Header />{children}<Footer /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organization) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(website) }} /></body></html>;
+gtag('config', '${googleAnalyticsId}');`}</Script></head><body><a className="skip-link" href="#main-content">Skip to content</a><Header />{children}<Footer /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organization) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(website) }} /></body></html>;
 }
