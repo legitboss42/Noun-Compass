@@ -51,7 +51,44 @@ export function StartHerePaths() {
 }
 
 export function FeaturedGrid({ articles }: { articles: ArticleMeta[] }) {
-  return <section className="section container"><div className="section-heading"><div><SectionBadge>Essential Guides</SectionBadge><h2>Popular NOUN help right now</h2></div><Link href="/student-guides">All guides -&gt;</Link></div><div className="featured-grid">{articles.slice(0, 1).map((article) => <ArticleCard key={article.slug} article={article} large priorityImage />)}<div className="featured-small">{articles.slice(1, 4).map((article, index) => <ArticleCard key={article.slug} article={article} compact priorityImage={index === 0} />)}</div></div></section>;
+  return <section className="section container"><div className="section-heading"><div><SectionBadge>Essential Guides</SectionBadge><h2>Popular NOUN help right now</h2></div><Link href="/student-guides">All guides -&gt;</Link></div><div className="featured-grid">{articles.slice(0, 1).map((article) => <ArticleCard key={article.slug} article={article} large priorityImage />)}<div className="featured-small">{articles.slice(1, 4).map((article) => <ArticleCard key={article.slug} article={article} compact />)}</div></div></section>;
+}
+
+export function TopicClusterHighlights({ articles }: { articles: ArticleMeta[] }) {
+  const clusters = [
+    {
+      title: "Results and academic records",
+      description: "Build stronger result-reading authority with guides that cover My Progress, result statements, CGPA, and outstanding credits together.",
+      href: "/results",
+      slugs: [
+        "how-to-check-noun-results",
+        "how-to-open-your-noun-result-statement-from-the-support-portal",
+        "how-to-read-noun-cgpa-class-of-degree-and-outstanding-credit",
+      ],
+    },
+    {
+      title: "TMA and eLearn workflow",
+      description: "Keep the TMA cluster connected from finding the activity to submitting it safely and checking the score later.",
+      href: "/articles/noun-elearn-and-tma-guide",
+      slugs: [
+        "noun-elearn-and-tma-guide",
+        "how-to-find-tma-on-noun-elearn",
+        "how-to-submit-tma-on-noun-elearn",
+      ],
+    },
+    {
+      title: "Student finance and NELFUND",
+      description: "Strengthen payment and funding authority with connected guides for fees, Remita, status checks, and NELFUND uncertainty.",
+      href: "/fees",
+      slugs: [
+        "how-to-pay-noun-school-fees",
+        "how-to-generate-remita-for-noun",
+        "nelfund-application-status-meanings-explained",
+      ],
+    },
+  ];
+
+  return <section className="section container"><div className="section-heading"><div><SectionBadge>Authority Clusters</SectionBadge><h2>Follow the next verified path by topic</h2></div><Link href="/student-guides">Explore all guides -&gt;</Link></div><div className="related">{clusters.map((cluster) => <div key={cluster.title}><span className="eyebrow">{cluster.title}</span><h2>{cluster.title}</h2><p>{cluster.description}</p><div>{cluster.slugs.map((slug) => articles.find((article) => article.slug === slug)).filter(Boolean).map((article) => <Link key={article!.slug} href={`/articles/${article!.slug}`}><span>{article!.category.replace("-", " ")}</span><strong>{article!.title}</strong><small>{article!.description}</small></Link>)}</div><p><Link href={cluster.href}>Open this cluster -&gt;</Link></p></div>)}</div></section>;
 }
 
 export function LatestArticles({ articles }: { articles: ArticleMeta[] }) {

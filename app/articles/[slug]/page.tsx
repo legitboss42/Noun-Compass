@@ -260,7 +260,6 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
                 image={article.image}
                 imageAlt={article.title}
                 mode="feature"
-                priorityImage
               />
               <figcaption>
                 Branded cover image for this guide. Check the official NOUN pages for final dates,

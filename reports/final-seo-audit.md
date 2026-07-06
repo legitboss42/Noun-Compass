@@ -1,11 +1,11 @@
 # Final SEO Audit
 
 ## Audit Summary
-- Target: http://127.0.0.1:3005
+- Target: https://nouncompass.me
 - Crawled pages: 30
 - Sitemap URLs: 81
 - Lighthouse average score: 0.95
-- PageSpeed average score: Unavailable
+- PageSpeed average score: 0.755
 - Search Console status: Connected
 
 ## Critical Issues
@@ -15,13 +15,15 @@
 - None found in this run.
 
 ## Medium Priority Issues
-- None found in this run.
+- Title length is outside the ideal range (https://nouncompass.me/articles/how-to-pay-noun-school-fees)
+- Title length is outside the ideal range (https://nouncompass.me/articles/nelfund-application-status-meanings-explained)
 
 ## Low Priority Issues
 - None found in this run.
 
 ## Technical SEO Issues
-- None found in this run.
+- Title length is outside the ideal range (https://nouncompass.me/articles/how-to-pay-noun-school-fees)
+- Title length is outside the ideal range (https://nouncompass.me/articles/nelfund-application-status-meanings-explained)
 
 ## Search Console Feedback
 - Property: sc-domain:nouncompass.me
@@ -129,12 +131,13 @@
 - https://nouncompass.me/portal | position 14.00 | impressions 18
 
 ## Core Web Vitals
-- LCP: 3.5 s
+- LCP: 2.7 s
 - CLS: 0
 - INP: Unavailable
 
 ## Metadata Issues
-- None found in this run.
+- Title length is outside the ideal range (https://nouncompass.me/articles/how-to-pay-noun-school-fees)
+- Title length is outside the ideal range (https://nouncompass.me/articles/nelfund-application-status-meanings-explained)
 
 ## Canonical Issues
 - None found in this run.
@@ -152,15 +155,16 @@
 - No major internal linking issues detected in the sampled crawl.
 
 ## Image Optimization Issues
-- http://127.0.0.1:3005/ includes an image with non-lazy loading: http://127.0.0.1:3005/_next/image?url=%2Fimages%2Farticles%2Fhow-to-pay-noun-school-fees.jpg&w=3840&q=75
-- http://127.0.0.1:3005/ includes an image with non-lazy loading: http://127.0.0.1:3005/_next/image?url=%2Fimages%2Farticles%2Fhow-to-register-noun-courses.jpg&w=3840&q=75
-- http://127.0.0.1:3005/articles/is-noun-eligible-for-nelfund includes an image with non-lazy loading: http://127.0.0.1:3005/_next/image?url=%2Fimages%2Farticles%2Fnoun-financial-statement.webp&w=3840&q=75
-- http://127.0.0.1:3005/articles/noun-course-materials-pdf includes an image with non-lazy loading: http://127.0.0.1:3005/_next/image?url=%2Fimages%2Farticles%2Fnoun-course-materials-pdf.webp&w=3840&q=75
-- http://127.0.0.1:3005/articles/noun-graduation-clearance-fee-convocation-costs includes an image with non-lazy loading: http://127.0.0.1:3005/_next/image?url=%2Fimages%2Farticles%2Fnoun-graduation-clearance-fee-convocation-costs.webp&w=3840&q=75
-- http://127.0.0.1:3005/articles/noun-support-ticket-guide includes an image with non-lazy loading: http://127.0.0.1:3005/_next/image?url=%2Fimages%2Farticles%2Fnoun-support-ticket-guide.jpg&w=3840&q=75
-- http://127.0.0.1:3005/articles/common-noun-tma-mistakes includes an image with non-lazy loading: http://127.0.0.1:3005/_next/image?url=%2Fimages%2Farticles%2Fnoun-support-ticket-guide.jpg&w=3840&q=75
-- http://127.0.0.1:3005/articles/how-to-submit-tma-on-noun-elearn includes an image with non-lazy loading: http://127.0.0.1:3005/images/articles/how-to-submit-tma-on-noun-elearn.svg
-- http://127.0.0.1:3005/articles/noun-elearn-and-tma-guide includes an image with non-lazy loading: http://127.0.0.1:3005/_next/image?url=%2Fimages%2Farticles%2Fnouonline-student-dashboard.webp&w=3840&q=75
+- https://nouncompass.me/ includes an image with non-lazy loading: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fhow-to-pay-noun-school-fees.jpg&w=3840&q=75
+- https://nouncompass.me/ includes an image with non-lazy loading: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fhow-to-register-noun-courses.jpg&w=3840&q=75
+- https://nouncompass.me/articles/common-nelfund-problems-noun-students-face includes an image with non-lazy loading: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Ffix-missing-noun-e-wallet-balance.webp&w=3840&q=75
+- https://nouncompass.me/articles/how-noun-students-apply-for-nelfund includes an image with non-lazy loading: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fhow-to-pay-noun-school-fees.jpg&w=3840&q=75
+- https://nouncompass.me/articles/how-to-pay-noun-school-fees includes an image with non-lazy loading: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fhow-to-pay-noun-school-fees.jpg&w=3840&q=75
+- https://nouncompass.me/articles/how-to-register-noun-courses includes an image with non-lazy loading: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fhow-to-register-noun-courses.jpg&w=3840&q=75
+- https://nouncompass.me/articles/is-noun-eligible-for-nelfund includes an image with non-lazy loading: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fnoun-financial-statement.webp&w=3840&q=75
+- https://nouncompass.me/articles/nelfund-application-status-meanings-explained includes an image with non-lazy loading: https://nouncompass.me/images/articles/nelfund-application-status-meanings-explained.svg
+- https://nouncompass.me/articles/nelfund-approval-and-disbursement-guide-for-noun-students includes an image with non-lazy loading: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fnoun-e-wallet-refund.webp&w=3840&q=75
+- https://nouncompass.me/articles/nelfund-frequently-asked-questions-for-noun-students includes an image with non-lazy loading: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fnoun-support-ticket-guide.jpg&w=3840&q=75
 
 ## AdSense Readiness Checks
 - /about: present
