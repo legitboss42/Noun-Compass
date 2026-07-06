@@ -51,7 +51,7 @@ export function StartHerePaths() {
 }
 
 export function FeaturedGrid({ articles }: { articles: ArticleMeta[] }) {
-  return <section className="section container"><div className="section-heading"><div><SectionBadge>Essential Guides</SectionBadge><h2>Popular NOUN help right now</h2></div><Link href="/student-guides">All guides -&gt;</Link></div><div className="featured-grid">{articles.slice(0, 1).map((article) => <ArticleCard key={article.slug} article={article} large />)}<div className="featured-small">{articles.slice(1, 5).map((article) => <ArticleCard key={article.slug} article={article} compact />)}</div></div></section>;
+  return <section className="section container"><div className="section-heading"><div><SectionBadge>Essential Guides</SectionBadge><h2>Popular NOUN help right now</h2></div><Link href="/student-guides">All guides -&gt;</Link></div><div className="featured-grid">{articles.slice(0, 1).map((article) => <ArticleCard key={article.slug} article={article} large />)}<div className="featured-small">{articles.slice(1, 4).map((article) => <ArticleCard key={article.slug} article={article} compact />)}</div></div></section>;
 }
 
 export function LatestArticles({ articles }: { articles: ArticleMeta[] }) {

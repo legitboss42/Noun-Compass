@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
-import { Inter, Poppins } from "next/font/google";
+import { Inter } from "next/font/google";
 import Script from "next/script";
 import { Footer, Header } from "@/components/site-shell";
 import { site } from "@/data/site";
 import "./globals.css";
 
-const inter = Inter({ variable: "--font-body", subsets: ["latin"] });
-const poppins = Poppins({ variable: "--font-display", subsets: ["latin"], weight: ["600", "700", "800"] });
+const inter = Inter({ variable: "--font-body", subsets: ["latin"], weight: ["400", "600", "700", "800"] });
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -89,5 +88,5 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       "query-input": "required name=search_term_string",
     },
   };
-  return <html lang="en" className={`${inter.variable} ${poppins.variable}`}><head><Script id="google-analytics-loader" strategy="afterInteractive">{analyticsLoader}</Script></head><body><a className="skip-link" href="#main-content">Skip to content</a><Header />{children}<Footer /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organization) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(website) }} /></body></html>;
+  return <html lang="en" className={inter.variable}><head><Script id="google-analytics-loader" strategy="afterInteractive">{analyticsLoader}</Script></head><body><a className="skip-link" href="#main-content">Skip to content</a><Header />{children}<Footer /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organization) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(website) }} /></body></html>;
 }

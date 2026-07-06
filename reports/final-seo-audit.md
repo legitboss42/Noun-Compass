@@ -1,11 +1,11 @@
 # Final SEO Audit
 
 ## Audit Summary
-- Target: https://nouncompass.me
+- Target: http://127.0.0.1:3005
 - Crawled pages: 30
 - Sitemap URLs: 81
-- Lighthouse average score: 0.9225
-- PageSpeed average score: 0.99
+- Lighthouse average score: 0.9625
+- PageSpeed average score: Unavailable
 - Search Console status: Connected
 
 ## Critical Issues
@@ -129,7 +129,7 @@
 - https://nouncompass.me/portal | position 14.00 | impressions 18
 
 ## Core Web Vitals
-- LCP: 2.8 s
+- LCP: 3.4 s
 - CLS: 0
 - INP: Unavailable
 
