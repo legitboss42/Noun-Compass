@@ -1,6 +1,3 @@
-"use client";
-
-import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { SectionBadge } from "@/components/SectionBadge";
 
@@ -12,7 +9,7 @@ type CalendarEvent = {
   note?: string;
 };
 
-const observedCalendarLabel = "Callendar for 2026_2 Academic Session";
+const observedCalendarLabel = "Calendar for 2026_2 Academic Session";
 
 const observedCalendarEvents: CalendarEvent[] = [
   { name: "Session", startsOn: "2025-12-17", endsOn: "2026-12-31", portalObservedStatus: "26Wks 5Days 6Hr 16Mins 27Sec" },
@@ -20,7 +17,7 @@ const observedCalendarEvents: CalendarEvent[] = [
   { name: "Registration (Semester, course and examination)", startsOn: "2026-06-08", endsOn: "2026-09-29", portalObservedStatus: "13Wks 3Days 6Hr 16Mins 27Sec" },
   { name: "Dropping of course for exam", startsOn: "2026-06-08", endsOn: null, portalObservedStatus: "Closed", note: "Portal end date is shown as 00/00/0000." },
   { name: "Requests for change...", startsOn: "2026-06-08", endsOn: "2026-09-28", portalObservedStatus: "13Wks 2Days 6Hr 16Mins 27Sec" },
-  { name: "Tutor Marked Assignement (TMA)", startsOn: "2026-07-20", endsOn: "2026-09-16", portalObservedStatus: "Loading..." },
+  { name: "Tutor Marked Assignment (TMA)", startsOn: "2026-07-20", endsOn: "2026-09-16", portalObservedStatus: "Loading..." },
   { name: "Examination", startsOn: "2026-09-15", endsOn: "2026-11-05", portalObservedStatus: "Loading..." },
 ];
 
@@ -29,29 +26,31 @@ function parseObservedDate(value: string | null, mode: "start" | "end") {
   const [year, month, day] = value.split("-").map(Number);
   if (!year || !month || !day) return null;
   return mode === "start"
-    ? new Date(year, month - 1, day, 0, 0, 0, 0)
-    : new Date(year, month - 1, day, 23, 59, 59, 999);
+    ? new Date(Date.UTC(year, month - 1, day, 0, 0, 0, 0))
+    : new Date(Date.UTC(year, month - 1, day, 23, 59, 59, 999));
 }
 
 function formatPortalDate(value: string | null) {
   if (!value) return "Closed";
   const date = parseObservedDate(value, "start");
   if (!date) return "Closed";
-  return date.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
+  return date.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric", timeZone: "UTC" });
 }
 
 function formatCountdown(target: Date, now: Date) {
   const difference = target.getTime() - now.getTime();
   if (difference <= 0) return "Closed";
 
-  const totalSeconds = Math.floor(difference / 1000);
-  const weeks = Math.floor(totalSeconds / (60 * 60 * 24 * 7));
-  const days = Math.floor((totalSeconds % (60 * 60 * 24 * 7)) / (60 * 60 * 24));
-  const hours = Math.floor((totalSeconds % (60 * 60 * 24)) / (60 * 60));
-  const minutes = Math.floor((totalSeconds % (60 * 60)) / 60);
-  const seconds = totalSeconds % 60;
+  const totalHours = Math.floor(difference / (1000 * 60 * 60));
+  const days = Math.floor(totalHours / 24);
+  const hours = totalHours % 24;
 
-  return `${weeks}w ${days}d ${hours}h ${minutes}m ${seconds}s`;
+  if (days === 0) return `${hours}h left`;
+  if (days < 14) return `${days}d ${hours}h left`;
+
+  const weeks = Math.floor(days / 7);
+  const remainingDays = days % 7;
+  return `${weeks}w ${remainingDays}d left`;
 }
 
 function getEventStatus(event: CalendarEvent, now: Date) {
@@ -63,8 +62,6 @@ function getEventStatus(event: CalendarEvent, now: Date) {
       state: "closed" as const,
       label: "Closed",
       countdown: "Closed",
-      startsAt,
-      endsAt,
     };
   }
 
@@ -73,8 +70,6 @@ function getEventStatus(event: CalendarEvent, now: Date) {
       state: "upcoming" as const,
       label: "Opens soon",
       countdown: formatCountdown(startsAt, now),
-      startsAt,
-      endsAt,
     };
   }
 
@@ -83,37 +78,22 @@ function getEventStatus(event: CalendarEvent, now: Date) {
       state: "closed" as const,
       label: "Closed",
       countdown: "Closed",
-      startsAt,
-      endsAt,
     };
   }
 
   return {
     state: "active" as const,
-    label: "Ends in",
+    label: "Open now",
     countdown: formatCountdown(endsAt, now),
-    startsAt,
-    endsAt,
   };
 }
 
 export function AcademicCountdownSidebar() {
-  const [now, setNow] = useState<Date>(() => new Date());
-
-  useEffect(() => {
-    const interval = window.setInterval(() => {
-      setNow(new Date());
-    }, 1000);
-
-    return () => window.clearInterval(interval);
-  }, []);
-
-  const eventStates = useMemo(() => {
-    return observedCalendarEvents.map((event) => ({
-      ...event,
-      ...getEventStatus(event, now),
-    }));
-  }, [now]);
+  const now = new Date();
+  const eventStates = observedCalendarEvents.map((event) => ({
+    ...event,
+    ...getEventStatus(event, now),
+  }));
 
   const primaryEvent = eventStates.find((event) => event.state === "active")
     ?? eventStates.find((event) => event.state === "upcoming")
@@ -124,7 +104,7 @@ export function AcademicCountdownSidebar() {
       <SectionBadge>Observed portal calendar</SectionBadge>
       <h2 id="academic-countdown-title">Academic countdown</h2>
       <p className="academic-countdown-intro">
-        These dates were copied from a logged-in portal view. The timer updates here, but the wording and dates come from what we saw on the student portal.
+        These dates were copied from a logged-in portal view. We show a server-rendered snapshot here so the page stays fast, then you can confirm the final date inside your own portal.
       </p>
 
       <section className="countdown-spotlight">
@@ -134,12 +114,7 @@ export function AcademicCountdownSidebar() {
         </div>
         <h3>{primaryEvent.name}</h3>
         {primaryEvent.note && <p>{primaryEvent.note}</p>}
-        <div
-          className="countdown-timer"
-          role="status"
-          aria-label={`${primaryEvent.name} ${primaryEvent.label} ${primaryEvent.countdown}`}
-          suppressHydrationWarning
-        >
+        <div className="countdown-timer" role="status" aria-label={`${primaryEvent.name} ${primaryEvent.label} ${primaryEvent.countdown}`}>
           {primaryEvent.countdown}
         </div>
         <div className="countdown-dates">
@@ -147,7 +122,7 @@ export function AcademicCountdownSidebar() {
           <span>Ends {formatPortalDate(primaryEvent.endsOn)}</span>
           <span>Portal observed: {primaryEvent.portalObservedStatus}</span>
         </div>
-        <small>This timer updates every second.</small>
+        <small>Snapshot rendered on page load.</small>
       </section>
 
       <div className="countdown-list" role="list">
@@ -160,7 +135,7 @@ export function AcademicCountdownSidebar() {
             </div>
             <div className="countdown-item-meta">
               <span>{formatPortalDate(event.startsOn)} - {formatPortalDate(event.endsOn)}</span>
-              <em className={`countdown-state countdown-state-${event.state}`} suppressHydrationWarning>{event.countdown}</em>
+              <em className={`countdown-state countdown-state-${event.state}`}>{event.countdown}</em>
             </div>
           </article>
         ))}

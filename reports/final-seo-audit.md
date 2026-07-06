@@ -1,71 +1,27 @@
 # Final SEO Audit
 
 ## Audit Summary
-- Target: https://nouncompass.me
+- Target: http://127.0.0.1:3005
 - Crawled pages: 30
 - Sitemap URLs: 81
-- Lighthouse average score: 0.8425
-- PageSpeed average score: 0.9299999999999999
+- Lighthouse average score: 0.91
+- PageSpeed average score: Unavailable
 - Search Console status: Connected
 
 ## Critical Issues
-- Lighthouse performance score is poor
+- None found in this run.
 
 ## High Priority Issues
 - None found in this run.
 
 ## Medium Priority Issues
-- Title length is outside the ideal range (https://nouncompass.me/portal)
-- Title length is outside the ideal range (https://nouncompass.me/about)
-- Title length is outside the ideal range (https://nouncompass.me/contact)
-- Title length is outside the ideal range (https://nouncompass.me/privacy-policy)
-- Title length is outside the ideal range (https://nouncompass.me/terms)
-- Title length is outside the ideal range (https://nouncompass.me/disclaimer)
-- Title length is outside the ideal range (https://nouncompass.me/articles/how-to-pay-noun-school-fees)
-- Title length is outside the ideal range (https://nouncompass.me/articles/how-to-register-noun-courses)
-- Title length is outside the ideal range (https://nouncompass.me/articles/is-noun-eligible-for-nelfund)
-- Title length is outside the ideal range (https://nouncompass.me/articles/nelfund-application-status-meanings-explained)
-- Title length is outside the ideal range (https://nouncompass.me/articles/nelfund-approval-and-disbursement-guide-for-noun-students)
-- Title length is outside the ideal range (https://nouncompass.me/articles/nelfund-frequently-asked-questions-for-noun-students)
+- None found in this run.
 
 ## Low Priority Issues
-- Meta description length is outside the ideal range (https://nouncompass.me/about)
-- Meta description length is outside the ideal range (https://nouncompass.me/privacy-policy)
-- Meta description length is outside the ideal range (https://nouncompass.me/terms)
-- Meta description length is outside the ideal range (https://nouncompass.me/disclaimer)
-- Meta description length is outside the ideal range (https://nouncompass.me/editorial-policy)
-- Meta description length is outside the ideal range (https://nouncompass.me/corrections-policy)
-- Meta description length is outside the ideal range (https://nouncompass.me/authors/victor)
-- Meta description length is outside the ideal range (https://nouncompass.me/articles/common-nelfund-problems-noun-students-face)
-- Meta description length is outside the ideal range (https://nouncompass.me/articles/how-noun-students-apply-for-nelfund)
-- Meta description length is outside the ideal range (https://nouncompass.me/articles/nelfund-approval-and-disbursement-guide-for-noun-students)
-- Meta description length is outside the ideal range (https://nouncompass.me/articles/nelfund-frequently-asked-questions-for-noun-students)
+- None found in this run.
 
 ## Technical SEO Issues
-- Title length is outside the ideal range (https://nouncompass.me/portal)
-- Title length is outside the ideal range (https://nouncompass.me/about)
-- Meta description length is outside the ideal range (https://nouncompass.me/about)
-- Title length is outside the ideal range (https://nouncompass.me/contact)
-- Title length is outside the ideal range (https://nouncompass.me/privacy-policy)
-- Meta description length is outside the ideal range (https://nouncompass.me/privacy-policy)
-- Title length is outside the ideal range (https://nouncompass.me/terms)
-- Meta description length is outside the ideal range (https://nouncompass.me/terms)
-- Title length is outside the ideal range (https://nouncompass.me/disclaimer)
-- Meta description length is outside the ideal range (https://nouncompass.me/disclaimer)
-- Meta description length is outside the ideal range (https://nouncompass.me/editorial-policy)
-- Meta description length is outside the ideal range (https://nouncompass.me/corrections-policy)
-- Meta description length is outside the ideal range (https://nouncompass.me/authors/victor)
-- Meta description length is outside the ideal range (https://nouncompass.me/articles/common-nelfund-problems-noun-students-face)
-- Meta description length is outside the ideal range (https://nouncompass.me/articles/how-noun-students-apply-for-nelfund)
-- Title length is outside the ideal range (https://nouncompass.me/articles/how-to-pay-noun-school-fees)
-- Title length is outside the ideal range (https://nouncompass.me/articles/how-to-register-noun-courses)
-- Title length is outside the ideal range (https://nouncompass.me/articles/is-noun-eligible-for-nelfund)
-- Title length is outside the ideal range (https://nouncompass.me/articles/nelfund-application-status-meanings-explained)
-- Title length is outside the ideal range (https://nouncompass.me/articles/nelfund-approval-and-disbursement-guide-for-noun-students)
-- Meta description length is outside the ideal range (https://nouncompass.me/articles/nelfund-approval-and-disbursement-guide-for-noun-students)
-- Title length is outside the ideal range (https://nouncompass.me/articles/nelfund-frequently-asked-questions-for-noun-students)
-- Meta description length is outside the ideal range (https://nouncompass.me/articles/nelfund-frequently-asked-questions-for-noun-students)
-- Lighthouse performance score is poor
+- None found in this run.
 
 ## Search Console Feedback
 - Property: sc-domain:nouncompass.me
@@ -173,34 +129,12 @@
 - https://nouncompass.me/portal | position 14.00 | impressions 18
 
 ## Core Web Vitals
-- LCP: 5.3 s
+- LCP: 3.8 s
 - CLS: 0
 - INP: Unavailable
 
 ## Metadata Issues
-- Title length is outside the ideal range (https://nouncompass.me/portal)
-- Title length is outside the ideal range (https://nouncompass.me/about)
-- Meta description length is outside the ideal range (https://nouncompass.me/about)
-- Title length is outside the ideal range (https://nouncompass.me/contact)
-- Title length is outside the ideal range (https://nouncompass.me/privacy-policy)
-- Meta description length is outside the ideal range (https://nouncompass.me/privacy-policy)
-- Title length is outside the ideal range (https://nouncompass.me/terms)
-- Meta description length is outside the ideal range (https://nouncompass.me/terms)
-- Title length is outside the ideal range (https://nouncompass.me/disclaimer)
-- Meta description length is outside the ideal range (https://nouncompass.me/disclaimer)
-- Meta description length is outside the ideal range (https://nouncompass.me/editorial-policy)
-- Meta description length is outside the ideal range (https://nouncompass.me/corrections-policy)
-- Meta description length is outside the ideal range (https://nouncompass.me/authors/victor)
-- Meta description length is outside the ideal range (https://nouncompass.me/articles/common-nelfund-problems-noun-students-face)
-- Meta description length is outside the ideal range (https://nouncompass.me/articles/how-noun-students-apply-for-nelfund)
-- Title length is outside the ideal range (https://nouncompass.me/articles/how-to-pay-noun-school-fees)
-- Title length is outside the ideal range (https://nouncompass.me/articles/how-to-register-noun-courses)
-- Title length is outside the ideal range (https://nouncompass.me/articles/is-noun-eligible-for-nelfund)
-- Title length is outside the ideal range (https://nouncompass.me/articles/nelfund-application-status-meanings-explained)
-- Title length is outside the ideal range (https://nouncompass.me/articles/nelfund-approval-and-disbursement-guide-for-noun-students)
-- Meta description length is outside the ideal range (https://nouncompass.me/articles/nelfund-approval-and-disbursement-guide-for-noun-students)
-- Title length is outside the ideal range (https://nouncompass.me/articles/nelfund-frequently-asked-questions-for-noun-students)
-- Meta description length is outside the ideal range (https://nouncompass.me/articles/nelfund-frequently-asked-questions-for-noun-students)
+- None found in this run.
 
 ## Canonical Issues
 - None found in this run.
@@ -218,205 +152,7 @@
 - No major internal linking issues detected in the sampled crawl.
 
 ## Image Optimization Issues
-- https://nouncompass.me/ includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/ includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/ includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/ includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Ffix-missing-noun-e-wallet-balance.webp&w=3840&q=75
-- https://nouncompass.me/ includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fhow-to-pay-noun-school-fees.jpg&w=3840&q=75
-- https://nouncompass.me/ includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fhow-to-pay-noun-school-fees.jpg&w=3840&q=75
-- https://nouncompass.me/ includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fhow-to-register-noun-courses.jpg&w=3840&q=75
-- https://nouncompass.me/ includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fnoun-financial-statement.webp&w=3840&q=75
-- https://nouncompass.me/ includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Ffix-missing-noun-e-wallet-balance.webp&w=3840&q=75
-- https://nouncompass.me/ includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fhow-to-pay-noun-school-fees.jpg&w=3840&q=75
-- https://nouncompass.me/ includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fhow-to-pay-noun-school-fees.jpg&w=3840&q=75
-- https://nouncompass.me/ includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fhow-to-register-noun-courses.jpg&w=3840&q=75
-- https://nouncompass.me/ includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fnoun-financial-statement.webp&w=3840&q=75
-- https://nouncompass.me/ includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fnoun-financial-statement.webp&w=3840&q=75
-- https://nouncompass.me/ includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fnoun-e-wallet-refund.webp&w=3840&q=75
-- https://nouncompass.me/admission includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/admission includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/admission includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fhow-to-apply-for-noun-admission.jpg&w=3840&q=75
-- https://nouncompass.me/admission includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fnoun-admission-requirements.jpg&w=3840&q=75
-- https://nouncompass.me/admission includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Ffix-missing-noun-e-wallet-balance.webp&w=3840&q=75
-- https://nouncompass.me/admission includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fhow-to-pay-noun-school-fees.jpg&w=3840&q=75
-- https://nouncompass.me/admission includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fhow-to-pay-noun-school-fees.jpg&w=3840&q=75
-- https://nouncompass.me/admission includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fhow-to-register-noun-courses.jpg&w=3840&q=75
-- https://nouncompass.me/admission includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fnoun-financial-statement.webp&w=3840&q=75
-- https://nouncompass.me/fees includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/fees includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/fees includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Ffix-missing-noun-e-wallet-balance.webp&w=3840&q=75
-- https://nouncompass.me/fees includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fhow-to-pay-noun-school-fees.jpg&w=3840&q=75
-- https://nouncompass.me/fees includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fhow-to-pay-noun-school-fees.jpg&w=3840&q=75
-- https://nouncompass.me/fees includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fnoun-financial-statement.webp&w=3840&q=75
-- https://nouncompass.me/fees includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fnoun-financial-statement.webp&w=3840&q=75
-- https://nouncompass.me/fees includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fnoun-e-wallet-refund.webp&w=3840&q=75
-- https://nouncompass.me/fees includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fnoun-support-ticket-guide.jpg&w=3840&q=75
-- https://nouncompass.me/fees includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fnoun-compulsory-fee.webp&w=3840&q=75
-- https://nouncompass.me/fees includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fnoun-e-wallet-refund.webp&w=3840&q=75
-- https://nouncompass.me/fees includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fnoun-installment-payment.webp&w=3840&q=75
-- https://nouncompass.me/fees includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fnoun-postgraduate-school-fees.webp&w=3840&q=75
-- https://nouncompass.me/fees includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fnoun-school-fees-new-students.jpg&w=3840&q=75
-- https://nouncompass.me/fees includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fnoun-school-fees-returning-students.jpg&w=3840&q=75
-- https://nouncompass.me/fees includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fnoun-admission-requirements.jpg&w=3840&q=75
-- https://nouncompass.me/fees includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Ffix-missing-noun-e-wallet-balance.webp&w=3840&q=75
-- https://nouncompass.me/fees includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fhow-to-generate-remita-for-noun.webp&w=3840&q=75
-- https://nouncompass.me/fees includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fnoun-compulsory-fee.webp&w=3840&q=75
-- https://nouncompass.me/fees includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fnoun-financial-statement.webp&w=3840&q=75
-- https://nouncompass.me/fees includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fnoun-late-registration-fee.webp&w=3840&q=75
-- https://nouncompass.me/portal includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/portal includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/portal includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fhow-to-register-noun-courses.jpg&w=3840&q=75
-- https://nouncompass.me/portal includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fnoun-core-courses-vs-electives.webp&w=3840&q=75
-- https://nouncompass.me/portal includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fnoun-missing-course-code.webp&w=3840&q=75
-- https://nouncompass.me/portal includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fnoun-registration-slip-printout.webp&w=3840&q=75
-- https://nouncompass.me/portal includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fhow-to-register-noun-courses.jpg&w=3840&q=75
-- https://nouncompass.me/portal includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fnoun-maximum-credit-units.webp&w=3840&q=75
-- https://nouncompass.me/portal includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fnoun-portal-password-reset.webp&w=3840&q=75
-- https://nouncompass.me/portal includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fnouonline-student-dashboard.webp&w=3840&q=75
-- https://nouncompass.me/portal includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fregister-carryover-courses-noun.webp&w=3840&q=75
-- https://nouncompass.me/portal includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fupdate-profile-nouonline.webp&w=3840&q=75
-- https://nouncompass.me/portal includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Ffix-missing-noun-e-wallet-balance.webp&w=3840&q=75
-- https://nouncompass.me/portal includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fhow-to-pay-noun-school-fees.jpg&w=3840&q=75
-- https://nouncompass.me/portal includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fhow-to-pay-noun-school-fees.jpg&w=3840&q=75
-- https://nouncompass.me/portal includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fhow-to-register-noun-courses.jpg&w=3840&q=75
-- https://nouncompass.me/portal includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fnoun-financial-statement.webp&w=3840&q=75
-- https://nouncompass.me/results includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/results includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/results includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fhow-to-check-noun-results.jpg&w=3840&q=75
-- https://nouncompass.me/results includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fhow-to-check-noun-results.jpg&w=3840&q=75
-- https://nouncompass.me/results includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fhow-to-check-noun-results.jpg&w=3840&q=75
-- https://nouncompass.me/results includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fhow-to-check-noun-results.jpg&w=3840&q=75
-- https://nouncompass.me/results includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fhow-to-check-noun-results.jpg&w=3840&q=75
-- https://nouncompass.me/results includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fnoun-support-ticket-guide.jpg&w=3840&q=75
-- https://nouncompass.me/results includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fnoun-registration-slip-printout.webp&w=3840&q=75
-- https://nouncompass.me/results includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fhow-to-check-noun-results.jpg&w=3840&q=75
-- https://nouncompass.me/results includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fhow-to-check-noun-results.jpg&w=3840&q=75
-- https://nouncompass.me/results includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Ffix-missing-noun-e-wallet-balance.webp&w=3840&q=75
-- https://nouncompass.me/results includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fhow-to-pay-noun-school-fees.jpg&w=3840&q=75
-- https://nouncompass.me/results includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fhow-to-pay-noun-school-fees.jpg&w=3840&q=75
-- https://nouncompass.me/results includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fhow-to-register-noun-courses.jpg&w=3840&q=75
-- https://nouncompass.me/results includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fnoun-financial-statement.webp&w=3840&q=75
-- https://nouncompass.me/examinations includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/examinations includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/examinations includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fnoun-e-exam-vs-pop.webp&w=3840&q=75
-- https://nouncompass.me/examinations includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fnoun-exam-registration-guide.jpg&w=3840&q=75
-- https://nouncompass.me/examinations includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Ffix-missing-noun-e-wallet-balance.webp&w=3840&q=75
-- https://nouncompass.me/examinations includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fhow-to-pay-noun-school-fees.jpg&w=3840&q=75
-- https://nouncompass.me/examinations includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fhow-to-pay-noun-school-fees.jpg&w=3840&q=75
-- https://nouncompass.me/examinations includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fhow-to-register-noun-courses.jpg&w=3840&q=75
-- https://nouncompass.me/examinations includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fnoun-financial-statement.webp&w=3840&q=75
-- https://nouncompass.me/study-centres includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/study-centres includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/study-centres includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fnoun-study-centres-in-lagos.jpg&w=3840&q=75
-- https://nouncompass.me/study-centres includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fnoun-study-centres-in-lagos.jpg&w=3840&q=75
-- https://nouncompass.me/study-centres includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fnoun-study-centres-in-lagos.jpg&w=3840&q=75
-- https://nouncompass.me/study-centres includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fnoun-study-centres-in-lagos.jpg&w=3840&q=75
-- https://nouncompass.me/study-centres includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fnoun-study-centres-in-lagos.jpg&w=3840&q=75
-- https://nouncompass.me/study-centres includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fnoun-study-centres-in-lagos.jpg&w=3840&q=75
-- https://nouncompass.me/study-centres includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fnoun-study-centres-in-lagos.jpg&w=3840&q=75
-- https://nouncompass.me/study-centres includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fnoun-study-centres-in-lagos.jpg&w=3840&q=75
-- https://nouncompass.me/study-centres includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fnoun-study-centres-in-lagos.jpg&w=3840&q=75
-- https://nouncompass.me/study-centres includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Ffix-missing-noun-e-wallet-balance.webp&w=3840&q=75
-- https://nouncompass.me/study-centres includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fhow-to-pay-noun-school-fees.jpg&w=3840&q=75
-- https://nouncompass.me/study-centres includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fhow-to-pay-noun-school-fees.jpg&w=3840&q=75
-- https://nouncompass.me/study-centres includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fhow-to-register-noun-courses.jpg&w=3840&q=75
-- https://nouncompass.me/study-centres includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fnoun-financial-statement.webp&w=3840&q=75
-- https://nouncompass.me/gst includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/gst includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/gst includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fgst302-summary.jpg&w=3840&q=75
-- https://nouncompass.me/gst includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Ffix-missing-noun-e-wallet-balance.webp&w=3840&q=75
-- https://nouncompass.me/gst includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fhow-to-pay-noun-school-fees.jpg&w=3840&q=75
-- https://nouncompass.me/gst includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fhow-to-pay-noun-school-fees.jpg&w=3840&q=75
-- https://nouncompass.me/gst includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fhow-to-register-noun-courses.jpg&w=3840&q=75
-- https://nouncompass.me/gst includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fnoun-financial-statement.webp&w=3840&q=75
-- https://nouncompass.me/student-guides includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/student-guides includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/student-guides includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fnoun-course-materials-pdf.webp&w=3840&q=75
-- https://nouncompass.me/student-guides includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fnoun-graduation-clearance-fee-convocation-costs.webp&w=3840&q=75
-- https://nouncompass.me/student-guides includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fnoun-support-ticket-guide.jpg&w=3840&q=75
-- https://nouncompass.me/student-guides includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fnoun-support-ticket-guide.jpg&w=3840&q=75
-- https://nouncompass.me/student-guides includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fnoun-exam-registration-guide.jpg&w=3840&q=75
-- https://nouncompass.me/student-guides includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fnouonline-student-dashboard.webp&w=3840&q=75
-- https://nouncompass.me/student-guides includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fnoun-late-registration-fee.webp&w=3840&q=75
-- https://nouncompass.me/student-guides includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Ffix-missing-noun-e-wallet-balance.webp&w=3840&q=75
-- https://nouncompass.me/student-guides includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fhow-to-pay-noun-school-fees.jpg&w=3840&q=75
-- https://nouncompass.me/student-guides includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fhow-to-pay-noun-school-fees.jpg&w=3840&q=75
-- https://nouncompass.me/student-guides includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fhow-to-register-noun-courses.jpg&w=3840&q=75
-- https://nouncompass.me/student-guides includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fnoun-financial-statement.webp&w=3840&q=75
-- https://nouncompass.me/course-materials includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/course-materials includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/tools includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/tools includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/about includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/about includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/contact includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/contact includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/privacy-policy includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/privacy-policy includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/terms includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/terms includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/disclaimer includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/disclaimer includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/editorial-policy includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/editorial-policy includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/corrections-policy includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/corrections-policy includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/copyright-policy includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/copyright-policy includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/takedown-policy includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/takedown-policy includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/authors/victor includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/authors/victor includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/authors/editorial-team includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/authors/editorial-team includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/articles/common-nelfund-problems-noun-students-face includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/articles/common-nelfund-problems-noun-students-face includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/articles/common-nelfund-problems-noun-students-face includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/articles/common-nelfund-problems-noun-students-face includes an image with missing alt text: https://nouncompass.me/images/brand/patterns/compass-pattern.svg
-- https://nouncompass.me/articles/common-nelfund-problems-noun-students-face includes an image with missing alt text: https://nouncompass.me/images/brand/patterns/paper-texture.svg
-- https://nouncompass.me/articles/common-nelfund-problems-noun-students-face includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Ffix-missing-noun-e-wallet-balance.webp&w=3840&q=75
-- https://nouncompass.me/articles/how-noun-students-apply-for-nelfund includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/articles/how-noun-students-apply-for-nelfund includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/articles/how-noun-students-apply-for-nelfund includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/articles/how-noun-students-apply-for-nelfund includes an image with missing alt text: https://nouncompass.me/images/brand/patterns/compass-pattern.svg
-- https://nouncompass.me/articles/how-noun-students-apply-for-nelfund includes an image with missing alt text: https://nouncompass.me/images/brand/patterns/paper-texture.svg
-- https://nouncompass.me/articles/how-noun-students-apply-for-nelfund includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fhow-to-pay-noun-school-fees.jpg&w=3840&q=75
-- https://nouncompass.me/articles/how-to-pay-noun-school-fees includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/articles/how-to-pay-noun-school-fees includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/articles/how-to-pay-noun-school-fees includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/articles/how-to-pay-noun-school-fees includes an image with missing alt text: https://nouncompass.me/images/brand/patterns/compass-pattern.svg
-- https://nouncompass.me/articles/how-to-pay-noun-school-fees includes an image with missing alt text: https://nouncompass.me/images/brand/patterns/paper-texture.svg
-- https://nouncompass.me/articles/how-to-pay-noun-school-fees includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fhow-to-pay-noun-school-fees.jpg&w=3840&q=75
-- https://nouncompass.me/articles/how-to-register-noun-courses includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/articles/how-to-register-noun-courses includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/articles/how-to-register-noun-courses includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/articles/how-to-register-noun-courses includes an image with missing alt text: https://nouncompass.me/images/brand/patterns/compass-pattern.svg
-- https://nouncompass.me/articles/how-to-register-noun-courses includes an image with missing alt text: https://nouncompass.me/images/brand/patterns/paper-texture.svg
-- https://nouncompass.me/articles/how-to-register-noun-courses includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fhow-to-register-noun-courses.jpg&w=3840&q=75
-- https://nouncompass.me/articles/is-noun-eligible-for-nelfund includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/articles/is-noun-eligible-for-nelfund includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/articles/is-noun-eligible-for-nelfund includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/articles/is-noun-eligible-for-nelfund includes an image with missing alt text: https://nouncompass.me/images/brand/patterns/compass-pattern.svg
-- https://nouncompass.me/articles/is-noun-eligible-for-nelfund includes an image with missing alt text: https://nouncompass.me/images/brand/patterns/paper-texture.svg
-- https://nouncompass.me/articles/is-noun-eligible-for-nelfund includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fnoun-financial-statement.webp&w=3840&q=75
-- https://nouncompass.me/articles/nelfund-application-status-meanings-explained includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/articles/nelfund-application-status-meanings-explained includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/articles/nelfund-application-status-meanings-explained includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/articles/nelfund-application-status-meanings-explained includes an image with missing alt text: https://nouncompass.me/images/brand/patterns/compass-pattern.svg
-- https://nouncompass.me/articles/nelfund-application-status-meanings-explained includes an image with missing alt text: https://nouncompass.me/images/brand/patterns/paper-texture.svg
-- https://nouncompass.me/articles/nelfund-application-status-meanings-explained includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fnoun-financial-statement.webp&w=3840&q=75
-- https://nouncompass.me/articles/nelfund-approval-and-disbursement-guide-for-noun-students includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/articles/nelfund-approval-and-disbursement-guide-for-noun-students includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/articles/nelfund-approval-and-disbursement-guide-for-noun-students includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/articles/nelfund-approval-and-disbursement-guide-for-noun-students includes an image with missing alt text: https://nouncompass.me/images/brand/patterns/compass-pattern.svg
-- https://nouncompass.me/articles/nelfund-approval-and-disbursement-guide-for-noun-students includes an image with missing alt text: https://nouncompass.me/images/brand/patterns/paper-texture.svg
-- https://nouncompass.me/articles/nelfund-approval-and-disbursement-guide-for-noun-students includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fnoun-e-wallet-refund.webp&w=3840&q=75
-- https://nouncompass.me/articles/nelfund-frequently-asked-questions-for-noun-students includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/articles/nelfund-frequently-asked-questions-for-noun-students includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/articles/nelfund-frequently-asked-questions-for-noun-students includes an image with missing alt text: https://nouncompass.me/images/brand/nouncompass-icon.svg
-- https://nouncompass.me/articles/nelfund-frequently-asked-questions-for-noun-students includes an image with missing alt text: https://nouncompass.me/images/brand/patterns/compass-pattern.svg
-- https://nouncompass.me/articles/nelfund-frequently-asked-questions-for-noun-students includes an image with missing alt text: https://nouncompass.me/images/brand/patterns/paper-texture.svg
-- https://nouncompass.me/articles/nelfund-frequently-asked-questions-for-noun-students includes an image with missing alt text: https://nouncompass.me/_next/image?url=%2Fimages%2Farticles%2Fnoun-support-ticket-guide.jpg&w=3840&q=75
+- No major image issues detected in the sampled crawl.
 
 ## AdSense Readiness Checks
 - /about: present
@@ -438,7 +174,6 @@
 - Improve image loading and sizing on key landing pages using next/image where practical.
 
 ## Final Checklist
-- [ ] Confirm Search Console property access with the final service account
 - [ ] Save secrets only in .env.local
 - [ ] Re-run npm run seo:audit:nouncompass
 - [ ] Review reports/action-checklist.md

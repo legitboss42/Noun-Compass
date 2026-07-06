@@ -1,5 +1,5 @@
 import { env, PSI_CATEGORIES } from "./config.mjs";
-import { average, scoreIssue } from "./utils.mjs";
+import { average, isLocalTarget, scoreIssue } from "./utils.mjs";
 
 export async function runPageSpeedAudit(targetUrl) {
   const result = {
@@ -13,6 +13,12 @@ export async function runPageSpeedAudit(targetUrl) {
   if (!env.pagespeedApiKey) {
     result.skipped = true;
     result.reason = "Missing PAGESPEED_API_KEY";
+    return result;
+  }
+
+  if (isLocalTarget(targetUrl)) {
+    result.skipped = true;
+    result.reason = "PageSpeed Insights requires a public URL";
     return result;
   }
 

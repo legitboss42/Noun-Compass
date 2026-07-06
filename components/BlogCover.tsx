@@ -81,7 +81,7 @@ export function BlogCover({
       <div className="blog-cover-grid">
         <div className="blog-cover-copy">
           <div className="blog-cover-brand">
-            <BrandLogo variant="wordmark" tone="dark" className="blog-cover-brand-logo" priority />
+            <BrandLogo variant="wordmark" tone="dark" className="blog-cover-brand-logo" />
             <span className="blog-cover-tagline">Independent student resource</span>
           </div>
           <SectionBadge>{palette.label}</SectionBadge>

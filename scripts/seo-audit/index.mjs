@@ -36,7 +36,7 @@ function prioritizeFixes(audit) {
     .map((issue) => `${issue.area}: ${issue.message}`);
 
   const additional = [
-    "Connect the final Search Console property and confirm the service account has property-level access.",
+    ...(audit.searchConsole.ok ? [] : ["Connect the final Search Console property and confirm the service account has property-level access."]),
     "Review sampled high-impression, low-CTR pages and rewrite titles/descriptions for stronger click appeal.",
     "Expand thin pages with people-first, original explanations before increasing ad density.",
   ];

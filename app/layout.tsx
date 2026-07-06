@@ -39,12 +39,27 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const googleAnalyticsId = "G-TVWNP6J0GF";
-  const scrollResetScript = `(() => {
-if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
-const resetScroll = () => window.scrollTo(0, 0);
-window.addEventListener('load', resetScroll, { once: true });
-window.addEventListener('pageshow', resetScroll);
-})();`;
+  const analyticsLoader = `window.addEventListener('load', () => {
+  const bootAnalytics = () => {
+    if (window.__nounCompassAnalyticsLoaded) return;
+    window.__nounCompassAnalyticsLoaded = true;
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function gtag(){window.dataLayer.push(arguments);};
+    window.gtag('js', new Date());
+    window.gtag('config', '${googleAnalyticsId}');
+    const script = document.createElement('script');
+    script.src = 'https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsId}';
+    script.async = true;
+    document.head.appendChild(script);
+  };
+
+  if ('requestIdleCallback' in window) {
+    window.requestIdleCallback(() => window.setTimeout(bootAnalytics, 1500), { timeout: 4000 });
+    return;
+  }
+
+  window.setTimeout(bootAnalytics, 3000);
+});`;
   const organization = {
     "@context": "https://schema.org",
     "@type": "Organization",
@@ -74,8 +89,5 @@ window.addEventListener('pageshow', resetScroll);
       "query-input": "required name=search_term_string",
     },
   };
-  return <html lang="en" className={`${inter.variable} ${poppins.variable}`}><head><Script id="scroll-reset" strategy="beforeInteractive">{scrollResetScript}</Script><Script src={`https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsId}`} strategy="lazyOnload" /><Script id="google-analytics" strategy="lazyOnload">{`window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', '${googleAnalyticsId}');`}</Script></head><body><a className="skip-link" href="#main-content">Skip to content</a><Header />{children}<Footer /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organization) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(website) }} /></body></html>;
+  return <html lang="en" className={`${inter.variable} ${poppins.variable}`}><head><Script id="google-analytics-loader" strategy="afterInteractive">{analyticsLoader}</Script></head><body><a className="skip-link" href="#main-content">Skip to content</a><Header />{children}<Footer /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organization) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(website) }} /></body></html>;
 }

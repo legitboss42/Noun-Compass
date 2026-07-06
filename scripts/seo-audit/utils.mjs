@@ -14,6 +14,18 @@ export function normalizeUrl(value, base) {
   }
 }
 
+export function isLocalTarget(value) {
+  try {
+    const { hostname } = new URL(value);
+    return hostname === "localhost"
+      || hostname === "127.0.0.1"
+      || hostname === "::1"
+      || hostname.endsWith(".local");
+  } catch {
+    return false;
+  }
+}
+
 export function sameOrigin(left, right) {
   try {
     return new URL(left).origin === new URL(right).origin;

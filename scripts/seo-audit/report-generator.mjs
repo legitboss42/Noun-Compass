@@ -24,6 +24,14 @@ export async function generateReports(audit) {
   const checklistPath = path.join(REPORTS_DIR, "action-checklist.md");
   const summaryPath = path.join(REPORTS_DIR, "client-summary.md");
 
+  const finalChecklistItems = [
+    ...(audit.searchConsole.ok ? [] : ["Confirm Search Console property access with the final service account"]),
+    "Save secrets only in .env.local",
+    "Re-run npm run seo:audit:nouncompass",
+    "Review reports/action-checklist.md",
+    "Implement the top critical and high-priority fixes",
+  ];
+
   const finalReport = `# Final SEO Audit
 
 ## Audit Summary
@@ -112,11 +120,7 @@ ${audit.adsense.croRecommendations.map((item) => `- ${item}`).join("\n")}
 - Improve image loading and sizing on key landing pages using next/image where practical.
 
 ## Final Checklist
-- [ ] Confirm Search Console property access with the final service account
-- [ ] Save secrets only in .env.local
-- [ ] Re-run npm run seo:audit:nouncompass
-- [ ] Review reports/action-checklist.md
-- [ ] Implement the top critical and high-priority fixes
+${finalChecklistItems.map((item) => `- [ ] ${item}`).join("\n")}
 `;
 
   const checklist = `# Action Checklist
