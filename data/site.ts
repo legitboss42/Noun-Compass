@@ -10,6 +10,19 @@ export const site = {
     "NOUN Compass breaks NOUN processes down in plain language. We are not the university, so always confirm final fees, deadlines, admissions, and account-specific details on official NOUN pages.",
 };
 
+export type SocialLink = {
+  label: string;
+  href: string;
+  handle: string;
+};
+
+export const socialLinks: SocialLink[] = [
+  { label: "Facebook", href: "https://www.facebook.com/nouncompass/", handle: "nouncompass" },
+  { label: "Instagram", href: "https://www.instagram.com/NounCompass/", handle: "@NounCompass" },
+  { label: "X", href: "https://x.com/NounCompass", handle: "@NounCompass" },
+  { label: "Pinterest", href: "https://www.pinterest.com/NounCompass/", handle: "NounCompass" },
+];
+
 export const navItems = [
   { label: "Admissions", href: "/admission" },
   { label: "School Fees Checker", href: "/fees" },

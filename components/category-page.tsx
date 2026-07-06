@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArticleCard } from "@/components/article-card";
 import { Breadcrumbs } from "@/components/article-elements";
 import { TrendingSidebar } from "@/components/home-sections";
+import { SocialLinks } from "@/components/social-links";
 import { categories, type Category } from "@/data/site";
 import type { ArticleMeta } from "@/lib/articles";
 
@@ -28,6 +29,7 @@ export function CategoryPage({
   const guideLabel = /guide/i.test(category.name) ? category.name : `${category.name} guides`;
   const trimmedQuery = query.trim();
   const siblingCategories = categories.filter((item) => item.slug !== category.slug).slice(0, 6);
+  const prioritySocialCategories = new Set(["admission", "portal", "results", "student-guides"]);
 
   return (
     <main id="main-content">
@@ -155,6 +157,14 @@ export function CategoryPage({
               academic decisions. Your current official NOUN record should always come first.
             </p>
           </div>
+
+          {prioritySocialCategories.has(category.slug) && (
+            <SocialLinks
+              className="priority-social-links"
+              title={`Follow NounCompass for ${category.name.toLowerCase()} updates`}
+              intro="These are the active priority social pages where NounCompass shares practical student-help posts and quick reminders."
+            />
+          )}
 
           <section className="related">
             <span className="eyebrow">Related topic hubs</span>

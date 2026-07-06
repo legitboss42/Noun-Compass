@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { BrandLogo } from "@/components/BrandLogo";
 import { MobileMenu } from "@/components/mobile-menu";
+import { SocialLinks } from "@/components/social-links";
 import { navGroups, navItems, site } from "@/data/site";
 
 export function TopUtilityBar() {
@@ -24,5 +25,5 @@ export function Footer() {
     ["Takedown Policy", "/takedown-policy"],
   ];
 
-  return <footer className="footer"><div className="container footer-grid"><div><Link className="logo logo-light" href="/"><BrandLogo variant="wordmark" tone="light" className="brand-logo-footer" /></Link><p>{site.tagline}. Straightforward help for NOUN students.</p><p className="footer-independence">NounCompass is run independently. It is not part of NOUN, and it does not act for the university.</p><Link href="/authors/editorial-team">Meet the editorial team</Link></div><div><h2>Student help</h2>{navItems.slice(0, 6).map((item) => <Link key={item.href} href={item.href}>{item.label}</Link>)}</div><div><h2>Trust & legal</h2>{trustLinks.map(([label, href]) => <Link key={href} href={href}>{label}</Link>)}</div></div><div className="container footer-bottom"><p>{site.disclaimer}</p><p>Copyright {new Date().getFullYear()} NOUN Compass</p></div></footer>;
+  return <footer className="footer"><div className="container footer-grid"><div><Link className="logo logo-light" href="/"><BrandLogo variant="wordmark" tone="light" className="brand-logo-footer" /></Link><p>{site.tagline}. Straightforward help for NOUN students.</p><p className="footer-independence">NounCompass is run independently. It is not part of NOUN, and it does not act for the university.</p><Link href="/authors/editorial-team">Meet the editorial team</Link></div><div><h2>Student help</h2>{navItems.slice(0, 6).map((item) => <Link key={item.href} href={item.href}>{item.label}</Link>)}</div><div><h2>Trust & legal</h2>{trustLinks.map(([label, href]) => <Link key={href} href={href}>{label}</Link>)}</div></div><div className="container footer-social-wrap"><SocialLinks compact title="Follow NounCompass on the priority platforms" intro="Use the official NounCompass social profiles for quick reminders, student-help posts, and traffic updates." /></div><div className="container footer-bottom"><p>{site.disclaimer}</p><p>Copyright {new Date().getFullYear()} NOUN Compass</p></div></footer>;
 }

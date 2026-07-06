@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArticleCard } from "@/components/article-card";
 import { Breadcrumbs, DisclaimerBox } from "@/components/article-elements";
 import { FeeChecker } from "@/components/fee-checker";
+import { SocialLinks } from "@/components/social-links";
 import { getArticlesByCategory } from "@/lib/articles";
 import { createMetadata } from "@/lib/metadata";
 import styles from "./fees.module.css";
@@ -59,6 +60,11 @@ export default function FeesPage() {
         <p>Compare the estimate with your current portal bill, review every course code, and save the final invoice and payment receipt. If a payment does not reflect, avoid paying again immediately. Keep the transaction reference and use the <Link href="/articles/noun-support-ticket-guide">support-ticket guide</Link>.</p>
         <p>If you are planning around student finance support rather than direct self-funding, read the <Link href="/articles/is-noun-eligible-for-nelfund">NOUN NELFUND eligibility guide</Link> before you rely on any claim about funding.</p>
       </section>
+      <SocialLinks
+        className="priority-social-links"
+        title="Follow NounCompass for school fees and payment updates"
+        intro="Use the active NounCompass social pages for fee reminders, Remita guidance, and quick student-help posts tied to the fees checker."
+      />
     </div>
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSchema) }} />
   </main>;

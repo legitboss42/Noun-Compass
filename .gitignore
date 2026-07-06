@@ -47,6 +47,9 @@ next-env.d.ts
 
 # local audit/debug output
 reports/seo-audit-debug.json
+reports/final-seo-audit.md
+reports/client-summary.md
+reports/action-checklist.md
 
 # local marketing/browser captures
 marketing-agent/*.png
