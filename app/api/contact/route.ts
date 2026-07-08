@@ -2,6 +2,12 @@ import { validateContactPayload, enforceSubmissionLimits, sendContactEmails } fr
 
 export const runtime = "nodejs";
 
+function apiHeaders() {
+  return {
+    "X-Robots-Tag": "noindex, nofollow, noarchive",
+  };
+}
+
 export async function POST(request: Request) {
   try {
     const payload = (await request.json()) as {
@@ -14,7 +20,7 @@ export async function POST(request: Request) {
 
     const validated = validateContactPayload(payload);
     if (validated.honeypotTriggered) {
-      return Response.json({ message: "Your message has been received." });
+      return Response.json({ message: "Your message has been received." }, { headers: apiHeaders() });
     }
 
     const forwardedFor = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim();
@@ -25,11 +31,11 @@ export async function POST(request: Request) {
 
     return Response.json({
       message: "Thanks. Your message has been received and a confirmation email is on its way.",
-    });
+    }, { headers: apiHeaders() });
   } catch (error) {
     const message = error instanceof Error ? error.message : "We could not send your message right now.";
     const status = /Missing email delivery configuration/i.test(message) ? 500 : 400;
 
-    return Response.json({ message }, { status });
+    return Response.json({ message }, { status, headers: apiHeaders() });
   }
 }

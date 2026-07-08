@@ -2,6 +2,14 @@ import { extractedCurricula, nounUpdateFeeSnapshotRetrievedAt, pureduFeeSnapshot
 
 export const runtime = "nodejs";
 
+function apiHeaders(extra: Record<string, string> = {}) {
+  return {
+    "Cache-Control": "public, max-age=3600, s-maxage=86400",
+    "X-Robots-Tag": "noindex, nofollow, noarchive",
+    ...extra,
+  };
+}
+
 export async function GET(request: Request) {
   const params = new URL(request.url).searchParams;
   const faculty = params.get("faculty");
@@ -22,17 +30,19 @@ export async function GET(request: Request) {
       })),
       pureduFeeSnapshotRetrievedAt,
       nounUpdateFeeSnapshotRetrievedAt,
-    }, { headers: { "Cache-Control": "public, max-age=3600, s-maxage=86400" } });
+    }, { headers: apiHeaders() });
   }
 
   const foundProgramme = extractedCurricula.find((item) => item.faculty === faculty && item.program === program);
   const foundLevel = foundProgramme?.levels.find((item) => item.level === level);
   const foundSemester = foundLevel?.semesters.find((item) => item.semester === semester && item.courses.length > 0);
-  if (!foundProgramme || !foundLevel || !foundSemester) return Response.json({ error: "Fee result not found." }, { status: 404 });
+  if (!foundProgramme || !foundLevel || !foundSemester) {
+    return Response.json({ error: "Fee result not found." }, { status: 404, headers: apiHeaders() });
+  }
 
   return Response.json({
     programme: { faculty: foundProgramme.faculty, program: foundProgramme.program },
     level: { level: foundLevel.level, label: foundLevel.label },
     semester: foundSemester,
-  }, { headers: { "Cache-Control": "public, max-age=3600, s-maxage=86400" } });
+  }, { headers: apiHeaders() });
 }
