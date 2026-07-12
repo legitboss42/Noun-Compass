@@ -7,6 +7,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "",
     ...navItems.map(({ href }) => href),
     "/tools/cgpa-calculator",
+    "/tools/result-checker",
     "/tools/study-planner",
     "/reviewers/student-workflow",
     "/reviewers/student-finance",

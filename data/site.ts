@@ -72,6 +72,7 @@ export const navGroups: NavGroup[] = [
     href: "/tools",
     items: [
       { label: "All Tools", href: "/tools" },
+      { label: "Result Checker", href: "/tools/result-checker" },
       { label: "CGPA Calculator", href: "/tools/cgpa-calculator" },
       { label: "Study Planner", href: "/tools/study-planner" },
     ],
