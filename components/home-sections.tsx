@@ -2,6 +2,8 @@ import Link from "next/link";
 import { ArticleCard } from "@/components/article-card";
 import { BrandLogo } from "@/components/BrandLogo";
 import { SectionBadge } from "@/components/SectionBadge";
+import { NewsletterForm } from "@/components/newsletter-form";
+import { examPrepCourses } from "@/data/exam-prep";
 import type { ArticleMeta } from "@/lib/articles";
 
 const startHerePaths = [
@@ -104,5 +106,9 @@ export function TrendingSidebar({ articles }: { articles: ArticleMeta[] }) {
 }
 
 export function NewsletterBlock() {
-  return <section className="newsletter container"><div><SectionBadge>Independent guidance</SectionBadge><h2>Use this site to understand the task, then finish it with the right NOUN page open.</h2><p>NOUN Compass helps you make sense of the process before you pay, submit records, or act on a deadline.</p></div><span className="newsletter-status">Check trust pages</span></section>;
+  return <section className="newsletter container"><div><SectionBadge>Free email updates</SectionBadge><h2>Get useful NOUN study updates without joining a paid plan.</h2><p>Join the NounCompass list for occasional exam-preparation releases, timetable reminders, and newly reviewed student guides. Email marketing will begin only after the list and unsubscribe workflow are ready.</p></div><NewsletterForm /></section>;
+}
+
+export function FreeExamPrepSection() {
+  return <section className="section container free-exam-prep"><div className="section-heading"><div><SectionBadge>Free exam preparation</SectionBadge><h2>Start with reviewed course coverage and a free diagnostic</h2></div><Link href="/exam-prep">View all exam-prep courses -&gt;</Link></div><p className="free-exam-prep-intro">Create a free account to save your semester courses and scores. Paid practice remains locked until the reviewed banks and payment gate are ready.</p><div className="platform-public-grid">{examPrepCourses.slice(0, 3).map((course) => <article key={course.code}><span>{course.level} level · Semester {course.semester}</span><h2>{course.code}</h2><h3>{course.title}</h3><p>{course.description}</p><Link href={`/exam-prep/${course.slug}`}>Review course coverage</Link></article>)}</div><div className="free-exam-prep-actions"><Link className="button" href="/dashboard/practice">Start free diagnostic</Link><Link href="/account/sign-up">Create free account</Link><Link href="/account/sign-in">Sign in</Link></div></section>;
 }

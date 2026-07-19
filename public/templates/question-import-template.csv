@@ -1,0 +1,2 @@
+course_code,topic,learning_objective,difficulty,sample,source_unit,source_page,prompt,option_a,option_b,option_c,option_d,correct_label,explanation
+GST101,Reading comprehension,Infer meaning from context,1,true,Unit 1,12,"Which clue best helps a reader infer the meaning of an unfamiliar word?",The font size,The surrounding sentence,The page number,The paragraph length,B,"The surrounding sentence provides semantic context that can clarify how the unfamiliar word is being used."

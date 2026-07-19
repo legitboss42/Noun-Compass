@@ -106,6 +106,8 @@ export function CategoryPage({
             </div>
           )}
 
+          {(category.slug === "examinations" || category.slug === "gst") && <aside className="platform-upgrade contextual-exam-prep"><div><span className="eyebrow">Free account feature</span><h2>{category.slug === "gst" ? "Prepare for supported GST courses" : "Turn exam guidance into a study session"}</h2><p>Review original course coverage, create a free account, and start a diagnostic when a reviewed sample bank is available.</p></div><Link className="button" href="/exam-prep">Explore exam preparation</Link><Link href="/dashboard/practice">Start free diagnostic</Link></aside>}
+
           <div className="seo-intro">
             <h2>How NOUN Compass approaches {category.name.toLowerCase()}</h2>
             {category.slug === "portal" && (

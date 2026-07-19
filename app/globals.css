@@ -105,6 +105,16 @@
 .membership-comparison h2 { margin-top: 0; }
 .checkout-action { display: grid; gap: 10px; }
 .checkout-action button:disabled { background: #687770; cursor: not-allowed; }
+.payment-success-summary { padding: 18px; background: var(--green-pale); border-left: 4px solid var(--green); }
+.payment-success-summary p { margin: 7px 0 0; color: var(--muted); line-height: 1.55; }
+.payment-receipt { width: min(100%, 720px); }
+.payment-receipt header h1 { margin-bottom: 10px; }
+.payment-receipt header p { margin: 0; color: var(--muted); }
+.payment-receipt dl { display: grid; gap: 0; margin: 0; border: 1px solid var(--line); }
+.payment-receipt dl > div { display: grid; grid-template-columns: minmax(130px, .45fr) 1fr; gap: 18px; padding: 13px 16px; border-bottom: 1px solid var(--line); }
+.payment-receipt dl > div:last-child { border-bottom: 0; }
+.payment-receipt dt { color: var(--muted); font-size: .75rem; font-weight: 800; }
+.payment-receipt dd { margin: 0; overflow-wrap: anywhere; font-weight: 700; }
 
 .practice-runner { display: grid; gap: 20px; padding: clamp(24px, 5vw, 42px); background: white; border: 1px solid var(--line); }
 .practice-runner h2 { margin: 0; font-size: clamp(1.5rem, 4vw, 2.5rem); line-height: 1.25; letter-spacing: -.04em; }
@@ -162,8 +172,9 @@ button, a, input, textarea, select { outline-offset: 4px; }
 .logo img { margin-right: 4px; }
 .logo span { letter-spacing: -.03em; }
 .header-actions { display: flex; align-items: center; gap: 12px; }
-.search-link { color: var(--green-dark); font-size: .82rem; font-weight: 750; }
+.search-link, .sign-in-link, .dashboard-link { color: var(--green-dark); font-size: .82rem; font-weight: 750; }
 .account-link { padding: 9px 12px; background: var(--green-pale); color: var(--green-dark); font-size: .78rem; font-weight: 800; }
+.dashboard-link { padding-left: 12px; border-left: 1px solid var(--line); }
 .desktop-nav { display: flex; align-items: center; gap: 20px; min-height: 43px; overflow: visible; font-size: .78rem; font-weight: 720; white-space: nowrap; }
 .desktop-nav a:hover, .desktop-nav-button:hover { color: var(--green); }
 .desktop-nav-group { position: relative; display: flex; align-items: center; padding-block: 6px; }
@@ -192,6 +203,8 @@ button, a, input, textarea, select { outline-offset: 4px; }
 .mobile-subnav { display: grid; gap: 4px; padding: 4px 6px 10px; background: #fbfcfd; }
 .mobile-subnav a { margin-inline: 4px; padding-left: 18px; border-radius: 10px; font-weight: 600; }
 .mobile-subnav a:hover { background: #eef7f1; color: var(--green-dark); }
+.mobile-auth-links { display: grid; gap: 4px; padding-top: 8px; }
+#mobile-nav .mobile-register-link { background: var(--green-pale); color: var(--green-dark); }
 
 .hero { position: relative; overflow: hidden; background: var(--soft); border-bottom: 1px solid var(--line); }
 .hero::before { content: ""; position: absolute; width: 480px; height: 480px; right: -180px; top: -230px; border: 78px solid var(--green-pale); border-radius: 50%; }
@@ -302,7 +315,22 @@ button, a, input, textarea, select { outline-offset: 4px; }
 .newsletter form { display: flex; gap: 8px; }
 .newsletter input { min-width: 0; flex: 1; border: 0; padding: 14px; }
 .newsletter button { border: 0; background: var(--ink); color: white; padding: 14px 18px; font-weight: 750; }
+.newsletter .newsletter-form { display: grid; gap: 12px; }
+.newsletter-fields { display: flex; gap: 8px; }
+.newsletter-consent { display: grid; grid-template-columns: auto 1fr; gap: 9px; align-items: start; color: #e8f6ed; font-size: .76rem; line-height: 1.45; }
+.newsletter-consent input { width: auto; margin-top: 3px; }
+.newsletter-honeypot { position: absolute; left: -9999px; }
+.newsletter-message { min-height: 1.3em; margin: 0; color: white; font-size: .78rem; }
+.newsletter-message-error { color: #fff1b8; }
+.newsletter-form small { color: #d4efdf; line-height: 1.5; }
+.newsletter-form small a { text-decoration: underline; text-underline-offset: 3px; }
 .newsletter-status { justify-self: end; padding: 12px 16px; border: 1px solid #a9efc7; color: white; font-size: .78rem; font-weight: 800; }
+.free-exam-prep { background: linear-gradient(180deg, #fff, var(--soft)); }
+.free-exam-prep-intro { max-width: 760px; color: var(--muted); line-height: 1.65; }
+.free-exam-prep-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 18px; margin-top: 24px; color: var(--green-dark); font-size: .82rem; font-weight: 800; }
+.contextual-exam-prep { margin-block: 34px; }
+.course-prep-actions { grid-template-columns: minmax(0, 1fr) auto auto; }
+.course-prep-actions > a:last-child { grid-column: auto; }
 .tool-grid-single { grid-template-columns: minmax(0, 1fr); max-width: 500px; }
 .social-follow { display: grid; gap: 20px; margin-top: 36px; padding: 26px; background: linear-gradient(180deg, #ffffff, #f8fbfd); border: 1px solid rgba(18, 36, 59, 0.08); box-shadow: 0 16px 36px rgba(18, 36, 59, 0.06); }
 .social-follow-copy h2 { margin: 6px 0 10px; font-size: clamp(1.45rem, 3vw, 2rem); letter-spacing: -.045em; }
@@ -482,7 +510,7 @@ button, a, input, textarea, select { outline-offset: 4px; }
 .empty-page p { margin-bottom: 30px; color: var(--muted); }
 
 .footer { padding-top: 58px; background: var(--ink); color: #c8d4cc; }
-.footer-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 50px; padding-bottom: 45px; }
+.footer-grid { display: grid; grid-template-columns: 1.4fr 1fr .8fr 1fr; gap: 50px; padding-bottom: 45px; }
 .logo-light { color: white; }
 .footer-grid p { max-width: 380px; font-size: .85rem; line-height: 1.6; }
 .footer-independence { color: #d8e4ed; }
@@ -495,7 +523,9 @@ button, a, input, textarea, select { outline-offset: 4px; }
 @media (max-width: 980px) {
   .desktop-nav { display: none; }
   .mobile-menu { display: block; }
+  .sign-in-link, .account-link, .dashboard-link { display: none; }
   .site-header { top: 0; }
+  .footer-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .featured-grid, .content-sidebar, .article-layout { grid-template-columns: 1fr; }
   .article-side { display: none; }
   .trending, .academic-countdown { position: static; margin-top: 0; padding-left: 0; border-left: 0; }
@@ -511,7 +541,7 @@ button, a, input, textarea, select { outline-offset: 4px; }
   .search-link { display: none; }
   .hero-inner { padding-block: 60px 54px; }
   .hero h1 { font-size: 3.25rem; }
-  .search-box, .newsletter form { flex-direction: column; }
+  .search-box, .newsletter form, .newsletter-fields { flex-direction: column; }
   .featured-small, .latest-list, .archive-grid, .category-grid, .tool-grid, .newsletter, .footer-grid, .contact-grid, .material-filters, .material-list, .material-related > div { grid-template-columns: 1fr; }
   .newsletter-status { justify-self: start; }
   .article-card-large .card-image, .feature-placeholder { min-height: 250px; }
@@ -519,6 +549,8 @@ button, a, input, textarea, select { outline-offset: 4px; }
   .band { padding-block: 48px; }
   .category-card { min-height: 200px; }
   .newsletter { gap: 20px; margin-bottom: 50px; padding: 25px; }
+  .course-prep-actions { grid-template-columns: 1fr; }
+  .course-prep-actions > a:last-child { grid-column: 1; }
   .category-hero { padding-block: 38px; }
   .article-header { padding-block: 36px 28px; }
   .article-header h1 { font-size: 2.75rem; }
@@ -530,6 +562,9 @@ button, a, input, textarea, select { outline-offset: 4px; }
 }
 
 @media print {
+  .utility, .site-header, .footer, .skip-link, .receipt-actions { display: none !important; }
+  .receipt-page { min-height: 0; padding: 0; background: white; }
+  .payment-receipt { width: 100%; border: 0; box-shadow: none; }
   body:has(.fee-report-printable) > * { display: none !important; }
   body:has(.fee-report-printable) > main:has(.fee-report-printable) { display: block !important; }
   main:has(.fee-report-printable) > * { display: none !important; }
@@ -708,7 +743,9 @@ body {
 }
 
 .desktop-nav > a:hover,
-.search-link:hover {
+.search-link:hover,
+.sign-in-link:hover,
+.dashboard-link:hover {
   color: var(--green);
 }
 

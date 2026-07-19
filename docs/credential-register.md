@@ -34,6 +34,8 @@ This register documents variable names, purpose, storage, and rotation without r
 | `BREVO_SMTP_PORT` | Configuration | SMTP submission port. | `.env.local`, Vercel, Supabase Auth SMTP | Use the provider-supported TLS port. |
 | `BREVO_SMTP_LOGIN` | Secret | Brevo SMTP account identifier. | `.env.local`, Vercel, Supabase Auth SMTP | Update all stores if regenerated. |
 | `BREVO_SMTP_PASSWORD` | Critical secret | Brevo SMTP key/password. | `.env.local`, Vercel, Supabase Auth SMTP | Regenerate in Brevo if exposed, then update Supabase and Vercel. |
+| `BREVO_API_KEY` | Critical secret | Server-only Brevo Contacts API key used to sync consented subscribers. | `.env.local`, Vercel | Never expose it through a `NEXT_PUBLIC_` variable. |
+| `BREVO_NEWSLETTER_LIST_ID` | Configuration | Numeric Brevo list that receives consented website subscribers. | `.env.local`, Vercel | Use a dedicated NounCompass updates list. |
 | `CONTACT_FORM_FROM` | Configuration | Verified sender used for support messages. | `.env.local`, Vercel | Must use a Brevo-verified sender on the authenticated domain. |
 | `CONTACT_FORM_AUTOREPLY_FROM` | Configuration | Verified sender used for acknowledgement messages. | `.env.local`, Vercel | Keep aligned with the verified sender policy. |
 | `CONTACT_FORM_TO` | Private configuration | Destination mailbox for support requests. | `.env.local`, Vercel | Confirm mailbox ownership and delivery after changes. |

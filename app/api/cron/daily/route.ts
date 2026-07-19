@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { syncSubscriberToBrevo } from "@/lib/newsletter";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 export async function GET(request: Request) {
@@ -27,7 +28,20 @@ export async function GET(request: Request) {
         }
       }
     }
-    const details = { expiredCount, reminderCount, checkedMemberships: expiring?.length ?? 0 };
+    const { data: pendingSubscribers } = await admin.from("newsletter_subscribers").select("email").eq("status", "subscribed").is("brevo_synced_at", null).limit(100);
+    let subscriberSyncCount = 0;
+    for (const subscriber of pendingSubscribers ?? []) {
+      try {
+        const result = await syncSubscriberToBrevo(subscriber.email);
+        if (result.synced) {
+          await admin.from("newsletter_subscribers").update({ brevo_synced_at: now.toISOString(), updated_at: now.toISOString() }).eq("email", subscriber.email);
+          subscriberSyncCount += 1;
+        }
+      } catch {
+        // Leave unsynced contacts queued for the next daily run.
+      }
+    }
+    const details = { expiredCount, reminderCount, checkedMemberships: expiring?.length ?? 0, subscriberSyncCount, checkedSubscribers: pendingSubscribers?.length ?? 0 };
     await admin.from("cron_runs").update({ status: "success", details, completed_at: new Date().toISOString() }).eq("id", run.id);
     return NextResponse.json({ ok: true, ...details });
   } catch (error) {

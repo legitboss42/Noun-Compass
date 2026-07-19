@@ -48,7 +48,30 @@ Never point `RESTORE_DATABASE_URL` at production. Never commit database URLs, pa
 
 ## Release gates
 
-- A question bank cannot be published until it has 100 published questions and 15 published sample questions.
+- A question bank cannot be released until it has at least 100 individually approved questions, including 15 approved sample questions, and every current question version has four options, exactly one correct answer, a source reference, and an explanation.
 - A schedule cannot be published without at least one validated row, an official source URL, checksum, and reviewer action.
 - Payment activation requires a locally created reference plus Flutterwave verification of provider transaction ID, status, amount, currency, email, and transaction timestamp.
+- A successful verified callback shows the thank-you page and links to an authenticated receipt. The receipt is generated only from the account-owned successful payment and membership records and can be printed or saved as PDF by the browser.
 - Protected routes and API responses must remain `noindex` and outside the sitemap.
+
+## Exam-preparation content workflow
+
+The student experience is now wired for randomized multiple-choice practice, a 40-minute timed mock, answer review with explanations, recent-score history, and five-box due revision. Course pages and the dashboard use only released banks and published timetable versions.
+
+Editors can create a single question or bulk-import draft questions from [`/templates/question-import-template.csv`](/templates/question-import-template.csv). The CSV headers are:
+
+```text
+course_code,topic,learning_objective,difficulty,sample,source_unit,source_page,prompt,option_a,option_b,option_c,option_d,correct_label,explanation
+```
+
+Imports are validated as one batch and always remain drafts. The academic workflow is `draft -> review -> published -> retired`; each approval remains a deliberate reviewer action. Importing a CSV or satisfying a numeric threshold never approves academic content automatically.
+
+Timetable imports likewise remain drafts until reviewed. Their source must use HTTPS and be hosted on `nou.edu.ng` or one of its subdomains. Invalid calendar dates, duplicate rows, empty schedules, missing checksums, and non-official source URLs are rejected.
+
+Human academic review of every question and legal owner approval are still required before launch. `FEATURE_CHECKOUT=false` remains unchanged and is independent of question-bank readiness.
+
+## Email subscriber collection
+
+Run `202607190004_newsletter_subscribers.sql` before enabling the homepage signup in production. The endpoint stores explicit consent in Supabase and then uses `BREVO_API_KEY` plus `BREVO_NEWSLETTER_LIST_ID` to add or update the address in a dedicated Brevo contact list. SMTP credentials cannot replace the Contacts API key.
+
+If Brevo is temporarily unavailable, the Supabase record remains with an empty `brevo_synced_at` value for a later retry. Do not send marketing campaigns until the owner has approved the content, sender identity, unsubscribe behavior, and audience.

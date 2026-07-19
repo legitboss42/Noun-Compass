@@ -2,6 +2,15 @@ import { isPlausibleCourseCode, normalizeCourseCode } from "./course-codes";
 
 export type TimetableImportRow = { courseCode: string; courseTitle: string; examDate: string; startsAt: string; venue: string };
 
+export function isOfficialNounSourceUrl(value: string) {
+  try {
+    const url = new URL(value);
+    return url.protocol === "https:" && (url.hostname === "nou.edu.ng" || url.hostname.endsWith(".nou.edu.ng"));
+  } catch {
+    return false;
+  }
+}
+
 function splitCsvLine(line: string) {
   const values: string[] = [];
   let value = ""; let quoted = false;
@@ -34,7 +43,8 @@ export function parseTimetableCsv(csv: string) {
     const examDate = get("exam_date");
     const startsAt = get("starts_at");
     if (!isPlausibleCourseCode(courseCode)) errors.push(`Row ${rowNumber}: invalid course code.`);
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(examDate) || Number.isNaN(Date.parse(`${examDate}T00:00:00Z`))) errors.push(`Row ${rowNumber}: exam_date must be YYYY-MM-DD.`);
+    const parsedDate = new Date(`${examDate}T00:00:00Z`);
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(examDate) || Number.isNaN(parsedDate.getTime()) || parsedDate.toISOString().slice(0, 10) !== examDate) errors.push(`Row ${rowNumber}: exam_date must be a real date in YYYY-MM-DD format.`);
     if (!/^([01]\d|2[0-3]):[0-5]\d$/.test(startsAt)) errors.push(`Row ${rowNumber}: starts_at must be HH:MM in 24-hour time.`);
     if (seen.has(courseCode)) errors.push(`Row ${rowNumber}: duplicate course code ${courseCode}.`);
     seen.add(courseCode);

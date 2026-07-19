@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/platform/auth";
 import { nextRevisionState } from "@/lib/platform/revision";
+import { timedMockExpiresAt } from "@/lib/platform/practice";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 export async function POST(request: Request, { params }: { params: Promise<{ "session-id": string }> }) {
@@ -12,8 +13,9 @@ export async function POST(request: Request, { params }: { params: Promise<{ "se
   const admin = createAdminClient();
   if (!admin) return NextResponse.json({ message: "Practice database is unavailable." }, { status: 503 });
 
-  const { data: session } = await admin.from("practice_sessions").select("id,user_id,mode,status").eq("id", sessionId).maybeSingle();
+  const { data: session } = await admin.from("practice_sessions").select("id,user_id,mode,status,started_at").eq("id", sessionId).maybeSingle();
   if (!session || session.user_id !== user.id || session.status !== "active") return NextResponse.json({ message: "This practice session is not active." }, { status: 403 });
+  if (session.mode === "timed-mock" && Date.now() >= timedMockExpiresAt(session.started_at).getTime()) return NextResponse.json({ message: "Time has ended. Finish the mock to see your result." }, { status: 408 });
   const { data: assignment } = await admin.from("practice_session_questions").select("question_version_id").eq("session_id", sessionId).eq("question_version_id", body.questionVersionId).maybeSingle();
   if (!assignment) return NextResponse.json({ message: "Question is not part of this session." }, { status: 400 });
   const { data: option } = await admin.from("question_options").select("id,is_correct,question_version_id").eq("id", body.selectedOptionId).maybeSingle();
