@@ -9,6 +9,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/tools/cgpa-calculator",
     "/tools/result-checker",
     "/tools/study-planner",
+    "/exam-prep",
+    "/membership",
+    "/refund-policy",
+    "/academic-integrity",
     "/reviewers/student-workflow",
     "/reviewers/student-finance",
     "/about",
@@ -49,5 +53,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     changeFrequency: "monthly" as const,
     priority: article.featured ? 0.9 : 0.8,
   }));
-  return [...staticEntries, ...articleEntries];
+  const examPrepEntries = ["gst101", "gst102", "gst107", "gst201", "gst302"].map((slug) => ({
+    url: `${site.url}/exam-prep/${slug}`,
+    changeFrequency: "monthly" as const,
+    priority: 0.8,
+  }));
+  return [...staticEntries, ...examPrepEntries, ...articleEntries];
 }

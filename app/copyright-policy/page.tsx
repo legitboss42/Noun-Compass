@@ -12,6 +12,8 @@ export default function Page() {
     <p>NOUN Compass may provide access pointers or delivery links to third-party or official academic materials for student educational support. We do not claim ownership of official National Open University of Nigeria materials or other third-party works. Their ownership and permitted use remain with their respective rights holders.</p>
     <h2>Educational and resource purpose</h2>
     <p>Material listings are intended to help students identify relevant learning resources and verify them through official platforms. A listing does not transfer ownership, grant additional rights, or represent an official NOUN endorsement of NOUN Compass.</p>
+    <h2>Practice questions and explanations</h2>
+    <p>NounCompass practice content must be newly written around learning objectives and reviewed before publication. We do not accept copied commercial banks, leaked examinations, or active TMA questions and answers as original content. Source-unit references document topic verification without transferring ownership of official courseware.</p>
     <h2>Submit a copyright complaint</h2>
     <p>Copyright owners or authorised representatives can email <a href={`mailto:${site.contactEmail}?subject=NOUN%20Compass%20copyright%20complaint`}>{site.contactEmail}</a>. Include the affected NOUN Compass URL, the material or course code involved, a description of the protected work, the reason for the complaint, proof of ownership or authority where relevant, and reliable contact information.</p>
     <h2>Review and removal process</h2>

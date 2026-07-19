@@ -65,6 +65,7 @@ export const navGroups: NavGroup[] = [
       { label: "Course Materials", href: "/course-materials" },
       { label: "Study Centres", href: "/study-centres" },
       { label: "GST", href: "/gst" },
+      { label: "Exam Preparation", href: "/exam-prep" },
     ],
   },
   {
@@ -75,6 +76,7 @@ export const navGroups: NavGroup[] = [
       { label: "Result Checker", href: "/tools/result-checker" },
       { label: "CGPA Calculator", href: "/tools/cgpa-calculator" },
       { label: "Study Planner", href: "/tools/study-planner" },
+      { label: "Semester Dashboard", href: "/dashboard" },
     ],
   },
 ];

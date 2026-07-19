@@ -1,0 +1,25 @@
+import Link from "next/link";
+import { LocalProfileImport } from "@/components/local-profile-import";
+import { requireUser } from "@/lib/platform/auth";
+import { membershipIsActive } from "@/lib/platform/membership";
+import { createClient } from "@/lib/supabase/server";
+import { studyPlannerCatalog } from "@/lib/study-planner-catalog";
+import { courseMaterialDownloadUrl, findCourseMaterial } from "@/lib/course-materials";
+
+export default async function DashboardPage({ searchParams }: { searchParams: Promise<{ notice?: string }> }) {
+  const user = await requireUser("/dashboard");
+  const params = await searchParams;
+  const supabase = await createClient();
+  const [{ data: profile }, { data: membership }, { data: notices }, { data: revisions }] = supabase ? await Promise.all([
+    supabase.from("profiles").select("*").eq("id", user.id).maybeSingle(),
+    supabase.from("memberships").select("status,starts_at,ends_at").eq("user_id", user.id).order("ends_at", { ascending: false }).limit(1).maybeSingle(),
+    supabase.from("notices").select("id,title,body,source_url,expires_at").eq("status", "published").order("created_at", { ascending: false }).limit(3),
+    supabase.from("revision_state").select("question_id,due_at,box").eq("user_id", user.id).lte("due_at", new Date().toISOString()).limit(20),
+  ]) : [{ data: null }, { data: null }, { data: [] }, { data: [] }];
+
+  const selectedCodes = (profile?.selected_course_codes ?? []) as string[];
+  const courses = selectedCodes.map((code) => studyPlannerCatalog.find((course) => course.code === code) ?? { code, title: "Course not yet verified", units: null, materialAvailable: false, source: "material-library" as const, faculties: [] });
+  const premium = membershipIsActive(membership?.status, membership?.ends_at);
+
+  return <><header className="platform-heading"><div><span className="eyebrow">Semester command centre</span><h1>Welcome{profile?.display_name ? `, ${profile.display_name}` : ""}</h1><p>See your selected courses, official resources, preparation status, and the next safe action in one place.</p></div><Link className="button" href="/dashboard/profile">{profile?.onboarding_completed_at ? "Update semester" : "Set up semester"}</Link></header>{params.notice && <p className="form-message form-message-success">{params.notice}</p>}<LocalProfileImport /><section className="platform-stat-grid" aria-label="Dashboard summary"><article><span>Selected courses</span><strong>{courses.length}</strong><small>{courses.filter((course) => course.materialAvailable).length} with official materials indexed</small></article><article><span>Revision due</span><strong>{revisions?.length ?? 0}</strong><small>Based on your five-box revision schedule</small></article><article><span>Membership</span><strong>{premium ? "Premium" : "Free"}</strong><small>{premium && membership?.ends_at ? `Ends ${new Intl.DateTimeFormat("en-NG", { dateStyle: "medium", timeZone: "Africa/Lagos" }).format(new Date(membership.ends_at))}` : "Core planning tools remain free"}</small></article></section><section className="platform-panel"><div className="section-heading"><div><span className="eyebrow">Your courses</span><h2>Semester resources</h2></div><Link href="/course-materials">Search all materials</Link></div>{courses.length ? <div className="platform-course-grid">{courses.map((course) => { const material = findCourseMaterial(course.code, course.title); return <article key={course.code}><div><strong>{course.code}</strong><span className={`confidence confidence-${course.source === "curriculum" ? "verified" : "user"}`}>{course.source === "curriculum" ? "Verified" : "User-entered"}</span></div><h3>{course.title}</h3><p>{course.units ? `${course.units} credit units` : "Units not verified"}</p>{material ? <a href={courseMaterialDownloadUrl(material)}>Open official material</a> : <Link href={`/course-materials?q=${course.code}`}>Check material index</Link>}</article>; })}</div> : <div className="empty-state"><h2>No courses selected yet</h2><p>Add your real registered course codes. NounCompass does not access your NOUN account.</p><Link className="button" href="/dashboard/profile">Set up semester</Link></div>}</section>{notices?.length ? <section className="platform-panel"><h2>Verified notices</h2><div className="platform-notice-list">{notices.map((notice) => <article key={notice.id}><h3>{notice.title}</h3><p>{notice.body}</p>{notice.source_url && <a href={notice.source_url} target="_blank" rel="noopener noreferrer">Confirm source</a>}</article>)}</div></section> : null}<section className="platform-action-grid"><Link href="/fees"><strong>Estimate fees</strong><span>Use programme and semester data, then confirm on your portal.</span></Link><Link href="/tools/cgpa-calculator"><strong>Check CGPA</strong><span>Estimate grade points without storing result records.</span></Link><Link href="/tools/study-planner"><strong>Build study timetable</strong><span>Plan reading around your actual free hours.</span></Link><Link href="/dashboard/practice"><strong>Prepare for exams</strong><span>Use original reviewed practice content as banks are published.</span></Link></section></>;
+}

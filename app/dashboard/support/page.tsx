@@ -1,0 +1,11 @@
+import { createSupportTicket } from "../actions";
+import { requireUser } from "@/lib/platform/auth";
+import { createClient } from "@/lib/supabase/server";
+
+export default async function SupportPage({ searchParams }: { searchParams: Promise<{ error?: string; notice?: string }> }) {
+  const user = await requireUser("/dashboard/support");
+  const params = await searchParams;
+  const supabase = await createClient();
+  const { data: tickets } = await supabase?.from("support_tickets").select("id,subject,category,status,created_at").eq("user_id", user.id).order("created_at", { ascending: false }).limit(20) ?? { data: [] };
+  return <><header className="platform-heading"><div><span className="eyebrow">Account support</span><h1>Support tickets</h1><p>Ask about NounCompass accounts, memberships, payments, content, or technical problems. For official academic decisions, use the appropriate NOUN channel.</p></div></header>{params.error && <p className="form-message form-message-error">{params.error}</p>}{params.notice && <p className="form-message form-message-success">{params.notice}</p>}<section className="platform-panel"><h2>Create a ticket</h2><form action={createSupportTicket} className="platform-form"><label>Category<select name="category" defaultValue="technical"><option value="account">Account</option><option value="membership">Membership</option><option value="payment">Payment</option><option value="academic-content">Academic content</option><option value="technical">Technical problem</option><option value="other">Other</option></select></label><label>Subject<input name="subject" minLength={5} maxLength={140} required /></label><label>Message<textarea name="body" minLength={2} maxLength={5000} rows={6} required /></label><button className="button" type="submit">Create ticket</button></form></section><section className="platform-panel"><h2>Your recent tickets</h2>{tickets?.length ? <div className="platform-ticket-list">{tickets.map((ticket) => <article key={ticket.id}><div><strong>{ticket.subject}</strong><span>{ticket.status}</span></div><small>{ticket.category} · {new Intl.DateTimeFormat("en-NG", { dateStyle: "medium", timeZone: "Africa/Lagos" }).format(new Date(ticket.created_at))}</small></article>)}</div> : <p>No support tickets yet.</p>}</section></>;
+}

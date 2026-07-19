@@ -27,6 +27,10 @@ const nextConfig: NextConfig = {
       { source: "/twitter-image", headers: [noIndexSocialImageHeader] },
       { source: "/articles/:slug/opengraph-image", headers: [noIndexSocialImageHeader] },
       { source: "/articles/:slug/twitter-image", headers: [noIndexSocialImageHeader] },
+      { source: "/account/:path*", headers: [noIndexSocialImageHeader, { key: "Cache-Control", value: "private, no-store" }] },
+      { source: "/dashboard/:path*", headers: [noIndexSocialImageHeader, { key: "Cache-Control", value: "private, no-store" }] },
+      { source: "/admin/:path*", headers: [noIndexSocialImageHeader, { key: "Cache-Control", value: "private, no-store" }] },
+      { source: "/api/:path*", headers: [noIndexSocialImageHeader, { key: "Cache-Control", value: "private, no-store" }] },
     ];
   },
 };
