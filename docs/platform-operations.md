@@ -17,8 +17,10 @@ Variable ownership, storage, sensitivity, and rotation are documented in [the cr
 - Complete: Supabase organization/project on the Free plan, both SQL migrations, Auth redirect URLs, email confirmation, and automatic RLS defaults.
 - Complete: Supabase custom SMTP using the verified Brevo sender and authenticated `nouncompass.me` domain.
 - Complete: Supabase runtime variables, platform feature flags, and `CRON_SECRET` stored in Vercel Production and Preview environments.
-- Enforced: `FEATURE_CHECKOUT=false`; live checkout is not enabled.
-- Pending: Paystack test-mode keys and acceptance tests.
+- Complete: a dedicated NounCompass Paystack business, fresh test credentials, and test callback/webhook URLs are configured.
+- Complete: a Paystack Test-mode NGN 2,500 transaction passed initialization, hosted checkout, and server-side verification of status, amount, currency, customer identity, and paid timestamp.
+- Enforced: `FEATURE_CHECKOUT=false`; live checkout is not enabled and no live keys are configured.
+- Preserved: the unrelated LitNaija Paystack business remains intact; deletion is not required for NounCompass isolation.
 - Pending: GitHub encrypted-backup secrets and a disposable restore test.
 - Pending: authenticated E2E, RLS/security, accessibility, and live SEO validation after deployment.
 - Non-delegable: human review of 500 questions and legal owner approval.

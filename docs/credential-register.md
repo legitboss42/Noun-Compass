@@ -50,7 +50,9 @@ This register documents variable names, purpose, storage, and rotation without r
 | `PAYSTACK_SEMESTER_PASS_AMOUNT_KOBO` | Configuration | Expected transaction amount in kobo. | `.env.local`, Vercel | Match product copy, server verification, refund policy, and acceptance tests. |
 | `PAYSTACK_SEMESTER_PASS_DURATION_DAYS` | Configuration | Membership duration granted after verified payment. | `.env.local`, Vercel | Change only with product and legal approval. |
 
-`FEATURE_CHECKOUT` must remain `false` while Paystack test keys are missing, acceptance tests are incomplete, or legal approval is pending. Live keys are not authorized for this launch workflow.
+The dedicated NounCompass Paystack business uses fresh test credentials. Its test callback is `https://nouncompass.me/account/payment/callback` and its test webhook is `https://nouncompass.me/api/webhooks/paystack`. The credentials are stored only in Vercel's encrypted environment-variable store; no values are recorded here.
+
+`FEATURE_CHECKOUT` must remain `false` while legal approval is pending. Live keys are not authorized for this launch workflow. The previous LitNaija business is separate and remains intact because deleting it is unnecessary and could destroy its operational history.
 
 ## Scheduled operations and encrypted backups
 
@@ -75,7 +77,9 @@ This register documents variable names, purpose, storage, and rotation without r
 - Supabase project, migrations, Auth URLs, RLS defaults, and Brevo SMTP are configured on free tiers.
 - The verified Brevo sender and authenticated `nouncompass.me` domain are active.
 - Supabase application variables, feature flags, and a generated cron secret are stored in Vercel for Production and Preview.
-- Checkout is disabled and Paystack keys are intentionally pending test-mode acceptance.
+- A separate NounCompass Paystack business is configured with fresh test credentials, callback, and webhook URLs.
+- Paystack provider acceptance passed in Test mode for the exact NGN 2,500 amount, successful status, paid timestamp, and NounCompass support identity.
+- Checkout remains disabled; no live Paystack keys are configured and no live payment was taken.
 - GitHub backup secrets and the disposable restore test are pending.
 - Question banks remain draft; human review of all 500 questions is still required before publication.
 - Legal owner approval remains required before checkout activation or policy-dependent launch decisions.
