@@ -1,5 +1,5 @@
 import { createAdminClient } from "@/lib/supabase/admin";
-import { assertSemesterPassTransaction, verifyFlutterwaveTransaction } from "./flutterwave";
+import { assertFlutterwaveCustomerIdentity, assertSemesterPassTransaction, verifyFlutterwaveTransaction } from "./flutterwave";
 
 export async function verifyAndActivatePayment(reference: string, transactionId: string) {
   const admin = createAdminClient();
@@ -15,7 +15,7 @@ export async function verifyAndActivatePayment(reference: string, transactionId:
   const verification = await verifyFlutterwaveTransaction(transactionId);
   const paidAt = assertSemesterPassTransaction(verification.data);
   if (verification.data.tx_ref !== attempt.reference) throw new Error("Payment reference mismatch.");
-  if (verification.data.customer.email.toLowerCase() !== attempt.email.toLowerCase()) throw new Error("Payment email mismatch.");
+  assertFlutterwaveCustomerIdentity(verification.data, attempt.email);
 
   const { error: responseError } = await admin.from("payment_attempts").update({
     provider_response: {
@@ -25,6 +25,7 @@ export async function verifyAndActivatePayment(reference: string, transactionId:
       amount: verification.data.amount,
       currency: verification.data.currency,
       customer_email: verification.data.customer.email,
+      customer_metadata_email: verification.data.meta?.nouncompass_customer_email,
       verified_at: new Date().toISOString(),
     },
     updated_at: new Date().toISOString(),

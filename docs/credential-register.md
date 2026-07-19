@@ -78,9 +78,9 @@ The NounCompass Flutterwave integration uses Flutterwave Standard. Its callback 
 - Supabase project, migrations, Auth URLs, RLS defaults, and Brevo SMTP are configured on free tiers.
 - The verified Brevo sender and authenticated `nouncompass.me` domain are active.
 - Supabase application variables, feature flags, and a generated cron secret are stored in Vercel for Production and Preview.
-- Flutterwave migration is in progress with fresh sandbox credentials and the test webhook URL configured.
-- The application now requires Flutterwave server verification of transaction ID, local reference, exact NGN 2,500 amount, currency, customer email, successful status, and transaction timestamp.
-- Checkout remains disabled until Flutterwave sandbox acceptance, the content gate, and legal approval pass.
+- Flutterwave Standard is configured with fresh sandbox credentials and the signed test webhook URL.
+- Flutterwave sandbox acceptance passed hosted checkout and direct server verification for a successful NGN 2,500 payment, local reference, currency, provider-signed customer and plan metadata, and transaction timestamp. Live mode additionally requires the provider customer email to match.
+- Checkout remains disabled because the content and legal-approval gates are still pending, even though Flutterwave sandbox acceptance passed.
 - GitHub Actions holds the database URL and backup passphrase as encrypted repository secrets. The scheduled backup, encrypted artifact checksum, decryption, and disposable restore test have passed.
 - The automated restore test does not expose the passphrase. The owner still needs a separate password-manager recovery copy before relying on manual, off-platform decryption.
 - Authenticated sign-in, profile persistence, cross-user RLS isolation, public draft protection, payment-write denial, and admin-route denial passed with temporary users that were deleted after testing.

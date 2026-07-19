@@ -17,8 +17,8 @@ Variable ownership, storage, sensitivity, and rotation are documented in [the cr
 - Complete: Supabase organization/project on the Free plan, all three SQL migrations, Auth redirect URLs, email confirmation, automatic RLS defaults, and explicit least-privilege grants.
 - Complete: Supabase custom SMTP using the verified Brevo sender and authenticated `nouncompass.me` domain.
 - Complete: Supabase runtime variables, platform feature flags, and `CRON_SECRET` stored in Vercel Production and Preview environments.
-- In progress: Flutterwave Standard is replacing Paystack, with fresh test credentials and a signed test webhook at `/api/webhooks/flutterwave`.
-- Required before activation: Flutterwave sandbox checkout must pass initialization, hosted checkout, callback, signed webhook, and server-side verification of status, amount, currency, customer identity, and transaction timestamp.
+- Complete: Flutterwave Standard replaced Paystack in application code, with fresh test credentials and a signed test webhook at `/api/webhooks/flutterwave`.
+- Complete: Flutterwave sandbox hosted checkout and server verification passed for successful status, the exact NGN 2,500 amount, currency, local reference, provider-signed customer and plan metadata, and transaction timestamp. Live mode also requires an exact provider customer-email match.
 - Enforced: `FEATURE_CHECKOUT=false`; public live checkout is not enabled.
 - Preserved: existing Paystack businesses remain intact; deleting provider history is unnecessary for the code migration.
 - Complete: GitHub encrypted-backup secrets, encrypted artifact plus checksum, and an isolated PostgreSQL restore test using the latest successful backup.

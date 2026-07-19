@@ -48,6 +48,10 @@ export async function initializeFlutterwaveTransaction(input: {
       currency: platformConfig.semesterPass.currency,
       redirect_url: input.callbackUrl,
       customer: { email: input.email },
+      meta: {
+        nouncompass_customer_email: input.email,
+        nouncompass_plan_key: platformConfig.semesterPass.key,
+      },
       customizations: {
         title: "NounCompass Semester Pass",
         description: "180 days of premium exam-preparation access",
@@ -67,6 +71,10 @@ export async function verifyFlutterwaveTransaction(transactionId: string) {
       currency: string;
       created_at: string | null;
       customer: { email: string };
+      meta?: {
+        nouncompass_customer_email?: string;
+        nouncompass_plan_key?: string;
+      } | null;
     };
   }>(`/transactions/${encodeURIComponent(transactionId)}/verify`);
 }
@@ -95,4 +103,20 @@ export function assertSemesterPassTransaction(data: { status: string; amount: nu
   if (data.currency !== platformConfig.semesterPass.currency) throw new Error("Payment currency does not match the plan.");
   if (!data.created_at || Number.isNaN(Date.parse(data.created_at))) throw new Error("Payment confirmation has no valid transaction timestamp.");
   return data.created_at;
+}
+
+export function assertFlutterwaveCustomerIdentity(data: {
+  customer: { email: string };
+  meta?: { nouncompass_customer_email?: string; nouncompass_plan_key?: string } | null;
+}, expectedEmail: string) {
+  const normalizedExpected = expectedEmail.trim().toLowerCase();
+  if (data.meta?.nouncompass_customer_email?.trim().toLowerCase() !== normalizedExpected) {
+    throw new Error("Payment customer metadata mismatch.");
+  }
+  if (data.meta?.nouncompass_plan_key !== platformConfig.semesterPass.key) {
+    throw new Error("Payment plan metadata mismatch.");
+  }
+  if ((process.env.FLUTTERWAVE_ENVIRONMENT ?? "test") === "live" && data.customer.email.trim().toLowerCase() !== normalizedExpected) {
+    throw new Error("Payment email mismatch.");
+  }
 }
