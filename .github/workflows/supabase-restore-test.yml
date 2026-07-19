@@ -1,0 +1,119 @@
+name: Test encrypted Supabase restore
+
+on:
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  restore-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_PASSWORD: nouncompass-restore-test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      BACKUP_PASSPHRASE: ${{ secrets.BACKUP_PASSPHRASE }}
+      PGHOST: localhost
+      PGPORT: "5432"
+      PGUSER: postgres
+      PGPASSWORD: nouncompass-restore-test
+      PGDATABASE: postgres
+    steps:
+      - name: Check out recovery schema
+        uses: actions/checkout@v4
+
+      - name: Validate restore secret
+        shell: bash
+        run: test -n "$BACKUP_PASSPHRASE"
+
+      - name: Find latest successful backup
+        id: backup-run
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          run_id="$(gh api \
+            "/repos/${GITHUB_REPOSITORY}/actions/workflows/supabase-backup.yml/runs?status=success&per_page=1" \
+            --jq '.workflow_runs[0].id // empty')"
+          test -n "$run_id"
+          echo "run_id=$run_id" >> "$GITHUB_OUTPUT"
+
+      - name: Download encrypted backup
+        uses: actions/download-artifact@v4
+        with:
+          name: nouncompass-supabase-backup
+          path: restore-artifact
+          github-token: ${{ github.token }}
+          run-id: ${{ steps.backup-run.outputs.run_id }}
+
+      - name: Verify and decrypt backup
+        shell: bash
+        run: |
+          cd restore-artifact
+          checksum_file="$(find . -maxdepth 1 -name '*.sql.gz.enc.sha256' -print -quit)"
+          test -n "$checksum_file"
+          sha256sum --check "${checksum_file#./}"
+          encrypted_file="${checksum_file%.sha256}"
+          openssl enc -d -aes-256-cbc -pbkdf2 \
+            -in "$encrypted_file" \
+            -out nouncompass.sql.gz \
+            -pass env:BACKUP_PASSPHRASE
+          gzip -d nouncompass.sql.gz
+
+      - name: Build disposable Supabase-compatible schema
+        shell: bash
+        run: |
+          psql -v ON_ERROR_STOP=1 <<'SQL'
+          create role anon;
+          create role authenticated;
+          create role service_role;
+          create schema auth;
+          create table auth.users (
+            id uuid primary key,
+            raw_user_meta_data jsonb not null default '{}'::jsonb
+          );
+          create function auth.uid() returns uuid
+          language sql stable
+          as 'select null::uuid';
+          SQL
+          for migration in supabase/migrations/*.sql; do
+            psql -v ON_ERROR_STOP=1 -f "$migration"
+          done
+          psql -v ON_ERROR_STOP=1 <<'SQL'
+          do $$
+          declare table_list text;
+          begin
+            select string_agg(format('%I.%I', schemaname, tablename), ', ')
+              into table_list
+              from pg_tables
+             where schemaname = 'public';
+            if table_list is not null then
+              execute 'truncate table ' || table_list || ' restart identity cascade';
+            end if;
+          end $$;
+          SQL
+
+      - name: Restore into disposable database
+        shell: bash
+        run: psql -v ON_ERROR_STOP=1 -f restore-artifact/nouncompass.sql
+
+      - name: Verify restored application state
+        shell: bash
+        run: |
+          table_count="$(psql -Atc "select count(*) from information_schema.tables where table_schema = 'public' and table_type = 'BASE TABLE'")"
+          test "$table_count" -ge 25
+          test "$(psql -Atc "select count(*) from public.membership_plans where plan_key = 'semester-pass' and amount_kobo = 250000 and currency = 'NGN'")" = "1"
+          test "$(psql -Atc "select count(*) from public.question_banks")" = "5"
+          test "$(psql -Atc "select count(*) from public.question_banks where status <> 'draft'")" = "0"

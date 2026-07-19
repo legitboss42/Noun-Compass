@@ -25,13 +25,20 @@ jobs:
         shell: bash
         run: |
           stamp="$(date -u +%Y%m%dT%H%M%SZ)"
-          pg_dump --data-only --no-owner --no-privileges "$SUPABASE_DB_URL" | gzip > "nouncompass-${stamp}.sql.gz"
+          docker run --rm \
+            -e SUPABASE_DB_URL="$SUPABASE_DB_URL" \
+            postgres:17-alpine \
+            sh -c 'pg_dump --schema=public --data-only --no-owner --no-privileges "$SUPABASE_DB_URL"' \
+            | gzip > "nouncompass-${stamp}.sql.gz"
           openssl enc -aes-256-cbc -salt -pbkdf2 -in "nouncompass-${stamp}.sql.gz" -out "nouncompass-${stamp}.sql.gz.enc" -pass env:BACKUP_PASSPHRASE
           rm "nouncompass-${stamp}.sql.gz"
+          sha256sum "nouncompass-${stamp}.sql.gz.enc" > "nouncompass-${stamp}.sql.gz.enc.sha256"
       - name: Upload encrypted artifact
         uses: actions/upload-artifact@v4
         with:
           name: nouncompass-supabase-backup
-          path: "*.sql.gz.enc"
+          path: |
+            *.sql.gz.enc
+            *.sql.gz.enc.sha256
           retention-days: 30
           if-no-files-found: error
