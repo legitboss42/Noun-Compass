@@ -9,7 +9,7 @@ export const platformConfig = {
       process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
   ),
   serviceRoleConfigured: Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY),
-  paystackConfigured: Boolean(process.env.PAYSTACK_SECRET_KEY),
+  flutterwaveConfigured: Boolean(process.env.FLUTTERWAVE_SECRET_KEY && process.env.FLUTTERWAVE_WEBHOOK_SECRET),
   features: {
     accounts: enabled(process.env.FEATURE_ACCOUNTS, true),
     dashboard: enabled(process.env.FEATURE_DASHBOARD, true),
@@ -19,9 +19,9 @@ export const platformConfig = {
   },
   semesterPass: {
     key: "semester-pass" as const,
-    amountKobo: Number(process.env.PAYSTACK_SEMESTER_PASS_AMOUNT_KOBO ?? "250000"),
+    amountKobo: Number(process.env.SEMESTER_PASS_AMOUNT_KOBO ?? "250000"),
     currency: "NGN" as const,
-    durationDays: Number(process.env.PAYSTACK_SEMESTER_PASS_DURATION_DAYS ?? "180"),
+    durationDays: Number(process.env.SEMESTER_PASS_DURATION_DAYS ?? "180"),
   },
 };
 
@@ -33,7 +33,7 @@ export function isCheckoutAvailable() {
   return (
     platformConfig.supabaseConfigured &&
     platformConfig.serviceRoleConfigured &&
-    platformConfig.paystackConfigured &&
+    platformConfig.flutterwaveConfigured &&
     platformConfig.features.checkout
   );
 }

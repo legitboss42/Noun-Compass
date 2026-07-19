@@ -8,7 +8,7 @@ Variable ownership, storage, sensitivity, and rotation are documented in [the cr
 2. Configure Supabase custom SMTP with the existing Brevo sender and set the production redirect URLs.
 3. Add the Supabase public URL/publishable key and server-only service-role key to Vercel.
 4. Set `INITIAL_SUPER_ADMIN_EMAIL` to the verified owner account.
-5. Configure Paystack test keys. Keep `FEATURE_CHECKOUT=false` until every payment acceptance test and policy gate passes.
+5. Configure Flutterwave sandbox credentials and signed webhooks. Keep `FEATURE_CHECKOUT=false` until every payment acceptance test and policy gate passes.
 6. Add a random `CRON_SECRET` of at least 16 characters. Vercel invokes `/api/cron/daily` once daily.
 7. Add `SUPABASE_DB_URL` and `BACKUP_PASSPHRASE` to GitHub Actions secrets and manually run the encrypted backup workflow once before relying on its schedule.
 
@@ -17,10 +17,10 @@ Variable ownership, storage, sensitivity, and rotation are documented in [the cr
 - Complete: Supabase organization/project on the Free plan, all three SQL migrations, Auth redirect URLs, email confirmation, automatic RLS defaults, and explicit least-privilege grants.
 - Complete: Supabase custom SMTP using the verified Brevo sender and authenticated `nouncompass.me` domain.
 - Complete: Supabase runtime variables, platform feature flags, and `CRON_SECRET` stored in Vercel Production and Preview environments.
-- Complete: a dedicated NounCompass Paystack business, fresh test credentials, and test callback/webhook URLs are configured.
-- Complete: a Paystack Test-mode NGN 2,500 transaction passed initialization, hosted checkout, and server-side verification of status, amount, currency, customer identity, and paid timestamp.
-- Enforced: `FEATURE_CHECKOUT=false`; live checkout is not enabled and no live keys are configured.
-- Preserved: the unrelated LitNaija Paystack business remains intact; deletion is not required for NounCompass isolation.
+- In progress: Flutterwave Standard is replacing Paystack, with fresh test credentials and a signed test webhook at `/api/webhooks/flutterwave`.
+- Required before activation: Flutterwave sandbox checkout must pass initialization, hosted checkout, callback, signed webhook, and server-side verification of status, amount, currency, customer identity, and transaction timestamp.
+- Enforced: `FEATURE_CHECKOUT=false`; public live checkout is not enabled.
+- Preserved: existing Paystack businesses remain intact; deleting provider history is unnecessary for the code migration.
 - Complete: GitHub encrypted-backup secrets, encrypted artifact plus checksum, and an isolated PostgreSQL restore test using the latest successful backup.
 - Complete: authenticated E2E covered sign-in, semester profile persistence, checkout-disabled state, and student denial from the admin surface. Temporary accounts were removed after testing.
 - Complete: RLS checks covered own-profile access, cross-user isolation, anonymous and student draft-bank denial, public plan visibility, payment-attempt write denial, and membership-RPC denial.
@@ -41,11 +41,11 @@ gzip -d nouncompass.sql.gz
 psql $env:RESTORE_DATABASE_URL -f nouncompass.sql
 ```
 
-Never point `RESTORE_DATABASE_URL` at production. Never commit database URLs, passphrases, dumps, Paystack keys, or Supabase service-role keys.
+Never point `RESTORE_DATABASE_URL` at production. Never commit database URLs, passphrases, dumps, Flutterwave keys, or Supabase service-role keys.
 
 ## Release gates
 
 - A question bank cannot be published until it has 100 published questions and 15 published sample questions.
 - A schedule cannot be published without at least one validated row, an official source URL, checksum, and reviewer action.
-- Payment activation requires a locally created reference plus Paystack verification of status, amount, currency, email, and paid timestamp.
+- Payment activation requires a locally created reference plus Flutterwave verification of provider transaction ID, status, amount, currency, email, and transaction timestamp.
 - Protected routes and API responses must remain `noindex` and outside the sitemap.

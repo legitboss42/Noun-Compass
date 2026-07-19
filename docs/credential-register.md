@@ -23,7 +23,7 @@ This register documents variable names, purpose, storage, and rotation without r
 | `FEATURE_ACCOUNTS` | Public configuration | Enables account registration and sign-in surfaces. | `.env.local`, Vercel | Disable during an auth incident. |
 | `FEATURE_DASHBOARD` | Public configuration | Enables authenticated dashboard surfaces. | `.env.local`, Vercel | Enable only with Auth and RLS configured. |
 | `FEATURE_EXAM_PREP` | Public configuration | Enables exam-prep surfaces; it does not publish draft question banks. | `.env.local`, Vercel | Keep banks in draft until editorial gates pass. |
-| `FEATURE_CHECKOUT` | Public configuration | Enables paid checkout entry points. | `.env.local`, Vercel | Must remain `false` until Paystack test acceptance and legal approval pass. |
+| `FEATURE_CHECKOUT` | Public configuration | Enables paid checkout entry points. | `.env.local`, Vercel | Must remain `false` until Flutterwave acceptance and legal approval pass. |
 | `FEATURE_ADMIN` | Public configuration | Enables protected administration surfaces. | `.env.local`, Vercel | Enable only with an authorized admin membership and RLS tests. |
 
 ## Brevo and support email
@@ -41,18 +41,19 @@ This register documents variable names, purpose, storage, and rotation without r
 | `CONTACT_FORM_RATE_LIMIT_MAX` | Configuration | Maximum submissions in the configured window. | `.env.local`, Vercel | Keep conservative for abuse prevention. |
 | `CONTACT_FORM_DUPLICATE_WINDOW_MINUTES` | Configuration | Duplicate-submission suppression window. | `.env.local`, Vercel | Test legitimate retry behavior after changes. |
 
-## Paystack test configuration
+## Flutterwave payment configuration
 
 | Variable | Sensitivity | Purpose | Approved stores | Rotation and validation |
 | --- | --- | --- | --- | --- |
-| `NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY` | Browser-safe | Initializes Paystack test checkout. | `.env.local`, Vercel | Use only a `pk_test_` key until every launch gate passes. |
-| `PAYSTACK_SECRET_KEY` | Critical secret | Server-side Paystack transaction initialization and verification. | `.env.local`, Vercel | Use only an `sk_test_` key during acceptance; rotate if exposed. |
-| `PAYSTACK_SEMESTER_PASS_AMOUNT_KOBO` | Configuration | Expected transaction amount in kobo. | `.env.local`, Vercel | Match product copy, server verification, refund policy, and acceptance tests. |
-| `PAYSTACK_SEMESTER_PASS_DURATION_DAYS` | Configuration | Membership duration granted after verified payment. | `.env.local`, Vercel | Change only with product and legal approval. |
+| `FLUTTERWAVE_ENVIRONMENT` | Configuration | Requires the configured key to match `test` or `live` mode. | `.env.local`, Vercel | Keep `test` during sandbox acceptance; change with the matching secret key. |
+| `FLUTTERWAVE_SECRET_KEY` | Critical secret | Server-side Flutterwave Standard initialization and transaction verification. | `.env.local`, Vercel | Use a fresh `FLWSECK_TEST-` key for sandbox acceptance; rotate if exposed. |
+| `FLUTTERWAVE_WEBHOOK_SECRET` | Critical secret | Validates Flutterwave webhook HMAC signatures. | `.env.local`, Vercel, Flutterwave Webhooks | Generate randomly, store the same value in both systems, and rotate if exposed. |
+| `SEMESTER_PASS_AMOUNT_KOBO` | Configuration | Expected transaction amount in kobo. | `.env.local`, Vercel | Match product copy, server verification, refund policy, and acceptance tests. |
+| `SEMESTER_PASS_DURATION_DAYS` | Configuration | Membership duration granted after verified payment. | `.env.local`, Vercel | Change only with product and legal approval. |
 
-The dedicated NounCompass Paystack business uses fresh test credentials. Its test callback is `https://nouncompass.me/account/payment/callback` and its test webhook is `https://nouncompass.me/api/webhooks/paystack`. The credentials are stored only in Vercel's encrypted environment-variable store; no values are recorded here.
+The NounCompass Flutterwave integration uses Flutterwave Standard. Its callback is `https://nouncompass.me/account/payment/callback` and its webhook is `https://nouncompass.me/api/webhooks/flutterwave`. Credentials belong only in approved encrypted stores; no values are recorded here.
 
-`FEATURE_CHECKOUT` must remain `false` while legal approval is pending. Live keys are not authorized for this launch workflow. The previous LitNaija business is separate and remains intact because deleting it is unnecessary and could destroy its operational history.
+`FEATURE_CHECKOUT` must remain `false` while legal approval and content gates are pending. A live Flutterwave key may be staged only in an encrypted provider store and must not make checkout public before those gates pass. The previous Paystack businesses remain intact because deleting them is unnecessary and could destroy operational history.
 
 ## Scheduled operations and encrypted backups
 
@@ -77,9 +78,9 @@ The dedicated NounCompass Paystack business uses fresh test credentials. Its tes
 - Supabase project, migrations, Auth URLs, RLS defaults, and Brevo SMTP are configured on free tiers.
 - The verified Brevo sender and authenticated `nouncompass.me` domain are active.
 - Supabase application variables, feature flags, and a generated cron secret are stored in Vercel for Production and Preview.
-- A separate NounCompass Paystack business is configured with fresh test credentials, callback, and webhook URLs.
-- Paystack provider acceptance passed in Test mode for the exact NGN 2,500 amount, successful status, paid timestamp, and NounCompass support identity.
-- Checkout remains disabled; no live Paystack keys are configured and no live payment was taken.
+- Flutterwave migration is in progress with fresh sandbox credentials and the test webhook URL configured.
+- The application now requires Flutterwave server verification of transaction ID, local reference, exact NGN 2,500 amount, currency, customer email, successful status, and transaction timestamp.
+- Checkout remains disabled until Flutterwave sandbox acceptance, the content gate, and legal approval pass.
 - GitHub Actions holds the database URL and backup passphrase as encrypted repository secrets. The scheduled backup, encrypted artifact checksum, decryption, and disposable restore test have passed.
 - The automated restore test does not expose the passphrase. The owner still needs a separate password-manager recovery copy before relying on manual, off-platform decryption.
 - Authenticated sign-in, profile persistence, cross-user RLS isolation, public draft protection, payment-write denial, and admin-route denial passed with temporary users that were deleted after testing.
@@ -92,5 +93,5 @@ The dedicated NounCompass Paystack business uses fresh test credentials. Its tes
 1. Revoke or regenerate the exposed credential at its provider.
 2. Update every approved store listed above without pasting the value into chat or source control.
 3. Redeploy the application if Vercel variables changed.
-4. Run the smallest relevant validation: Auth/RLS, email delivery, payment verification, cron authorization, backup/restore, or SEO audit.
+4. Run the smallest relevant validation: Auth/RLS, email delivery, Flutterwave verification, cron authorization, backup/restore, or SEO audit.
 5. Record the rotation date and result in an internal incident or operations log without recording the value.

@@ -1,7 +1,7 @@
 import { createAdminClient } from "@/lib/supabase/admin";
-import { assertSemesterPassTransaction, verifyPaystackTransaction } from "./paystack";
+import { assertSemesterPassTransaction, verifyFlutterwaveTransaction } from "./flutterwave";
 
-export async function verifyAndActivatePayment(reference: string) {
+export async function verifyAndActivatePayment(reference: string, transactionId: string) {
   const admin = createAdminClient();
   if (!admin) throw new Error("Platform database is not configured.");
 
@@ -12,10 +12,24 @@ export async function verifyAndActivatePayment(reference: string) {
     .maybeSingle();
   if (attemptError || !attempt) throw new Error("Payment reference was not created by NounCompass.");
 
-  const verification = await verifyPaystackTransaction(reference);
+  const verification = await verifyFlutterwaveTransaction(transactionId);
   const paidAt = assertSemesterPassTransaction(verification.data);
-  if (verification.data.reference !== attempt.reference) throw new Error("Payment reference mismatch.");
+  if (verification.data.tx_ref !== attempt.reference) throw new Error("Payment reference mismatch.");
   if (verification.data.customer.email.toLowerCase() !== attempt.email.toLowerCase()) throw new Error("Payment email mismatch.");
+
+  const { error: responseError } = await admin.from("payment_attempts").update({
+    provider_response: {
+      provider: "flutterwave",
+      transaction_id: String(verification.data.id),
+      status: verification.data.status,
+      amount: verification.data.amount,
+      currency: verification.data.currency,
+      customer_email: verification.data.customer.email,
+      verified_at: new Date().toISOString(),
+    },
+    updated_at: new Date().toISOString(),
+  }).eq("reference", reference);
+  if (responseError) throw responseError;
 
   const { data: membership, error } = await admin.rpc("activate_semester_pass", {
     p_reference: reference,

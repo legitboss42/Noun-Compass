@@ -3,17 +3,18 @@ import { requireUser } from "@/lib/platform/auth";
 import { verifyAndActivatePayment } from "@/lib/platform/payments";
 import { createAdminClient } from "@/lib/supabase/admin";
 
-export default async function PaymentCallbackPage({ searchParams }: { searchParams: Promise<{ reference?: string; trxref?: string }> }) {
+export default async function PaymentCallbackPage({ searchParams }: { searchParams: Promise<{ status?: string; tx_ref?: string; transaction_id?: string }> }) {
   const user = await requireUser("/account/payment/callback");
   const params = await searchParams;
-  const reference = params.reference ?? params.trxref ?? "";
+  const reference = params.tx_ref ?? "";
+  const transactionId = params.transaction_id ?? "";
   let success = false;
   let message = "The payment could not be verified.";
-  if (/^nc_[a-z0-9_]+$/i.test(reference)) {
+  if (params.status === "successful" && /^nc_[a-z0-9_]+$/i.test(reference) && /^[a-z0-9_-]+$/i.test(transactionId)) {
     const admin = createAdminClient();
     const { data: attempt } = await admin?.from("payment_attempts").select("user_id").eq("reference", reference).maybeSingle() ?? { data: null };
     if (attempt?.user_id === user.id) {
-      try { await verifyAndActivatePayment(reference); success = true; message = "Your semester pass is active."; }
+      try { await verifyAndActivatePayment(reference, transactionId); success = true; message = "Your semester pass is active."; }
       catch (error) { message = error instanceof Error ? error.message : message; }
     }
   }

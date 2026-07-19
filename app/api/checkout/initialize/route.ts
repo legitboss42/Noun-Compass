@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/platform/auth";
 import { isCheckoutAvailable, platformConfig } from "@/lib/platform/config";
-import { createPaymentReference, initializePaystackTransaction } from "@/lib/platform/paystack";
+import { createPaymentReference, initializeFlutterwaveTransaction } from "@/lib/platform/flutterwave";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 export async function POST(request: Request) {
@@ -25,12 +25,12 @@ export async function POST(request: Request) {
   if (error) return NextResponse.json({ message: "Could not prepare checkout." }, { status: 500 });
 
   try {
-    const initialized = await initializePaystackTransaction({
+    const initialized = await initializeFlutterwaveTransaction({
       email: user.email,
       reference,
       callbackUrl: `${origin}/account/payment/callback`,
     });
-    return NextResponse.json({ authorizationUrl: initialized.data.authorization_url, reference });
+    return NextResponse.json({ authorizationUrl: initialized.data.link, reference });
   } catch (error) {
     await admin.from("payment_attempts").update({ status: "failed" }).eq("reference", reference);
     return NextResponse.json({ message: error instanceof Error ? error.message : "Checkout failed." }, { status: 502 });
