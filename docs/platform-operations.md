@@ -19,6 +19,9 @@ Variable ownership, storage, sensitivity, and rotation are documented in [the cr
 - Complete: Supabase runtime variables, platform feature flags, and `CRON_SECRET` stored in Vercel Production and Preview environments.
 - Complete: Flutterwave Standard replaced Paystack in application code, with fresh test credentials and a signed test webhook at `/api/webhooks/flutterwave`.
 - Complete: Flutterwave sandbox hosted checkout and server verification passed for successful status, the exact NGN 2,500 amount, currency, local reference, provider-signed customer and plan metadata, and transaction timestamp. Live mode also requires an exact provider customer-email match.
+- Complete: Flutterwave live credentials and a fresh live webhook secret are isolated in Vercel Production; sandbox credentials remain isolated in Preview. The live webhook URL is configured with retries and V3 webhooks enabled.
+- Complete: live API initialization returned a Flutterwave-hosted checkout, and controlled inspection confirmed NGN 2,500 and the expected payment options. The post-configuration Production deployment is Ready/Current.
+- Pending by design: no live settlement was submitted because a real transaction would move money and may incur Flutterwave fees. This does not weaken the completed sandbox transaction and server-verification acceptance test.
 - Enforced: `FEATURE_CHECKOUT=false`; public live checkout is not enabled.
 - Preserved: existing Paystack businesses remain intact; deleting provider history is unnecessary for the code migration.
 - Complete: GitHub encrypted-backup secrets, encrypted artifact plus checksum, and an isolated PostgreSQL restore test using the latest successful backup.

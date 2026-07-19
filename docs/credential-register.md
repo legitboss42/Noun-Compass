@@ -45,8 +45,8 @@ This register documents variable names, purpose, storage, and rotation without r
 
 | Variable | Sensitivity | Purpose | Approved stores | Rotation and validation |
 | --- | --- | --- | --- | --- |
-| `FLUTTERWAVE_ENVIRONMENT` | Configuration | Requires the configured key to match `test` or `live` mode. | `.env.local`, Vercel | Keep `test` during sandbox acceptance; change with the matching secret key. |
-| `FLUTTERWAVE_SECRET_KEY` | Critical secret | Server-side Flutterwave Standard initialization and transaction verification. | `.env.local`, Vercel | Use a fresh `FLWSECK_TEST-` key for sandbox acceptance; rotate if exposed. |
+| `FLUTTERWAVE_ENVIRONMENT` | Configuration | Requires the configured key to match `test` or `live` mode. | `.env.local`, Vercel | Keep Preview in `test`; Production may use `live` only with the matching live key and gated checkout. |
+| `FLUTTERWAVE_SECRET_KEY` | Critical secret | Server-side Flutterwave Standard initialization and transaction verification. | `.env.local`, Vercel | Keep test and live keys separated by environment; rotate either key if exposed. |
 | `FLUTTERWAVE_WEBHOOK_SECRET` | Critical secret | Validates Flutterwave webhook HMAC signatures. | `.env.local`, Vercel, Flutterwave Webhooks | Generate randomly, store the same value in both systems, and rotate if exposed. |
 | `SEMESTER_PASS_AMOUNT_KOBO` | Configuration | Expected transaction amount in kobo. | `.env.local`, Vercel | Match product copy, server verification, refund policy, and acceptance tests. |
 | `SEMESTER_PASS_DURATION_DAYS` | Configuration | Membership duration granted after verified payment. | `.env.local`, Vercel | Change only with product and legal approval. |
@@ -78,9 +78,11 @@ The NounCompass Flutterwave integration uses Flutterwave Standard. Its callback 
 - Supabase project, migrations, Auth URLs, RLS defaults, and Brevo SMTP are configured on free tiers.
 - The verified Brevo sender and authenticated `nouncompass.me` domain are active.
 - Supabase application variables, feature flags, and a generated cron secret are stored in Vercel for Production and Preview.
-- Flutterwave Standard is configured with fresh sandbox credentials and the signed test webhook URL.
+- Flutterwave Standard is configured with fresh sandbox credentials in Vercel Preview and fresh live credentials in Vercel Production. Test and live webhook secrets are isolated in their matching environments.
 - Flutterwave sandbox acceptance passed hosted checkout and direct server verification for a successful NGN 2,500 payment, local reference, currency, provider-signed customer and plan metadata, and transaction timestamp. Live mode additionally requires the provider customer email to match.
-- Checkout remains disabled because the content and legal-approval gates are still pending, even though Flutterwave sandbox acceptance passed.
+- The live Flutterwave API returned a hosted checkout successfully, and the controlled checkout inspection confirmed NGN 2,500 plus card, USSD, bank, bank-transfer, and eNaira options. The live webhook points to `https://nouncompass.me/api/webhooks/flutterwave`, with retries and V3 webhooks enabled.
+- Vercel Production was redeployed after the live-variable update and is Ready/Current. No live charge or settlement test was made, because that would move real money and could incur provider fees.
+- Checkout remains disabled because the content and legal-approval gates are still pending, even though sandbox acceptance and live initialization passed.
 - GitHub Actions holds the database URL and backup passphrase as encrypted repository secrets. The scheduled backup, encrypted artifact checksum, decryption, and disposable restore test have passed.
 - The automated restore test does not expose the passphrase. The owner still needs a separate password-manager recovery copy before relying on manual, off-platform decryption.
 - Authenticated sign-in, profile persistence, cross-user RLS isolation, public draft protection, payment-write denial, and admin-route denial passed with temporary users that were deleted after testing.
