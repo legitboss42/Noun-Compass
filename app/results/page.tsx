@@ -1,5 +1,7 @@
-import { redirect } from "next/navigation";
+import { CategoryRoute, categoryMetadata } from "@/app/category-route";
+
+export const metadata = categoryMetadata("results");
 
 export default function ResultsPage() {
-  redirect("/tools/result-checker");
+  return <CategoryRoute slug="results" />;
 }

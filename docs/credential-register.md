@@ -80,7 +80,10 @@ The dedicated NounCompass Paystack business uses fresh test credentials. Its tes
 - A separate NounCompass Paystack business is configured with fresh test credentials, callback, and webhook URLs.
 - Paystack provider acceptance passed in Test mode for the exact NGN 2,500 amount, successful status, paid timestamp, and NounCompass support identity.
 - Checkout remains disabled; no live Paystack keys are configured and no live payment was taken.
-- GitHub backup secrets and the disposable restore test are pending.
+- GitHub Actions holds the database URL and backup passphrase as encrypted repository secrets. The scheduled backup, encrypted artifact checksum, decryption, and disposable restore test have passed.
+- The automated restore test does not expose the passphrase. The owner still needs a separate password-manager recovery copy before relying on manual, off-platform decryption.
+- Authenticated sign-in, profile persistence, cross-user RLS isolation, public draft protection, payment-write denial, and admin-route denial passed with temporary users that were deleted after testing.
+- Live validation passed Search Console connectivity, a 30-page crawl with no failed pages, and PageSpeed SEO and best-practices scores of 100 on mobile and desktop. Accessibility scored 100 mobile and 95 desktop; performance scored 75 mobile and 77 desktop and remains an improvement opportunity.
 - Question banks remain draft; human review of all 500 questions is still required before publication.
 - Legal owner approval remains required before checkout activation or policy-dependent launch decisions.
 

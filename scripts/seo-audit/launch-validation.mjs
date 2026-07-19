@@ -8,12 +8,13 @@ import { runSchemaCheck } from "./schema-checker.mjs";
 import { runSearchConsoleAudit } from "./search-console.mjs";
 import { runSitemapCheck } from "./sitemap-checker.mjs";
 
-const targetUrl = process.argv[2] || "https://nouncompass.me";
+const targetUrl = process.argv.find((argument) => argument.startsWith("http")) || "https://nouncompass.me";
+const crawlOnly = process.argv.includes("--crawl-only");
 const sitemap = await runSitemapCheck(targetUrl);
 const [robots, pagespeed, searchConsole] = await Promise.all([
   runRobotsCheck(targetUrl, sitemap.sitemapUrl),
-  runPageSpeedAudit(targetUrl),
-  runSearchConsoleAudit(targetUrl),
+  crawlOnly ? Promise.resolve({ ok: false, skipped: true, reason: "Crawl-only diagnostic", strategy: {}, issues: [] }) : runPageSpeedAudit(targetUrl),
+  crawlOnly ? Promise.resolve({ ok: false, skipped: true, error: null }) : runSearchConsoleAudit(targetUrl),
 ]);
 const crawl = await crawlSite(targetUrl, sitemap.urls);
 const checks = [
@@ -50,6 +51,7 @@ console.log(JSON.stringify({
     severity: issue.severity,
     area: issue.area,
     message: issue.message,
+    details: issue.details,
   })),
   pagespeed: {
     ok: pagespeed.ok,

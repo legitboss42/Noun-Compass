@@ -14,20 +14,25 @@ Variable ownership, storage, sensitivity, and rotation are documented in [the cr
 
 ## Launch setup status (2026-07-19)
 
-- Complete: Supabase organization/project on the Free plan, both SQL migrations, Auth redirect URLs, email confirmation, and automatic RLS defaults.
+- Complete: Supabase organization/project on the Free plan, all three SQL migrations, Auth redirect URLs, email confirmation, automatic RLS defaults, and explicit least-privilege grants.
 - Complete: Supabase custom SMTP using the verified Brevo sender and authenticated `nouncompass.me` domain.
 - Complete: Supabase runtime variables, platform feature flags, and `CRON_SECRET` stored in Vercel Production and Preview environments.
 - Complete: a dedicated NounCompass Paystack business, fresh test credentials, and test callback/webhook URLs are configured.
 - Complete: a Paystack Test-mode NGN 2,500 transaction passed initialization, hosted checkout, and server-side verification of status, amount, currency, customer identity, and paid timestamp.
 - Enforced: `FEATURE_CHECKOUT=false`; live checkout is not enabled and no live keys are configured.
 - Preserved: the unrelated LitNaija Paystack business remains intact; deletion is not required for NounCompass isolation.
-- Pending: GitHub encrypted-backup secrets and a disposable restore test.
-- Pending: authenticated E2E, RLS/security, accessibility, and live SEO validation after deployment.
+- Complete: GitHub encrypted-backup secrets, encrypted artifact plus checksum, and an isolated PostgreSQL restore test using the latest successful backup.
+- Complete: authenticated E2E covered sign-in, semester profile persistence, checkout-disabled state, and student denial from the admin surface. Temporary accounts were removed after testing.
+- Complete: RLS checks covered own-profile access, cross-user isolation, anonymous and student draft-bank denial, public plan visibility, payment-attempt write denial, and membership-RPC denial.
+- Complete: the live launch validator confirmed Search Console access, 95 sitemap URLs, healthy robots/sitemap responses, no failures in the 30-page crawl, PageSpeed SEO/best-practices scores of 100, and accessibility scores of 100 mobile and 95 desktop.
+- Improve after launch: PageSpeed performance measured 75 mobile and 77 desktop. This is not blocking the gated free launch, but Core Web Vitals work should continue before increasing ad density.
 - Non-delegable: human review of 500 questions and legal owner approval.
 
 ## Restore an encrypted backup
 
-Download the Actions artifact through an authorized GitHub account, then decrypt and restore outside the repository:
+For the routine recovery test, manually run **Test encrypted Supabase restore** in GitHub Actions. It downloads the latest successful encrypted backup, validates its checksum, decrypts it with the repository secret, builds a disposable PostgreSQL schema from the committed migrations, restores the data, verifies launch-critical records, and destroys the test database with the runner.
+
+For a manual off-platform restore, retrieve the passphrase from the owner-controlled password manager, download the Actions artifact through an authorized GitHub account, and use:
 
 ```powershell
 $env:BACKUP_PASSPHRASE = "retrieve-from-password-manager"
@@ -36,7 +41,7 @@ gzip -d nouncompass.sql.gz
 psql $env:RESTORE_DATABASE_URL -f nouncompass.sql
 ```
 
-Test restoration against a non-production database. Never commit database URLs, passphrases, dumps, Paystack keys, or Supabase service-role keys.
+Never point `RESTORE_DATABASE_URL` at production. Never commit database URLs, passphrases, dumps, Paystack keys, or Supabase service-role keys.
 
 ## Release gates
 

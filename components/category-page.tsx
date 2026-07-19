@@ -119,7 +119,8 @@ export function CategoryPage({
             )}
             {category.slug === "results" && (
               <p>
-                Start with <Link href="/articles/how-to-find-noun-results-on-my-progress">My progress</Link>,
+                Open the <Link href="/tools/result-checker">NOUN result checker</Link> when you have a
+                matriculation number, start with <Link href="/articles/how-to-find-noun-results-on-my-progress">My progress</Link>,
                 continue to <Link href="/articles/how-to-open-your-noun-result-statement-from-the-support-portal">Result statement</Link> when you need the deeper academic record, and use the <Link href="/tools/cgpa-calculator">CGPA calculator</Link> only for planning before you compare it with your official NOUN result page.
               </p>
             )}
