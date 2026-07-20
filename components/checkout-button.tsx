@@ -20,5 +20,5 @@ export function CheckoutButton({ available }: { available: boolean }) {
       setLoading(false);
     }
   }
-  return <div className="checkout-action"><button className="button" type="button" onClick={checkout} disabled={!available || loading}>{loading ? "Opening secure checkout…" : available ? "Buy semester pass" : "Checkout opens after test approval"}</button>{status && <p className="form-message form-message-error" role="status">{status}</p>}</div>;
+  return <div className="checkout-action"><button className="button" type="button" onClick={checkout} disabled={!available || loading}>{loading ? "Opening secure checkout…" : available ? "Buy semester pass" : "Checkout is temporarily unavailable"}</button>{status && <p className="form-message form-message-error" role="status">{status}</p>}</div>;
 }

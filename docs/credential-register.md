@@ -23,7 +23,8 @@ This register documents variable names, purpose, storage, and rotation without r
 | `FEATURE_ACCOUNTS` | Public configuration | Enables account registration and sign-in surfaces. | `.env.local`, Vercel | Disable during an auth incident. |
 | `FEATURE_DASHBOARD` | Public configuration | Enables authenticated dashboard surfaces. | `.env.local`, Vercel | Enable only with Auth and RLS configured. |
 | `FEATURE_EXAM_PREP` | Public configuration | Enables exam-prep surfaces; it does not publish draft question banks. | `.env.local`, Vercel | Keep banks in draft until editorial gates pass. |
-| `FEATURE_CHECKOUT` | Public configuration | Enables paid checkout entry points. | `.env.local`, Vercel | Must remain `false` until Flutterwave acceptance and legal approval pass. |
+| `FEATURE_CHECKOUT` | Public configuration | Enables paid checkout in test/local environments. Live mode is released by `FLUTTERWAVE_ENVIRONMENT=live`. | `.env.local`, Vercel | Keep Preview `false` unless running a controlled sandbox acceptance test. |
+| `CHECKOUT_EMERGENCY_DISABLED` | Public configuration | Fail-closed override for every checkout environment. | `.env.local`, Vercel | Set `true` immediately during a payment incident; redeploy before investigating. |
 | `FEATURE_ADMIN` | Public configuration | Enables protected administration surfaces. | `.env.local`, Vercel | Enable only with an authorized admin membership and RLS tests. |
 
 ## Brevo and support email
@@ -55,7 +56,7 @@ This register documents variable names, purpose, storage, and rotation without r
 
 The NounCompass Flutterwave integration uses Flutterwave Standard. Its callback is `https://nouncompass.me/account/payment/callback` and its webhook is `https://nouncompass.me/api/webhooks/flutterwave`. Credentials belong only in approved encrypted stores; no values are recorded here.
 
-`FEATURE_CHECKOUT` must remain `false` while legal approval and content gates are pending. A live Flutterwave key may be staged only in an encrypted provider store and must not make checkout public before those gates pass. The previous Paystack businesses remain intact because deleting them is unnecessary and could destroy operational history.
+`FLUTTERWAVE_ENVIRONMENT=live` is the explicit Production release signal and requires a matching live key plus webhook secret. `CHECKOUT_EMERGENCY_DISABLED=true` overrides both live mode and `FEATURE_CHECKOUT`. The previous Paystack businesses remain intact because deleting them is unnecessary and could destroy operational history.
 
 ## Scheduled operations and encrypted backups
 
@@ -84,7 +85,7 @@ The NounCompass Flutterwave integration uses Flutterwave Standard. Its callback 
 - Flutterwave sandbox acceptance passed hosted checkout and direct server verification for a successful NGN 2,500 payment, local reference, currency, provider-signed customer and plan metadata, and transaction timestamp. Live mode additionally requires the provider customer email to match.
 - The live Flutterwave API returned a hosted checkout successfully, and the controlled checkout inspection confirmed NGN 2,500 plus card, USSD, bank, bank-transfer, and eNaira options. The live webhook points to `https://nouncompass.me/api/webhooks/flutterwave`, with retries and V3 webhooks enabled.
 - Vercel Production was redeployed after the live-variable update and is Ready/Current. No live charge or settlement test was made, because that would move real money and could incur provider fees.
-- Checkout remains disabled because the content and legal-approval gates are still pending, even though sandbox acceptance and live initialization passed.
+- Live checkout was released by owner direction after sandbox acceptance and live initialization passed. No real charge was submitted during deployment validation.
 - GitHub Actions holds the database URL and backup passphrase as encrypted repository secrets. The scheduled backup, encrypted artifact checksum, decryption, and disposable restore test have passed.
 - The automated restore test does not expose the passphrase. The owner still needs a separate password-manager recovery copy before relying on manual, off-platform decryption.
 - Authenticated sign-in, profile persistence, cross-user RLS isolation, public draft protection, payment-write denial, and admin-route denial passed with temporary users that were deleted after testing.
