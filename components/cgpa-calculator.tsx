@@ -238,7 +238,7 @@ export function CgpaCalculator() {
   return (
     <div className={styles.calculator}>
       <section className={styles.introCard}>
-        <span className="eyebrow">Version 2 calculator</span>
+        <span className="eyebrow">CGPA calculator</span>
         <h2>Calculate semester GPA and cumulative CGPA across multiple semesters</h2>
         <p>
           Add as many sessions and semesters as you need. For each semester,
@@ -595,7 +595,7 @@ export function CgpaCalculator() {
         <div className={styles.panelHeader}>
           <span className={styles.panelNumber}>03</span>
           <div>
-            <h3>Worked example from your note</h3>
+            <h3>Worked example</h3>
             <p>
               This still follows the same calculation path, even when you add
               more semesters.
@@ -643,7 +643,7 @@ export function CgpaCalculator() {
       </section>
 
       <section className={styles.guideCard}>
-        <span>Use it well</span>
+        <span>Before you rely on this result</span>
         <h3>What this calculator can and cannot do</h3>
         <p>
           This tool helps you estimate semester GPA and cumulative CGPA from the

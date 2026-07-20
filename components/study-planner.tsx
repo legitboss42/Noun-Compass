@@ -374,7 +374,7 @@ export function StudyPlanner({ stats }: { stats: PlannerStats }) {
   return (
     <div className={styles.planner}>
       <section className={styles.introCard}>
-        <span className="eyebrow">Version 1 planner</span>
+        <span className="eyebrow">Study planner</span>
         <h2>Build a weekly NOUN reading timetable around your real availability</h2>
         <p>This first version is built for distance-learning students who work and study. Add your courses, tell the planner when you are actually free, and generate a timetable that spreads the reading load across the week.</p>
         <div className={styles.statsRow}>
@@ -506,7 +506,7 @@ export function StudyPlanner({ stats }: { stats: PlannerStats }) {
         <section className={styles.results}>
           <div className={styles.resultsHeader}>
             <div>
-              <span className="eyebrow">Generated timetable</span>
+              <span className="eyebrow">Your timetable</span>
               <h2>Your weekly NOUN reading plan</h2>
             </div>
             <div className={styles.resultMeta}>

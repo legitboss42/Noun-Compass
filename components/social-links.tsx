@@ -21,7 +21,7 @@ const iconMap = {
 
 export function SocialLinks({
   title = "Follow NounCompass",
-  intro = "Get updates, student-help posts, and quick reminders on our priority platforms.",
+  intro = "Get updates, short tips, and reminders on NounCompass social pages.",
   className = "",
   compact = false,
 }: {

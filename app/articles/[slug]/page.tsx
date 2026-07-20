@@ -161,7 +161,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
       "@type": "Organization",
       name: site.name,
       url: site.url,
-      logo: { "@type": "ImageObject", url: `${site.url}/images/brand/nouncompass-icon.png` },
+      logo: { "@type": "ImageObject", url: `${site.url}/images/brand/nouncompass-icon-512.png` },
     },
     citation: [
       article.officialSourceUrl,
@@ -209,11 +209,23 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
     : null;
 
   const internalHubLinks = [
-    { href: categoryUrl, label: `${categoryLabel} hub`, description: `Browse more ${categoryLabel.toLowerCase()} guides.` },
-    { href: "/student-guides", label: "All student guides", description: "Search every NOUN Compass guide in one place." },
-    { href: "/course-materials", label: "Course materials library", description: "Match course codes with the right study materials." },
-    { href: "/tools", label: "Student tools", description: "Open the fees checker and study planner." },
+    { href: categoryUrl, label: `More about ${categoryLabel.toLowerCase()}`, description: `See the other ${categoryLabel.toLowerCase()} guides.` },
+    { href: "/student-guides", label: "Find another student guide", description: "Search by the task you need to complete." },
+    { href: "/course-materials", label: "Look up a course material", description: "Search the library with your course code." },
+    { href: "/tools", label: "Use a student tool", description: "Check fees, results, CGPA, or plan your study week." },
   ];
+
+  const categoryCautions: Record<string, string> = {
+    admission: "Check the current entry requirements for the programme you want before you apply.",
+    fees: "Use the amount shown for your own student record before making a payment.",
+    portal: "Portal labels can move, so match these steps with the screen in front of you.",
+    results: "Treat your official result statement as the final academic record.",
+    examinations: "Confirm the current timetable, venue, and registration status for your own courses.",
+    "study-centres": "Confirm the address and services before travelling to a study centre.",
+    gst: "Use the current course material as your main study source.",
+    "student-guides": "Check any account-specific step against your own NOUN record.",
+  };
+  const summaryCaution = categoryCautions[article.category] ?? "Check any detail that can change on the relevant official NOUN page.";
 
   return (
     <main id="main-content">
@@ -262,8 +274,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
                 mode="feature"
               />
               <figcaption>
-                Branded cover image for this guide. Check the official NOUN pages for final dates,
-                fees, or account details.
+                Guide cover for {article.title}.
               </figcaption>
             </figure>
 
@@ -276,10 +287,9 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
             />
 
             <div className="summary-box">
-              <strong>Quick take</strong>
+              <strong>In short</strong>
               <p>
-                {article.description} Check the final details in your own portal or the matching
-                official NOUN page.
+                {article.description} {summaryCaution}
               </p>
             </div>
 
@@ -301,8 +311,8 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
             <SourceNote url={article.officialSourceUrl} />
 
             <section className="related">
-              <span className="eyebrow">Keep exploring</span>
-              <h2>Continue with the right NOUN hub</h2>
+              <span className="eyebrow">Where to go next</span>
+              <h2>Continue with the task you need</h2>
               <div>
                 {internalHubLinks.map((item) => (
                   <Link key={item.href} href={item.href}>

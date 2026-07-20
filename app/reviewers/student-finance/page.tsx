@@ -4,7 +4,7 @@ import { createMetadata } from "@/lib/metadata";
 
 export const metadata = createMetadata(
   "Student Finance Review Desk",
-  "Learn how the NOUN Compass Student Finance Review Desk checks NELFUND, payments, wallet, and fee-process guides.",
+  "Learn how the NOUN Compass Student Finance Review Desk checks NELFUND, payments, wallet, and fee guides.",
   "/reviewers/student-finance",
 );
 
@@ -17,7 +17,7 @@ export default function Page() {
       name: "Student Finance Review Desk",
       url: `${site.url}/reviewers/student-finance`,
       description:
-        "The NOUN Compass review desk that checks NELFUND, fee payment, wallet, and financial workflow guides.",
+        "The NOUN Compass review desk that checks NELFUND, fee payment, wallet, and finance guides.",
     },
   };
 
@@ -37,9 +37,9 @@ export default function Page() {
       </ul>
       <h2>How reviews are done</h2>
       <p>
-        The desk checks current public finance workflows, removes unsupported certainty around
-        funding outcomes or timelines, and keeps the difference clear between verified steps and
-        student-help interpretation.
+        The desk checks current public finance steps, removes unsupported certainty around
+        funding outcomes or timelines, and keeps the difference clear between confirmed steps and
+        our explanation of them.
       </p>
       <h2>What the desk does not claim</h2>
       <p>

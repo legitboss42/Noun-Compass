@@ -13,7 +13,7 @@ export default function Page() {
     "@type": "AboutPage",
     name: "About NOUN Compass",
     url: `${site.url}/about`,
-    description: "Learn why NOUN Compass exists and how it helps NOUN students find clearer, simpler help.",
+    description: "Learn why NOUN Compass exists and how it helps NOUN students find practical, easier-to-follow help.",
     about: {
       "@type": "Organization",
       name: site.name,
@@ -21,7 +21,7 @@ export default function Page() {
       description: site.description,
     },
   };
-  return <TrustPage title="About NOUN Compass" eyebrow="Independent student support" intro="We explain NOUN processes in plain language so students can waste less time guessing.">
+  return <TrustPage title="About NOUN Compass" eyebrow="Independent student support" intro="We explain NOUN processes in plain language so students can spend less time guessing.">
     <h2>Our purpose</h2>
     <p>NOUN Compass is an independent website for current and future NOUN students. We publish clear guides, useful tools, study help, and links that make it easier to find the right official page.</p>
     <h2>How we support learning</h2>

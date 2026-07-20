@@ -13,10 +13,10 @@ export default async function DashboardPracticePage() {
     <>
       <header className="platform-heading">
         <div>
-          <span className="eyebrow">Original exam preparation</span>
+          <span className="eyebrow">Exam preparation</span>
           <h1>Practice and revise</h1>
           <p>
-            Published banks use original reviewed questions. Incorrect answers return to the first revision box;
+            Published banks use original questions that have been checked before release. Incorrect answers return to the first revision box;
             correct answers move through 1, 3, 7, 14, and 30-day intervals.
           </p>
         </div>
@@ -26,7 +26,7 @@ export default async function DashboardPracticePage() {
       <section className="platform-stat-grid" aria-label="Practice progress">
         <article><span>Revision due</span><strong>{dueCount}</strong><small>Questions scheduled for review now</small></article>
         <article><span>Sessions</span><strong>{sessions.length}</strong><small>Your ten most recent sessions</small></article>
-        <article><span>Latest score</span><strong>{completed ? `${String(completed.score)}%` : "—"}</strong><small>Based on the complete session total</small></article>
+        <article><span>Latest score</span><strong>{completed ? `${String(completed.score)}%` : "-"}</strong><small>From your most recent completed session</small></article>
       </section>
 
       <PracticeRunner banks={banks} premium={premium} dueCount={dueCount} />
@@ -40,11 +40,11 @@ export default async function DashboardPracticePage() {
               return (
                 <article key={String(session.id)}>
                   <div>
-                    <strong>{bank?.course_code ?? "Course"} · {String(session.mode)}</strong>
+                    <strong>{bank?.course_code ?? "Course"} - {String(session.mode)}</strong>
                     <span>{String(session.status)}</span>
                   </div>
                   <small>
-                    {session.score === null ? "No score yet" : `${String(session.score)}%`} · {String(session.question_count)} questions · {new Intl.DateTimeFormat("en-NG", { dateStyle: "medium", timeStyle: "short", timeZone: "Africa/Lagos" }).format(new Date(String(session.started_at)))}
+                    {session.score === null ? "No score yet" : `${String(session.score)}%`} - {String(session.question_count)} questions - {new Intl.DateTimeFormat("en-NG", { dateStyle: "medium", timeStyle: "short", timeZone: "Africa/Lagos" }).format(new Date(String(session.started_at)))}
                   </small>
                   {session.status === "completed" ? <Link href={`/attempts/${String(session.id)}/results`}>View results</Link> : null}
                 </article>

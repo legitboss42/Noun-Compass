@@ -44,37 +44,37 @@ const articleFaqs: Record<string, ArticleFaq[]> = {
     { question: "What should I take to a study centre?", answer: "Take identification, relevant references or receipts, and a concise record of the issue you need resolved." },
   ],
   "full-list-of-verified-noun-study-centres-in-nigeria": [
-    { question: "Does this page list every NOUN study-centre row found online?", answer: "No. It lists only the centres that cleared the verified threshold in the audited research pass and flags partial or held-back locations separately." },
+    { question: "Does this page list every NOUN study centre mentioned online?", answer: "No. We include centres only when the available NOUN-owned information is strong enough. Listings that still need confirmation are labelled separately." },
     { question: "Should I travel to a partially verified centre?", answer: "Not until you have confirmed the current address, purpose, and official support route again through stronger NOUN-owned signals." },
     { question: "What should I do after choosing a centre?", answer: "Move into the next student workflow that matches your task, such as admission, registration, TMA, exams, results, or support." },
   ],
   "noun-study-centres-in-abuja": [
-    { question: "Which Abuja centre was the strongest verified match?", answer: "Abuja Model Study Centre was the strongest verified Abuja centre in the Phase 7.3 pass." },
+    { question: "Which Abuja centre had the clearest official support?", answer: "Abuja Model Study Centre had the clearest supporting information when we checked the Abuja listings." },
     { question: "Is Wuse II Study Centre Abuja fully confirmed?", answer: "No. It was treated as partially verified and should be rechecked before travel." },
     { question: "Should I treat special Abuja centre rows like general student centres?", answer: "No. Special and correctional rows need extra caution and should not be assumed to work like ordinary general-centre listings." },
   ],
   "noun-study-centres-in-kano": [
-    { question: "Which Kano centre was fully verified?", answer: "Kano Study Centre was the clearest fully verified Kano centre in the current audit." },
+    { question: "Which Kano centre had the clearest official support?", answer: "Kano Study Centre had the clearest supporting information when we checked the Kano listings." },
     { question: "Why are there so many partial Kano rows?", answer: "Kano had the biggest cluster in the inventory, but many surrounding rows did not have strong enough direct official support to be treated as fully settled public facts." },
     { question: "What should I do if my nearest Kano row is only partial?", answer: "Treat it as a lead and verify it again before travelling rather than assuming it is false or fully confirmed." },
   ],
   "noun-study-centres-in-ogun": [
-    { question: "Which Ogun centres were fully verified?", answer: "Abeokuta Study Centre Ogun and Awa-Ijebu Community Study Centre Ogun were the fully verified Ogun centres in this pass." },
+    { question: "Which Ogun centres could we confirm most clearly?", answer: "Abeokuta Study Centre and Awa-Ijebu Community Study Centre had the clearest supporting information when we checked the Ogun listings." },
     { question: "Is Ilaro Community Study Centre Ogun confirmed?", answer: "It was partially verified, so students should recheck it carefully before travelling." },
     { question: "Should I rely on the Abeokuta correctional-centre row?", answer: "No. It remained unverified and should not be treated as settled centre-detail guidance." },
   ],
   "noun-study-centres-in-enugu": [
-    { question: "Which Enugu centres were verified?", answer: "Enugu Study Centre and Awgu Community Study Centre were both treated as verified in the current audit." },
+    { question: "Which Enugu centres could we confirm most clearly?", answer: "Enugu Study Centre and Awgu Community Study Centre both had clear supporting information when we checked the Enugu listings." },
     { question: "Was the Enugu correctional-centre row confirmed?", answer: "No. That row remained unverified and is not treated as confirmed fact." },
     { question: "Should I choose Enugu city or Awgu first?", answer: "Choose the centre that fits your travel route and task, then verify the current detail again before you move." },
   ],
   "noun-study-centres-in-benin": [
-    { question: "Which Edo centre was verified?", answer: "Benin Study Centre was the strongest verified Edo-centre result in the Phase 7.3 pass." },
-    { question: "Is Uromi Community Study Centre confirmed?", answer: "No. It remained unverified in the current research set." },
+    { question: "Which Edo centre had the clearest official support?", answer: "Benin Study Centre had the clearest supporting information when we checked the Edo listings." },
+    { question: "Is Uromi Community Study Centre confirmed?", answer: "We could not confirm it strongly enough to recommend relying on the listing without another official check." },
     { question: "What should I do after choosing Benin Study Centre?", answer: "Use the task-specific workflow for your next step, such as admission, registration, results, or support, instead of assuming every issue starts with a centre visit." },
   ],
   "how-to-verify-a-noun-study-centre-before-you-travel": [
-    { question: "What is the first thing I should check before a centre trip?", answer: "Check whether the centre was fully verified, partially verified, or unverified in the audited research set." },
+    { question: "What is the first thing I should check before a centre trip?", answer: "Check whether the page marks the centre as verified, partly verified, or still unverified, then confirm the latest address before travelling." },
     { question: "Does a verified centre mean every task should start there?", answer: "No. A verified centre name still needs to be matched to the actual student workflow and task you are trying to solve." },
     { question: "What if the centre is only partially verified?", answer: "Treat it as a lead that requires another round of checking before you travel." },
   ],
@@ -129,18 +129,18 @@ const articleFaqs: Record<string, ArticleFaq[]> = {
     { question: "What is the safest response when the TMA workflow looks wrong?", answer: "Stop, capture safe evidence, verify the correct course and grades route, and escalate through official support rather than guessing or repeating actions." },
   ],
   "is-noun-eligible-for-nelfund": [
-    { question: "Is NOUN participating in NELFUND?", answer: "Yes. The Phase 7.4 research verified that NOUN promotes NELFUND on its homepage and announced approved disbursement to 90 NOUN students on 3 March 2026." },
-    { question: "Does that mean every NOUN student category is definitely eligible?", answer: "No. Postgraduate eligibility, returning-student eligibility, and new-student timing were not fully verified in the research set." },
+    { question: "Is NOUN participating in NELFUND?", answer: "Yes. NOUN promotes NELFUND on its website and announced approved disbursement to 90 NOUN students on 3 March 2026." },
+    { question: "Does that mean every NOUN student category is definitely eligible?", answer: "No. We could not confirm the same answer for postgraduate students, returning students, and every stage of a new student's admission." },
     { question: "What is the safest next step after confirming participation?", answer: "Review the verified application and requirement guides, compare them with your own current NOUN record, and avoid treating unverified category claims as settled facts." },
   ],
   "how-noun-students-apply-for-nelfund": [
     { question: "Where does the verified NELFUND application process begin?", answer: "It begins on the official NELFUND portal and then moves through educational verification, JAMB verification, and email-verification continuation." },
-    { question: "What details were clearly verified in the public flow?", answer: "The Phase 7.4 research confirmed institution selection, matric number, JAMB registration number, and date of birth." },
-    { question: "Should I trust articles that describe later hidden steps as certain facts?", answer: "No. Later-stage NOUN-specific steps that were not verified in the research set should stay qualified or unverified." },
+    { question: "What details appear in the public application flow?", answer: "The public steps we checked included institution selection, matric number, JAMB registration number, and date of birth." },
+    { question: "Should I trust articles that describe later hidden steps as certain facts?", answer: "Be cautious. Some later steps only appear after an applicant signs in, so public guides should not present those screens as universal facts without direct evidence." },
   ],
   "nelfund-requirements-for-noun-students": [
     { question: "What NELFUND requirements were directly verified for NOUN students?", answer: "The verified public flow showed institution selection, matric number, JAMB registration number, and date of birth." },
-    { question: "Was a full later-stage document list verified?", answer: "No. The Phase 7.4 research did not verify a complete later-stage checklist for every NOUN applicant." },
+    { question: "Is there one confirmed document checklist for every later stage?", answer: "We did not find a complete later-stage checklist that could safely be applied to every NOUN applicant." },
     { question: "Is JAMB regularization already a fully settled requirement for all NOUN students?", answer: "No. JAMB-linked verification is verified, but the exact universal regularization rule was not fully confirmed." },
   ],
   "why-nelfund-requests-a-jamb-registration-number": [
@@ -154,7 +154,7 @@ const articleFaqs: Record<string, ArticleFaq[]> = {
     { question: "Should I keep retrying when the process looks wrong?", answer: "Usually no. Save the exact wording, compare your own records carefully, and escalate responsibly instead of repeating the same step blindly." },
   ],
   "nelfund-application-status-meanings-explained": [
-    { question: "Which NELFUND statuses or stages were actually verified?", answer: "The Phase 7.4 research verified educational verification, a missing-information state, JAMB verification, JAMB profile review, and email-verification continuation." },
+    { question: "Which NELFUND stages could we see in the public flow?", answer: "The public flow showed educational verification, a missing-information state, JAMB verification, JAMB profile review, and an email-verification step." },
     { question: "Did the research confirm a full later-stage approval-status glossary?", answer: "No. It did not verify a complete internal dictionary for every later approval, rejection, or disbursement label." },
     { question: "What should I do when I see missing information?", answer: "Treat it as a real warning state, review your own records carefully, and avoid turning an unclear mismatch into repeated blind attempts." },
   ],

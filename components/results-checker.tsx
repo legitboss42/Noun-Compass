@@ -76,7 +76,7 @@ export function ResultsChecker() {
         </p>
       </form>
       <p className="form-help">
-        This is an independent convenience tool. Confirm the final record on the official NOUN page before relying
+        This tool only helps you open the official NOUN result page. Confirm the final record there before relying
         on it for registration, graduation, or support.
       </p>
     </section>

@@ -106,7 +106,7 @@ export function CategoryPage({
             </div>
           )}
 
-          {(category.slug === "examinations" || category.slug === "gst") && <aside className="platform-upgrade contextual-exam-prep"><div><span className="eyebrow">Free account feature</span><h2>{category.slug === "gst" ? "Prepare for supported GST courses" : "Turn exam guidance into a study session"}</h2><p>Review original course coverage, create a free account, and start a diagnostic when a reviewed sample bank is available.</p></div><Link className="button" href="/exam-prep">Explore exam preparation</Link><Link href="/dashboard/practice">Start free diagnostic</Link></aside>}
+          {(category.slug === "examinations" || category.slug === "gst") && <aside className="platform-upgrade contextual-exam-prep"><div><span className="eyebrow">Free account option</span><h2>{category.slug === "gst" ? "Prepare for supported GST courses" : "Turn exam guidance into study practice"}</h2><p>Check the supported course list, create a free account, and try a short diagnostic when sample questions are available.</p></div><Link className="button" href="/exam-prep">See exam preparation</Link><Link href="/dashboard/practice">Try free diagnostic</Link></aside>}
 
           <div className="seo-intro">
             <h2>How NOUN Compass approaches {category.name.toLowerCase()}</h2>
@@ -141,7 +141,7 @@ export function CategoryPage({
               spot problems early and explain them clearly if support asks questions later.
             </p>
             <p>
-              If two sources disagree, do not just pick the cheaper or easier answer. Use the
+              If two sources disagree, follow the one that matches your current official record. Use the
               instruction tied most closely to your current official record, and ask an authorized
               channel when the difference could affect payment or academic progress.
             </p>
@@ -165,7 +165,7 @@ export function CategoryPage({
             <SocialLinks
               className="priority-social-links"
               title={`Follow NounCompass for ${category.name.toLowerCase()} updates`}
-              intro="These are the active priority social pages where NounCompass shares practical student-help posts and quick reminders."
+              intro="These are the NounCompass social pages for quick reminders and short updates."
             />
           )}
 

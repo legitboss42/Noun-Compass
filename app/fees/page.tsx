@@ -29,13 +29,13 @@ export default function FeesPage() {
       <span className="eyebrow">Plan before you pay</span>
       <h1>NOUN school fees checker</h1>
       <p>Select your faculty, programme, level, and semester to view the available fee breakdown and semester course list inside the NounCompass checker.</p>
-      <div className={styles.points}><span>9 faculties</span><span>99 programmes</span><span>488 captured fee breakdowns</span></div>
+      <div className={styles.points}><span>9 faculties</span><span>99 programmes</span><span>488 fee breakdowns listed</span></div>
     </div></div>
     <div className={`container ${styles.content}`}>
       <section className={styles.toolIntro}>
         <span className="eyebrow">Before using the checker</span>
         <h2>Use the estimate to plan, then confirm officially</h2>
-        <p>The checker gives you a fast planning view of semester fees, course registration, and exam registration in one place. Use it to compare totals, review course rows, and prepare before you enter the portal.</p>
+        <p>The checker gives you one place to review semester fees, course registration, and exam registration. Use it to compare totals, review course rows, and prepare before you enter the portal.</p>
         <div className={styles.accuracyNote}><strong>Before you pay</strong><p>This checker was last refreshed on {formatDate(pureduFeeSnapshotRetrievedAt)} with fallback updates on {formatDate(nounUpdateFeeSnapshotRetrievedAt)}. Always use the final amount shown on your NOUN portal before you make payment.</p></div>
       </section>
       <FeeChecker />
@@ -53,7 +53,7 @@ export default function FeesPage() {
         <h2>How the school fees checker is built</h2>
         <p>NounCompass organizes fee breakdowns, programme selections, and semester course lists into one planning tool so students can review the likely structure before they pay.</p>
         <h3>What is available now</h3>
-        <p>All 99 exposed programmes are listed. The checker currently shows 473 complete fee breakdowns, plus 15 additional recovered gaps. Where no fee amount was available, the course list still appears with fees marked pending.</p>
+        <p>All 99 listed programmes are included. The checker currently shows 473 complete fee breakdowns, plus 15 more cases where we could still show the course list even though the fee amount was missing.</p>
         <h3>How fee accuracy is handled</h3>
         <p>Use the checker as a planning tool, not as your final bill. Compare the result with your current portal amount before payment, especially if your programme, level, or semester has changed.</p>
         <h3>What to do after checking</h3>
@@ -63,7 +63,7 @@ export default function FeesPage() {
       <SocialLinks
         className="priority-social-links"
         title="Follow NounCompass for school fees and payment updates"
-        intro="Use the active NounCompass social pages for fee reminders, Remita guidance, and quick student-help posts tied to the fees checker."
+        intro="Use the NounCompass social pages for fee reminders, Remita guidance, and short updates tied to the fees checker."
       />
     </div>
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSchema) }} />

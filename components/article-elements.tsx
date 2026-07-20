@@ -43,25 +43,25 @@ export function TableOfContents({ headings = [] }: { headings?: { id: string; la
 }
 
 export function SourceNote({ url }: { url: string }) {
-  return <aside className="source-note"><strong>Official source note</strong><p>Use the official NOUN source below for final dates, payments, requirements, and course-material details.</p><a href={url} target="_blank" rel="noopener noreferrer">Open official source</a></aside>;
+  return <aside className="source-note"><strong>Check the official page</strong><p>Use this NOUN page to confirm anything that can change, including dates, charges, requirements, and course-material details.</p><a href={url} target="_blank" rel="noopener noreferrer">Visit the NOUN source</a></aside>;
 }
 
 export function LastCheckedBox({ date }: { date: string }) {
-  return <div className="last-checked"><span aria-hidden="true">OK</span><p><strong>Last checked:</strong> {formatDate(date)}. We review operational guides regularly, but official processes can change.</p></div>;
+  return <div className="last-checked"><span aria-hidden="true">OK</span><p><strong>Checked on {formatDate(date)}.</strong> NOUN pages and procedures can change, so compare the steps here with what you see in your own account.</p></div>;
 }
 
 export function FAQBlock({ faqs }: { faqs: ArticleFaq[] }) {
-  return <section id="faq" className="faq"><span className="eyebrow">Common questions</span><h2>Frequently asked questions</h2><p className="faq-intro">Tap a question to expand the answer. Opening one answer will collapse the others.</p><div className="faq-list">{faqs.map((faq, index) => <details key={faq.question} className="faq-item" name="article-faq"><summary><span className="faq-question-wrap"><span className="faq-number">{String(index + 1).padStart(2, "0")}</span><span className="faq-question">{faq.question}</span></span><span className="faq-toggle" aria-hidden="true"><span className="faq-toggle-line faq-toggle-line-horizontal" /><span className="faq-toggle-line faq-toggle-line-vertical" /></span></summary><div className="faq-answer"><p>{faq.answer}</p></div></details>)}</div></section>;
+  return <section id="faq" className="faq"><span className="eyebrow">Questions students ask</span><h2>Quick answers</h2><p className="faq-intro">Open any question for the answer.</p><div className="faq-list">{faqs.map((faq, index) => <details key={faq.question} className="faq-item" name="article-faq"><summary><span className="faq-question-wrap"><span className="faq-number">{String(index + 1).padStart(2, "0")}</span><span className="faq-question">{faq.question}</span></span><span className="faq-toggle" aria-hidden="true"><span className="faq-toggle-line faq-toggle-line-horizontal" /><span className="faq-toggle-line faq-toggle-line-vertical" /></span></summary><div className="faq-answer"><p>{faq.answer}</p></div></details>)}</div></section>;
 }
 
 export function AuthorBox({ author, reviewer }: { author: string; reviewer: string }) {
   const authorProfile = getEditorialProfile(author);
   const reviewerProfile = getEditorialProfile(reviewer);
-  return <aside className="author-box"><div className="author-avatar">NC</div><div><span className="eyebrow">About this guide</span><h2>Written by <Link href={authorProfile.href}>{author}</Link></h2><p>Written by {author}. Reviewed by <Link href={reviewerProfile.href}>{reviewer}</Link> for source clarity, student risk, and workflow accuracy before publication.</p><Link href="/editorial-policy">Read our editorial policy</Link></div></aside>;
+  return <aside className="author-box"><div className="author-avatar">NC</div><div><span className="eyebrow">Who checked this guide</span><h2><Link href={authorProfile.href}>{author}</Link></h2><p>{author} prepared the guide, and <Link href={reviewerProfile.href}>{reviewer}</Link> checked the sources, the steps, and any advice that could affect a student&apos;s record or payment.</p><Link href="/editorial-policy">How we write and review guides</Link></div></aside>;
 }
 
 export function DisclaimerBox() {
-  return <aside className="disclaimer-box"><strong>Independent resource disclaimer</strong><p>NOUN Compass is independent and is not officially connected to NOUN. Check official NOUN channels before you act on fees, admission details, deadlines, or course-material information.</p></aside>;
+  return <aside className="disclaimer-box"><strong>Before you rely on this</strong><p>NOUN Compass is an independent student-help website, not part of NOUN. For fees, admissions, deadlines, and course materials, your current NOUN record and official NOUN pages come first.</p></aside>;
 }
 
 export function SourceReviewBox({
@@ -76,11 +76,11 @@ export function SourceReviewBox({
   reviewedAt: string;
 }) {
   if (!summary && !reviewedSources?.length && !reviewHighlights?.length) return null;
-  return <aside className="source-review-box"><strong>Source review</strong>{summary ? <p>{summary}</p> : null}<p><strong>Last reviewed:</strong> {formatDate(reviewedAt)}.</p>{reviewHighlights?.length ? <ul>{reviewHighlights.map((item) => <li key={item}>{item}</li>)}</ul> : null}{reviewedSources?.length ? <div className="source-review-links">{reviewedSources.map((item) => <a key={item.url} href={item.url} target="_blank" rel="noopener noreferrer">{item.label}</a>)}</div> : null}</aside>;
+  return <aside className="source-review-box"><strong>What we checked</strong>{summary ? <p>{summary}</p> : null}<p><strong>Sources checked:</strong> {formatDate(reviewedAt)}.</p>{reviewHighlights?.length ? <ul>{reviewHighlights.map((item) => <li key={item}>{item}</li>)}</ul> : null}{reviewedSources?.length ? <div className="source-review-links">{reviewedSources.map((item) => <a key={item.url} href={item.url} target="_blank" rel="noopener noreferrer">{item.label}</a>)}</div> : null}</aside>;
 }
 
 export function RelatedReads({ articles }: { articles: ArticleMeta[] }) {
-  return <section className="related"><span className="eyebrow">Read next</span><h2>Related reads</h2><div>{articles.map((article) => <Link key={article.slug} href={`/articles/${article.slug}`}><span>{article.category.replace("-", " ")}</span><strong>{article.title}</strong><small>{article.readingTime}</small></Link>)}</div></section>;
+  return <section className="related"><span className="eyebrow">If you need the next step</span><h2>Guides that may help</h2><div>{articles.map((article) => <Link key={article.slug} href={`/articles/${article.slug}`}><span>{article.category.replace("-", " ")}</span><strong>{article.title}</strong><small>{article.readingTime}</small></Link>)}</div></section>;
 }
 
 export function AdPlaceholder({ position }: { position: string }) {
@@ -150,8 +150,8 @@ export function ArticleScreenshot({
       </div>
       <figcaption>
         {caption} {isReconstruction
-          ? "Educational reconstruction, not a live portal record."
-          : "Captured from an official NOUN platform with personal information removed."}
+          ? "This is a teaching diagram, not a live student record."
+          : "This came from an official NOUN page; personal information has been removed."}
       </figcaption>
     </figure>
   );
