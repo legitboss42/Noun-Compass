@@ -8,7 +8,7 @@ import { createMetadata } from "@/lib/metadata";
 import styles from "./fees.module.css";
 import { nounUpdateFeeSnapshotRetrievedAt, pureduFeeSnapshotRetrievedAt } from "@/data/curricula";
 
-export const metadata = createMetadata("NOUN School Fees Checker, Remita, and Fee Guides", "Check NOUN fee breakdowns, plan payments, review Remita steps, and compare semester costs before paying officially.", "/fees");
+export const metadata = createMetadata("NOUN School Fees Checker & Cost Breakdown", "Check estimated NOUN school fees by programme, level, and semester, then review course, exam, and compulsory charges before paying.", "/fees");
 
 export default function FeesPage() {
   const articles = getArticlesByCategory("fees");

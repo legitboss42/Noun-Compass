@@ -2,7 +2,11 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { requireRole } from "@/lib/platform/auth";
 
-export const metadata: Metadata = { robots: { index: false, follow: false } };
+export const metadata: Metadata = {
+  title: "NounCompass Administration",
+  alternates: null,
+  robots: { index: false, follow: false },
+};
 
 const links = [
   ["Overview", "/admin"], ["Questions", "/admin/questions"], ["Schedules", "/admin/schedules"],

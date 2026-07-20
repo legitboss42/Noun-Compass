@@ -3,7 +3,11 @@ import Link from "next/link";
 import { requireUser } from "@/lib/platform/auth";
 import { signOut } from "@/app/account/actions";
 
-export const metadata: Metadata = { robots: { index: false, follow: false } };
+export const metadata: Metadata = {
+  title: "Student Dashboard",
+  alternates: null,
+  robots: { index: false, follow: false },
+};
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   await requireUser("/dashboard");
