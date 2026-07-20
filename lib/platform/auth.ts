@@ -1,8 +1,10 @@
 import { redirect } from "next/navigation";
 import type { UserRole } from "./types";
+import { localPilotEnabled, localPilotUser } from "./local-pilot";
 import { createClient } from "@/lib/supabase/server";
 
 export async function getCurrentUser() {
+  if (process.env.LOCAL_PILOT === "true" && localPilotEnabled()) return localPilotUser();
   const supabase = await createClient();
   if (!supabase) return null;
   const { data, error } = await supabase.auth.getUser();
@@ -17,6 +19,7 @@ export async function requireUser(nextPath = "/dashboard") {
 }
 
 export async function getUserRoles(userId: string): Promise<UserRole[]> {
+  if (process.env.LOCAL_PILOT === "true" && localPilotEnabled() && localPilotUser().id === userId) return ["student"];
   const initialAdmin = process.env.INITIAL_SUPER_ADMIN_EMAIL?.trim().toLowerCase();
   const user = await getCurrentUser();
   if (initialAdmin && user?.id === userId && user.email?.toLowerCase() === initialAdmin) {
