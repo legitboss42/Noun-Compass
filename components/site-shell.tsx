@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { AuthHeaderLinks } from "@/components/auth-header-links";
 import { BrandLogo } from "@/components/BrandLogo";
 import { MobileMenu } from "@/components/mobile-menu";
 import { SocialLinks } from "@/components/social-links";
@@ -9,7 +10,7 @@ export function TopUtilityBar() {
 }
 
 export function Header() {
-  return <><TopUtilityBar /><header className="site-header"><div className="container header-main"><Link className="logo" href="/" aria-label="NOUN Compass home"><BrandLogo variant="wordmark" tone="dark" className="brand-logo-header" /></Link><div className="header-actions"><Link className="search-link" href="/student-guides#guides">Search guides</Link><Link className="sign-in-link" href="/account/sign-in">Sign in</Link><Link className="account-link" href="/account/sign-up">Create free account</Link><Link className="dashboard-link" href="/dashboard">Dashboard</Link><MobileMenu /></div></div><nav className="desktop-nav container" aria-label="Primary navigation">{navGroups.map((item) => item.items?.length ? <div key={item.label} className="desktop-nav-group"><Link className="desktop-nav-button" href={item.href ?? item.items[0].href}>{item.label}</Link><div className="desktop-subnav">{item.items.map((subItem) => <Link key={subItem.href} href={subItem.href}>{subItem.label}</Link>)}</div></div> : <Link key={item.label} href={item.href ?? "/"}>{item.label}</Link>)}</nav></header></>;
+  return <><TopUtilityBar /><header className="site-header"><div className="container header-main"><Link className="logo" href="/" aria-label="NOUN Compass home"><BrandLogo variant="wordmark" tone="dark" className="brand-logo-header" /></Link><div className="header-actions"><Link className="search-link" href="/student-guides#guides">Search guides</Link><AuthHeaderLinks /><MobileMenu /></div></div><nav className="desktop-nav container" aria-label="Primary navigation">{navGroups.map((item) => item.items?.length ? <div key={item.label} className="desktop-nav-group"><Link className="desktop-nav-button" href={item.href ?? item.items[0].href}>{item.label}</Link><div className="desktop-subnav">{item.items.map((subItem) => <Link key={subItem.href} href={subItem.href}>{subItem.label}</Link>)}</div></div> : <Link key={item.label} href={item.href ?? "/"}>{item.label}</Link>)}</nav></header></>;
 }
 
 export function Footer() {
