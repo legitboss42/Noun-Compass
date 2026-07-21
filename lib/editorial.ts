@@ -9,8 +9,8 @@ export type EditorialProfile = {
 export const EDITORIAL_PROFILE_URL = "https://webgrowth.info/victorious/";
 
 const editorialProfiles: Record<string, EditorialProfile> = {
-  "Victor Chinukwue": {
-    name: "Victor Chinukwue",
+  Victoious: {
+    name: "Victoious",
     href: EDITORIAL_PROFILE_URL,
     type: "Person",
     title: "Founder / Editor, NOUN Compass",
