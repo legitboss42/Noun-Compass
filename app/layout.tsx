@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Script from "next/script";
+import { Suspense } from "react";
+import { BackToTopButton } from "@/components/back-to-top-button";
+import { ScrollReset } from "@/components/scroll-reset";
 import { Footer, Header } from "@/components/site-shell";
 import { site } from "@/data/site";
 import { EDITORIAL_PROFILE_URL } from "@/lib/editorial";
@@ -39,6 +42,23 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const googleAnalyticsId = "G-TVWNP6J0GF";
+  const scrollResetBootstrap = `(() => {
+  const reset = () => {
+    window.scrollTo(0, 0);
+    requestAnimationFrame(() => {
+      window.scrollTo(0, 0);
+      requestAnimationFrame(() => window.scrollTo(0, 0));
+    });
+  };
+
+  if ("scrollRestoration" in window.history) {
+    window.history.scrollRestoration = "manual";
+  }
+
+  reset();
+  window.addEventListener("pageshow", reset);
+  window.addEventListener("load", reset);
+})();`;
   const analyticsLoader = `window.addEventListener('load', () => {
   const bootAnalytics = () => {
     if (window.__nounCompassAnalyticsLoaded) return;
@@ -89,5 +109,5 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       "query-input": "required name=search_term_string",
     },
   };
-  return <html lang="en" className={inter.variable}><head><Script id="google-analytics-loader" strategy="afterInteractive">{analyticsLoader}</Script></head><body><a className="skip-link" href="#main-content">Skip to content</a><Header />{children}<Footer /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organization) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(website) }} /></body></html>;
+  return <html lang="en" className={inter.variable}><head><Script id="scroll-reset-bootstrap" strategy="beforeInteractive">{scrollResetBootstrap}</Script><Script id="google-analytics-loader" strategy="afterInteractive">{analyticsLoader}</Script></head><body><Suspense fallback={null}><ScrollReset /></Suspense><a className="skip-link" href="#main-content">Skip to content</a><Header />{children}<BackToTopButton /><Footer /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organization) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(website) }} /></body></html>;
 }
