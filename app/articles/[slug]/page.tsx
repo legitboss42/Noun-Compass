@@ -76,7 +76,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     authors: [
       {
         name: article.author,
-        url: article.author === "Victor Chinukwue" ? `${site.url}/authors/victor` : `${site.url}/authors/editorial-team`,
+        url: getEditorialProfile(article.author).href,
       },
     ],
     creator: article.author,
@@ -122,10 +122,6 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
     (faq, index, list) => list.findIndex((item) => item.question === faq.question) === index,
   );
   const headings = extractHeadings(articleContent);
-  const authorUrl =
-    article.author === "Victor Chinukwue"
-      ? `${site.url}/authors/victor`
-      : `${site.url}/authors/editorial-team`;
   const category = getCategory(article.category);
   const categoryLabel = category?.name ?? article.category.replace("-", " ");
   const articleUrl = `${site.url}/articles/${article.slug}`;
@@ -148,13 +144,13 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
     author: {
       "@type": authorProfile.type,
       name: article.author,
-      url: authorUrl,
+      url: authorProfile.href,
       description: authorProfile.description,
     },
     editor: {
       "@type": reviewerProfile.type,
       name: reviewerProfile.name,
-      url: `${site.url}${reviewerProfile.href}`,
+      url: reviewerProfile.href,
       description: reviewerProfile.description,
     },
     publisher: {

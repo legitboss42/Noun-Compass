@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import Script from "next/script";
 import { Footer, Header } from "@/components/site-shell";
 import { site } from "@/data/site";
+import { EDITORIAL_PROFILE_URL } from "@/lib/editorial";
 import "./globals.css";
 
 const inter = Inter({ variable: "--font-body", subsets: ["latin"], weight: ["400", "600", "700", "800"] });
@@ -29,7 +30,7 @@ export const metadata: Metadata = {
     apple: [{ url: "/images/brand/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
     shortcut: ["/images/brand/favicon.png"],
   },
-  authors: [{ name: "NOUN Compass Editorial Team", url: "/authors/editorial-team" }],
+  authors: [{ name: "NOUN Compass Editorial Team", url: EDITORIAL_PROFILE_URL }],
   creator: "NOUN Compass",
   publisher: "NOUN Compass",
   openGraph: { siteName: site.name, type: "website", locale: "en_NG", images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "NOUN Compass" }] },

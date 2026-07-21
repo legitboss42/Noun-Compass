@@ -12,8 +12,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/membership",
     "/refund-policy",
     "/academic-integrity",
-    "/reviewers/student-workflow",
-    "/reviewers/student-finance",
     "/about",
     "/contact",
     "/privacy-policy",
@@ -23,8 +21,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/corrections-policy",
     "/copyright-policy",
     "/takedown-policy",
-    "/authors/victor",
-    "/authors/editorial-team",
   ];
   const highPriorityPaths = new Set([
     "/student-guides",
@@ -41,9 +37,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     changeFrequency:
       path === ""
         ? ("weekly" as const)
-        : path.startsWith("/authors") || path.startsWith("/reviewers")
-          ? ("monthly" as const)
-          : ("weekly" as const),
+        : ("weekly" as const),
     priority: path === "" ? 1 : highPriorityPaths.has(path) ? 0.9 : 0.7,
   }));
   const articleEntries = articles.map((article) => ({

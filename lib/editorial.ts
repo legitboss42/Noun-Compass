@@ -6,10 +6,12 @@ export type EditorialProfile = {
   description: string;
 };
 
+export const EDITORIAL_PROFILE_URL = "https://webgrowth.info/victorious/";
+
 const editorialProfiles: Record<string, EditorialProfile> = {
   "Victor Chinukwue": {
     name: "Victor Chinukwue",
-    href: "/authors/victor",
+    href: EDITORIAL_PROFILE_URL,
     type: "Person",
     title: "Founder / Editor, NOUN Compass",
     description:
@@ -17,7 +19,7 @@ const editorialProfiles: Record<string, EditorialProfile> = {
   },
   "NOUN Compass Editorial Team": {
     name: "NOUN Compass Editorial Team",
-    href: "/authors/editorial-team",
+    href: EDITORIAL_PROFILE_URL,
     type: "Organization",
     title: "Research and Review Team",
     description:
@@ -25,7 +27,7 @@ const editorialProfiles: Record<string, EditorialProfile> = {
   },
   "Student Workflow Review Desk": {
     name: "Student Workflow Review Desk",
-    href: "/reviewers/student-workflow",
+    href: EDITORIAL_PROFILE_URL,
     type: "Organization",
     title: "Workflow Review Desk",
     description:
@@ -33,7 +35,7 @@ const editorialProfiles: Record<string, EditorialProfile> = {
   },
   "Student Finance Review Desk": {
     name: "Student Finance Review Desk",
-    href: "/reviewers/student-finance",
+    href: EDITORIAL_PROFILE_URL,
     type: "Organization",
     title: "Finance Review Desk",
     description:
@@ -45,7 +47,7 @@ export function getEditorialProfile(name: string): EditorialProfile {
   return (
     editorialProfiles[name] ?? {
       name,
-      href: "/editorial-policy",
+      href: EDITORIAL_PROFILE_URL,
       type: "Organization",
       title: "Editorial contributor",
       description: "Editorial contributor profile for NOUN Compass.",
