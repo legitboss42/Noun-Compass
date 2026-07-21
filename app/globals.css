@@ -520,6 +520,9 @@ button, a, input, textarea, select { outline-offset: 4px; }
 .logo-light { color: white; }
 .footer-grid p { max-width: 380px; font-size: .85rem; line-height: 1.6; }
 .footer-independence { color: #d8e4ed; }
+.footer-credit { display: inline-flex; align-items: center; gap: 10px; margin: 10px 0 6px; color: white; }
+.footer-credit-label { font-size: .72rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: #d8e4ed; }
+.footer-credit-logo { width: auto; height: 28px; }
 .footer-grid h2 { margin-top: 0; color: white; font-size: .8rem; text-transform: uppercase; }
 .footer-grid > div:not(:first-child) { display: grid; align-content: start; gap: 10px; font-size: .78rem; }
 .footer a:hover { color: white; }
