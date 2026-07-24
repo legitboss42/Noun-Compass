@@ -229,42 +229,50 @@ Completed through the controlled Chrome session on 24 July 2026:
   `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`,
   `SUPABASE_SERVICE_ROLE_KEY`, and
   `INITIAL_SUPER_ADMIN_EMAIL`.
-- Confirmed Vercel requires a new deployment before the running production
-  build receives the updated values. No redeployment was started.
+- Deployed the completed repository changes and confirmed the new production
+  build is `Ready` on `nouncompass.me`.
 - Linked the Supabase CLI to project `bkxujxtshrqxhwyhqtey`.
 - Repaired and verified the six documented migration-history versions:
   `202607200001`, `202607200002`, `202607240001`, `202607240002`,
   `202607240003`, and `202607240004`.
 - Revoked the temporary Supabase CLI access token and removed its temporary
   local transfer file after verification.
-- Reused the already signed-in owner account for role tests instead of creating
-  production test users. Every temporary role transition was written to
-  `audit_logs`; the account was left with `student` and `super_admin`.
+- Created five dedicated synthetic production accounts to test each role in
+  isolation. Their creation and cleanup were written to `audit_logs`, all five
+  accounts were removed after the tests, and the owner session was restored
+  with `student` and `super_admin`.
+- Replaced the raw `forbidden` authorization code on the student dashboard with
+  the accessible message, “You don’t have permission to view that page.”
 
 Signed-in production results:
 
 | Role | Expected allowed route | Result | Expected denied route | Result |
 | --- | --- | --- | --- | --- |
 | `student` | `/dashboard` | Pass | `/admin` | Pass |
-| `support_agent` | `/admin`, `/admin/support` | Pass | `/admin/payments` | **Fail: payment records were exposed** |
-| `content_editor` | `/admin/questions` | Pass | `/admin/payments` | **Fail: payment records were exposed** |
-| `academic_reviewer` | `/admin/questions` | Pass | `/admin/users` | **Fail: user management was exposed** |
-| `super_admin` | `/admin/users`, `/admin/payments` | Pass | Not applicable | `/admin/settings` is not present in the deployed build |
+| `support_agent` | `/admin`, `/admin/support` | Pass | `/admin/payments` | Pass |
+| `content_editor` | `/admin/questions` | Pass | `/admin/payments`, `/admin/users` | Pass |
+| `academic_reviewer` | `/admin/questions` | Pass | `/admin/users`, `/admin/payments`, `/admin/settings` | Pass |
+| `super_admin` | `/admin/users`, `/admin/payments`, `/admin/settings`, `/admin/analytics` | Pass | Not applicable | Pass |
 
-The live sidebar also exposes links outside the signed-in staff role's
-permission set. This confirms production is serving the older admin
-authorization implementation. The repository implementation uses
-permission-aware navigation and per-page `requirePermission()` checks, but
-those changes are not yet deployed.
+Permission-aware navigation was also verified for support, editor, reviewer,
+and super-admin sessions. No restricted link was exposed in the tested
+lower-privilege sidebars.
+
+Final live counts after synthetic-account cleanup:
+
+- 2 Supabase Auth users
+- 2 profiles
+- 3 role assignments
+- 0 memberships
+- 2 payment attempts
+- 0 support tickets
+- 0 question reports
+- 14 audit-log entries
+- 0 platform-setting overrides
+- 0 remaining synthetic smoke-test accounts
 
 ## 12. Remaining limitations
 
-- Vercel has the updated Supabase variables, but the running deployment still
-  needs an approved redeployment to receive them.
-- The deployed admin build fails least-privilege checks for `support_agent`,
-  `content_editor`, and `academic_reviewer`. Do not treat the current
-  production admin as staff-safe until the completed repository changes are
-  reviewed and deployed.
 - The four earlier local-only history entries (`202607190001` through
   `202607190004`) remain unreconciled because they were not included in the
   documented, live-verified repair set. Their SQL state must be independently
@@ -278,31 +286,31 @@ those changes are not yet deployed.
 
 ## 13. Manual deployment steps
 
-1. Review the files listed below.
-2. Confirm `LOCAL_PILOT=false`.
-3. Re-run the validation commands in the deployment environment.
-4. Commit, push, and deploy only after explicit approval.
-5. Redeploy so Vercel injects the updated Supabase variables.
-6. Repeat the signed-in role matrix and require every current failure above to
-   pass before granting staff access.
-7. Test one non-destructive list/filter flow per section.
-8. Test sensitive actions with dedicated test records and inspect audit rows.
-9. Verify internal notes through both staff and student sessions.
+The approved release, variable update, migration-history repair, deployment,
+and staff-role smoke matrix are complete.
+
+Before granting real staff access:
+
+1. Assign only the minimum role required for each staff member.
+2. Test sensitive actions with dedicated records and inspect their audit rows.
+3. Verify internal support notes through both a staff and a student session.
+4. Independently prove the SQL state of the four older local-only migrations
+   before reconciling those ledger versions.
 
 ## 14. Environment-variable changes required
 
-Set non-empty values in the deployment environment:
+The following values are configured locally and in Vercel Production and
+Preview:
 
 ```text
 NEXT_PUBLIC_SUPABASE_URL
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
 SUPABASE_SERVICE_ROLE_KEY
 INITIAL_SUPER_ADMIN_EMAIL
-NEXT_PUBLIC_SITE_URL
 ```
 
-Keep the existing Flutterwave variables for payment re-verification and the
-existing Supabase Auth email configuration for recovery links.
+Keep the existing `NEXT_PUBLIC_SITE_URL`, Flutterwave variables for payment
+re-verification, and Supabase Auth email configuration for recovery links.
 
 Do not prefix `SUPABASE_SERVICE_ROLE_KEY` with `NEXT_PUBLIC_`. Do not commit
 `.env.local`.
@@ -326,9 +334,14 @@ npx.cmd supabase migration repair --status applied 202607240004
 The repair commands reconcile history only. The migration SQL is already
 applied live.
 
-## 16. Files requiring review before commit
+## 16. Release and review record
 
-Review the complete admin change set, especially:
+The complete sitewide and admin change set was committed and pushed as:
+
+- `19115d1` — `Build sitewide redesign and secure admin operations`
+- `c09282a` — `Humanize forbidden dashboard notice`
+
+High-risk files reviewed in the release include:
 
 - `lib/platform/admin-permissions.ts`
 - `lib/platform/admin-auth.ts`
@@ -344,5 +357,6 @@ Review the complete admin change set, especially:
 - `docs/admin-dashboard.md`
 - `docs/article-admin-limitations.md`
 
-The worktree also contains the user's earlier sitewide redesign changes. They
-were preserved and not reverted. No commit, push, or deployment was performed.
+The user's earlier sitewide redesign changes were preserved and included in the
+approved release. Production deployment and signed-in verification were
+completed through the controlled Chrome session.
