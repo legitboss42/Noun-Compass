@@ -1,5 +1,5 @@
 .planner { display: grid; gap: 28px; }
-.introCard, .panel, .results, .notePanel {
+.introCard, .panel, .results, .notePanel, .calendarPanel {
   padding: 28px;
   background: linear-gradient(180deg, #ffffff, #fbfcfd);
   border: 1px solid rgba(18, 36, 59, 0.08);
@@ -48,6 +48,15 @@
 .availabilitySummary strong { color: #12243B; }
 .availabilitySummary span { color: #586879; font-size: .84rem; }
 .actionRow { display: flex; flex-wrap: wrap; gap: 12px; }
+.calendarPanel { display: grid; grid-template-columns: minmax(0, 1fr) minmax(260px, 380px); gap: 20px; align-items: start; border-left: 4px solid #0E7A3E; }
+.calendarPanel h2 { margin: 8px 0 10px; font-size: clamp(1.5rem, 3vw, 2.2rem); letter-spacing: -.05em; }
+.calendarPanel p { max-width: 64ch; margin: 0; color: #586879; line-height: 1.65; }
+.calendarActions { display: grid; gap: 10px; justify-items: stretch; }
+.calendarActions .secondaryButton, .calendarActions form, .calendarActions button { width: 100%; }
+.calendarActions small { color: #586879; line-height: 1.45; }
+.reminderToggle { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; align-items: center; }
+.reminderToggle label { min-height: 48px; display: flex; align-items: center; gap: 9px; padding: 10px 12px; border: 1px solid rgba(18, 36, 59, 0.12); background: #f8fbf9; color: #12243B; font-size: .82rem; font-weight: 800; }
+.reminderToggle button { min-height: 48px; padding: 10px 14px; border: 1px solid rgba(18, 36, 59, 0.12); background: #fff; color: #12243B; font-weight: 800; cursor: pointer; }
 .resultsHeader { display: flex; justify-content: space-between; gap: 20px; align-items: end; }
 .resultMeta { text-align: right; }
 .resultMeta strong { display: block; color: #12243B; font-family: var(--font-display), Arial, sans-serif; font-size: 1.2rem; }
@@ -72,6 +81,7 @@
 @media (max-width: 980px) {
   .statsRow,
   .fieldGrid,
+  .calendarPanel,
   .breakdownGrid,
   .timetableGrid {
     grid-template-columns: 1fr;
@@ -86,7 +96,8 @@
   .courseSearch,
   .resultsHeader,
   .availabilityHead,
-  .availabilityRow {
+  .availabilityRow,
+  .reminderToggle {
     grid-template-columns: 1fr;
   }
 

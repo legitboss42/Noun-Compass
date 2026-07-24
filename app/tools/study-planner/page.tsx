@@ -2,6 +2,9 @@ import Link from "next/link";
 import { Breadcrumbs, DisclaimerBox } from "@/components/article-elements";
 import { StudyPlanner } from "@/components/study-planner";
 import { createMetadata } from "@/lib/metadata";
+import { getCurrentUser } from "@/lib/platform/auth";
+import { getStudyPlannerPremiumState } from "@/lib/platform/study-planner-access";
+import { createClient } from "@/lib/supabase/server";
 import { studyPlannerStats } from "@/lib/study-planner-catalog";
 
 export const metadata = createMetadata(
@@ -10,7 +13,32 @@ export const metadata = createMetadata(
   "/tools/study-planner",
 );
 
-export default function StudyPlannerPage() {
+export default async function StudyPlannerPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ error?: string; notice?: string }>;
+}) {
+  const params = await searchParams;
+  const user = await getCurrentUser();
+  const premium = user ? await getStudyPlannerPremiumState(user.id) : false;
+  const supabase = await createClient();
+  const { data: savedPlan } =
+    user && premium && supabase
+      ? await supabase
+          .from("study_plans")
+          .select("id,reminders_enabled")
+          .eq("user_id", user.id)
+          .maybeSingle()
+      : { data: null };
+  const { count: savedCalendarSessionCount } =
+    user && premium && supabase && savedPlan
+      ? await supabase
+          .from("study_plan_sessions")
+          .select("id", { count: "exact", head: true })
+          .eq("plan_id", savedPlan.id)
+          .eq("user_id", user.id)
+      : { count: 0 };
+
   const toolSchema = {
     "@context": "https://schema.org",
     "@type": "WebApplication",
@@ -46,7 +74,15 @@ export default function StudyPlannerPage() {
       </div>
 
       <div className="container section">
-        <StudyPlanner stats={studyPlannerStats} />
+        <StudyPlanner
+          error={params.error}
+          notice={params.notice}
+          premium={premium}
+          savedCalendarSessionCount={savedCalendarSessionCount ?? 0}
+          signedIn={Boolean(user)}
+          stats={studyPlannerStats}
+          remindersEnabled={savedPlan?.reminders_enabled ?? false}
+        />
 
         <div className="seo-intro">
           <h2>How to use this planner well</h2>

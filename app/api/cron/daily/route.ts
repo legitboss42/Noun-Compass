@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
+import { sendStudyReminderEmail } from "@/lib/contact-mail";
 import { syncSubscriberToBrevo } from "@/lib/newsletter";
+import { shouldSendStudyReminder } from "@/lib/platform/study-planner-premium";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 export async function GET(request: Request) {
@@ -28,6 +30,57 @@ export async function GET(request: Request) {
         }
       }
     }
+    const { data: studySessions } = await admin
+      .from("study_plan_sessions")
+      .select("id,user_id,title,starts_at,reminder_sent_at,study_plans!inner(timezone,reminder_minutes_before,reminders_enabled)")
+      .is("reminder_sent_at", null)
+      .gte("starts_at", now.toISOString())
+      .lte("starts_at", new Date(now.getTime() + 24 * 60 * 60 * 1000).toISOString())
+      .eq("study_plans.reminders_enabled", true)
+      .limit(200);
+    let studyReminderCount = 0; let studyEmailCount = 0;
+    for (const session of studySessions ?? []) {
+      const plan = Array.isArray(session.study_plans) ? session.study_plans[0] : session.study_plans;
+      const reminderMinutesBefore = Number(plan?.reminder_minutes_before ?? 60);
+      if (!shouldSendStudyReminder({ startsAt: session.starts_at, now, reminderMinutesBefore: Math.max(24 * 60, reminderMinutesBefore) })) continue;
+      const dedupeKey = `study-session:${session.id}`;
+      const { error } = await admin.from("notifications").insert({
+        user_id: session.user_id,
+        kind: "study-plan",
+        title: "Study session coming up",
+        body: `${session.title} is scheduled soon. Open your planner if you need to adjust your timetable.`,
+        action_url: "/tools/study-planner",
+        dedupe_key: dedupeKey,
+      });
+      if (!error || error.code === "23505") {
+        await admin.from("study_plan_sessions").update({ reminder_sent_at: now.toISOString() }).eq("id", session.id);
+        studyReminderCount += error ? 0 : 1;
+        const { data: preferences } = await admin
+          .from("email_preferences")
+          .select("study_reminders")
+          .eq("user_id", session.user_id)
+          .maybeSingle();
+        if (preferences?.study_reminders !== false && !error) {
+          try {
+            const { data: authUser } = await admin.auth.admin.getUserById(session.user_id);
+            const email = authUser.user?.email;
+            if (email) {
+              await sendStudyReminderEmail({
+                actionUrl: "https://nouncompass.me/tools/study-planner",
+                startsAt: session.starts_at,
+                timezone: plan?.timezone ?? "Africa/Lagos",
+                title: session.title,
+                to: email,
+              });
+              await admin.from("notifications").update({ emailed_at: new Date().toISOString() }).eq("user_id", session.user_id).eq("dedupe_key", dedupeKey);
+              studyEmailCount += 1;
+            }
+          } catch {
+            // Keep the in-app reminder even if optional SMTP delivery is unavailable.
+          }
+        }
+      }
+    }
     const { data: pendingSubscribers } = await admin.from("newsletter_subscribers").select("email").eq("status", "subscribed").is("brevo_synced_at", null).limit(100);
     let subscriberSyncCount = 0;
     for (const subscriber of pendingSubscribers ?? []) {
@@ -41,7 +94,7 @@ export async function GET(request: Request) {
         // Leave unsynced contacts queued for the next daily run.
       }
     }
-    const details = { expiredCount, reminderCount, checkedMemberships: expiring?.length ?? 0, subscriberSyncCount, checkedSubscribers: pendingSubscribers?.length ?? 0 };
+    const details = { expiredCount, reminderCount, checkedMemberships: expiring?.length ?? 0, studyReminderCount, studyEmailCount, checkedStudySessions: studySessions?.length ?? 0, subscriberSyncCount, checkedSubscribers: pendingSubscribers?.length ?? 0 };
     await admin.from("cron_runs").update({ status: "success", details, completed_at: new Date().toISOString() }).eq("id", run.id);
     return NextResponse.json({ ok: true, ...details });
   } catch (error) {

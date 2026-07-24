@@ -217,3 +217,49 @@ export async function sendContactEmails(submission: ContactSubmission) {
     `,
   });
 }
+
+export async function sendStudyReminderEmail({
+  actionUrl,
+  startsAt,
+  timezone = "Africa/Lagos",
+  title,
+  to,
+}: {
+  actionUrl: string;
+  startsAt: string;
+  timezone?: string | null;
+  title: string;
+  to: string;
+}) {
+  const transporter = createTransporter();
+  const fromAddress = process.env.CONTACT_FORM_AUTOREPLY_FROM ?? process.env.CONTACT_FORM_FROM ?? "NounCompass Support <support@nouncompass.me>";
+  const formattedStart = new Intl.DateTimeFormat("en-NG", {
+    dateStyle: "medium",
+    timeStyle: "short",
+    timeZone: timezone || "Africa/Lagos",
+  }).format(new Date(startsAt));
+
+  await transporter.sendMail({
+    from: fromAddress,
+    to,
+    subject: `Study reminder: ${title}`,
+    text: [
+      "Your saved NounCompass study session is coming up.",
+      "",
+      `Session: ${title}`,
+      `Time: ${formattedStart}`,
+      "",
+      `Open your planner: ${actionUrl}`,
+      "",
+      "NounCompass Support",
+    ].join("\n"),
+    html: `
+      <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #12243b;">
+        <h2 style="margin: 0 0 16px;">Your study session is coming up</h2>
+        <p><strong>Session:</strong> ${escapeHtml(title)}</p>
+        <p><strong>Time:</strong> ${escapeHtml(formattedStart)}</p>
+        <p><a href="${escapeHtml(actionUrl)}">Open your Study Planner</a></p>
+      </div>
+    `,
+  });
+}

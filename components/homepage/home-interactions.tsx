@@ -6,6 +6,11 @@ import { useState } from "react";
 import { HomeIcon } from "@/components/homepage/home-icons";
 import { homeNavigation } from "@/components/homepage/home-data";
 import { useSignedInSession } from "@/lib/platform/use-auth-session";
+import {
+  getStudentNavigationKey,
+  signedInStudentNavigation,
+  signedOutMobileNavigation,
+} from "@/lib/platform/student-navigation";
 import styles from "@/components/homepage/homepage.module.css";
 
 export function HomepageAuthLinks() {
@@ -165,30 +170,19 @@ export function HomepageMobileMenu() {
 export function MobileBottomNavigation() {
   const pathname = usePathname();
   const signedIn = useSignedInSession();
-  const items = [
-    { label: "Home", href: "/", icon: "home" as const },
-    { label: "Exams", href: "/exam-prep", icon: "graduation" as const },
-    { label: "Tools", href: "/tools", icon: "tools" as const },
-    { label: "Resources", href: "/student-guides", icon: "book" as const },
-    {
-      label: "Account",
-      href: signedIn ? "/dashboard" : "/account/sign-in",
-      icon: "user" as const,
-    },
-  ];
+  const items = signedIn ? signedInStudentNavigation : signedOutMobileNavigation;
+  const activeKey = getStudentNavigationKey(pathname, signedIn);
 
   return (
     <nav aria-label="Mobile quick navigation" className={styles.bottomNavigation}>
       {items.map((item) => {
-        const active =
-          pathname === item.href ||
-          (item.href !== "/" && pathname.startsWith(`${item.href}/`));
+        const active = activeKey === item.key;
         return (
           <Link
             aria-current={active ? "page" : undefined}
             className={active ? styles.bottomNavigationActive : undefined}
             href={item.href}
-            key={item.label}
+            key={item.key}
           >
             <HomeIcon name={item.icon} size={21} />
             <span>{item.label}</span>

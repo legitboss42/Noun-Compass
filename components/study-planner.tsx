@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
+import { savePremiumStudyPlan, updateStudyPlannerReminders } from "@/app/tools/study-planner/actions";
 import type { StudyPlannerCourse } from "@/lib/study-planner-catalog";
 import styles from "./study-planner.module.css";
 
@@ -65,6 +66,15 @@ const defaultDays: DayAvailability[] = [
 ];
 
 const plannerStorageKey = "noun-compass-study-planner-v1";
+const dayIndexes = new Map([
+  ["Sunday", 0],
+  ["Monday", 1],
+  ["Tuesday", 2],
+  ["Wednesday", 3],
+  ["Thursday", 4],
+  ["Friday", 5],
+  ["Saturday", 6],
+]);
 
 function normalizeCode(value: string) {
   return value.toUpperCase().replace(/[^A-Z0-9]/g, "");
@@ -104,6 +114,51 @@ function minutesToLabel(totalMinutes: number) {
 function timeToMinutes(value: string) {
   const [hours, minutes] = value.split(":").map(Number);
   return (hours * 60) + minutes;
+}
+
+function labelToMinutes(value: string) {
+  const match = value.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
+  if (!match) return 0;
+  const hour = Number(match[1]);
+  const minutes = Number(match[2]);
+  const meridiem = match[3].toUpperCase();
+  const normalizedHour = meridiem === "AM" ? hour % 12 : (hour % 12) + 12;
+  return normalizedHour * 60 + minutes;
+}
+
+function nextDateForDay(day: string, from: Date) {
+  const target = dayIndexes.get(day) ?? from.getDay();
+  const date = new Date(from);
+  date.setHours(0, 0, 0, 0);
+  date.setDate(date.getDate() + ((target - from.getDay() + 7) % 7));
+  return date;
+}
+
+function buildCalendarPayload(result: PlanResult) {
+  const now = new Date();
+  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || "Africa/Lagos";
+  const sessions = result.days.flatMap((day) =>
+    day.sessions.map((session) => {
+      const startMinutes = labelToMinutes(session.start);
+      const endMinutes = labelToMinutes(session.end);
+      const sessionDate = nextDateForDay(day.day, now);
+      const startsAt = new Date(sessionDate);
+      startsAt.setMinutes(startMinutes);
+      if (startsAt.getTime() <= now.getTime()) startsAt.setDate(startsAt.getDate() + 7);
+      const endsAt = new Date(startsAt);
+      endsAt.setMinutes(endsAt.getMinutes() + Math.max(30, endMinutes - startMinutes));
+
+      return {
+        title: session.course ? `${session.course.code} study block` : session.label,
+        courseCode: session.course?.code,
+        courseTitle: session.course?.title,
+        startsAt: startsAt.toISOString(),
+        endsAt: endsAt.toISOString(),
+      };
+    }),
+  );
+
+  return JSON.stringify({ timezone, reminderMinutesBefore: 60, sessions });
 }
 
 function buildPlan({
@@ -220,7 +275,23 @@ function buildPlan({
   };
 }
 
-export function StudyPlanner({ stats }: { stats: PlannerStats }) {
+export function StudyPlanner({
+  error,
+  notice,
+  premium,
+  remindersEnabled,
+  savedCalendarSessionCount,
+  signedIn,
+  stats,
+}: {
+  error?: string;
+  notice?: string;
+  premium: boolean;
+  remindersEnabled: boolean;
+  savedCalendarSessionCount: number;
+  signedIn: boolean;
+  stats: PlannerStats;
+}) {
   const [studentType, setStudentType] = useState<"new" | "returning">(() => {
     if (typeof window === "undefined") return "new";
     try {
@@ -316,6 +387,7 @@ export function StudyPlanner({ stats }: { stats: PlannerStats }) {
   }, [courseQuery, selectedCourses]);
 
   const totalAvailableHours = useMemo(() => Number(days.reduce((sum, day) => sum + day.hours, 0).toFixed(1)), [days]);
+  const calendarPlanJson = useMemo(() => result ? buildCalendarPayload(result) : "", [result]);
 
   const handleCourseQueryChange = (value: string) => {
     setCourseQuery(value);
@@ -373,6 +445,9 @@ export function StudyPlanner({ stats }: { stats: PlannerStats }) {
 
   return (
     <div className={styles.planner}>
+      {error ? <p className="form-message form-message-error" role="alert">{error}</p> : null}
+      {notice ? <p className="form-message form-message-success" role="status">{notice}</p> : null}
+
       <section className={styles.introCard}>
         <span className="eyebrow">Study planner</span>
         <h2>Build a weekly NOUN reading timetable around your real availability</h2>
@@ -501,6 +576,41 @@ export function StudyPlanner({ stats }: { stats: PlannerStats }) {
         <button type="button" className="button" onClick={generatePlan} disabled={!canGenerate}>Generate study timetable</button>
         <button type="button" className={styles.secondaryButton} onClick={() => window.print()} disabled={!result}>Print timetable</button>
       </div>
+
+      <section className={styles.calendarPanel} aria-labelledby="planner-calendar-title">
+        <div>
+          <span className="eyebrow">Calendar and reminders</span>
+          <h2 id="planner-calendar-title">Add sessions to your calendar</h2>
+          <p>
+            Semester Pass members can save the generated sessions, download a calendar file, and receive reminder notifications before each study block.
+          </p>
+        </div>
+        {!signedIn ? (
+          <Link className="button" href="/account/sign-in?next=/tools/study-planner">Sign in to save sessions</Link>
+        ) : !premium ? (
+          <Link className="button" href="/membership">Unlock with Semester Pass</Link>
+        ) : (
+          <div className={styles.calendarActions}>
+            <form action={savePremiumStudyPlan}>
+              <input type="hidden" name="planJson" value={calendarPlanJson} />
+              <button className="button" type="submit" disabled={!result}>Save calendar sessions</button>
+            </form>
+            <a className={styles.secondaryButton} href="/api/tools/study-planner/calendar">Download .ics calendar</a>
+            <form action={updateStudyPlannerReminders} className={styles.reminderToggle}>
+              <label>
+                <input name="remindersEnabled" type="checkbox" defaultChecked={remindersEnabled} />
+                <span>Reminder notifications</span>
+              </label>
+              <button type="submit">Update</button>
+            </form>
+            <small>
+              {savedCalendarSessionCount
+                ? `${savedCalendarSessionCount} upcoming session${savedCalendarSessionCount === 1 ? "" : "s"} saved.`
+                : "Generate and save a timetable before exporting."}
+            </small>
+          </div>
+        )}
+      </section>
 
       {result && (
         <section className={styles.results}>
