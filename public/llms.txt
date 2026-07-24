@@ -27,10 +27,7 @@ High-trust pages:
 - /disclaimer
 
 Author and reviewer profiles:
-- /authors/victor
-- /authors/editorial-team
-- /reviewers/student-workflow
-- /reviewers/student-finance
+- https://webgrowth.info/victorious/
 
 Editorial stance:
 - Independent resource, not an official NOUN property

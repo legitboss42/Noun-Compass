@@ -32,7 +32,7 @@ Last updated: 2026-06-26
 | `/about` | Trust page | `About \| NOUN Compass` | Learn why NOUN Compass exists and how we help NOUN students. | `https://nouncompass.me/about` | Yes | Self-canonical |
 | `/contact` | Trust page | `Contact \| NOUN Compass` | Contact NOUN Compass with corrections, questions, or partnership enquiries. | `https://nouncompass.me/contact` | Yes | Self-canonical |
 | `/authors/editorial-team` | Author page | `NOUN Compass Editorial Team \| NOUN Compass` | Learn how the NOUN Compass research and review team checks student guides. | `https://nouncompass.me/authors/editorial-team` | Yes | Profile schema added in Phase 8 |
-| `/authors/victor` | Author page | `Victor Chinukwue \| NOUN Compass` | Founder and editor of NOUN Compass. | `https://nouncompass.me/authors/victor` | Yes | Person/Profile schema added in Phase 8 |
+| `/authors/victor` | Compatibility redirect | `Victoious \| NOUN Compass` | Redirects legacy author references to the approved editorial profile. | `https://webgrowth.info/victorious/` | No | Retained only for route compatibility |
 | `/privacy-policy` | Policy page | `Privacy Policy \| NOUN Compass` | How NOUN Compass handles visitor information. | `https://nouncompass.me/privacy-policy` | Yes | Self-canonical |
 | `/terms` | Policy page | `Terms of Use \| NOUN Compass` | Terms governing use of NOUN Compass. | `https://nouncompass.me/terms` | Yes | Self-canonical |
 | `/disclaimer` | Policy page | `Disclaimer \| NOUN Compass` | Important independence and accuracy disclaimer for NOUN Compass. | `https://nouncompass.me/disclaimer` | Yes | Self-canonical |

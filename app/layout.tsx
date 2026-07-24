@@ -1,15 +1,26 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Manrope, Sora } from "next/font/google";
 import Script from "next/script";
 import { Suspense } from "react";
 import { BackToTopButton } from "@/components/back-to-top-button";
+import { MobileBottomNavigation } from "@/components/homepage/home-interactions";
 import { ScrollReset } from "@/components/scroll-reset";
 import { Footer, Header } from "@/components/site-shell";
 import { site } from "@/data/site";
 import { EDITORIAL_PROFILE_URL } from "@/lib/editorial";
 import "./globals.css";
+import "./sitewide.css";
 
-const inter = Inter({ variable: "--font-body", subsets: ["latin"], weight: ["400", "600", "700", "800"] });
+const manrope = Manrope({
+  variable: "--font-body",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+});
+const sora = Sora({
+  variable: "--font-display",
+  subsets: ["latin"],
+  weight: ["500", "600", "700", "800"],
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -109,5 +120,5 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       "query-input": "required name=search_term_string",
     },
   };
-  return <html lang="en" className={inter.variable}><head><Script id="scroll-reset-bootstrap" strategy="beforeInteractive">{scrollResetBootstrap}</Script><Script id="google-analytics-loader" strategy="afterInteractive">{analyticsLoader}</Script></head><body><Suspense fallback={null}><ScrollReset /></Suspense><a className="skip-link" href="#main-content">Skip to content</a><Header />{children}<BackToTopButton /><Footer /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organization) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(website) }} /></body></html>;
+  return <html lang="en" className={`${manrope.variable} ${sora.variable}`}><head><Script id="scroll-reset-bootstrap" strategy="beforeInteractive">{scrollResetBootstrap}</Script><Script id="google-analytics-loader" strategy="afterInteractive">{analyticsLoader}</Script></head><body><Suspense fallback={null}><ScrollReset /></Suspense><a className="skip-link" href="#main-content">Skip to content</a><Header />{children}<BackToTopButton /><Footer /><MobileBottomNavigation /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organization) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(website) }} /></body></html>;
 }

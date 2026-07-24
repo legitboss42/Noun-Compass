@@ -1,8 +1,10 @@
 import { importTimetable, publishSchedule } from "../actions";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { requirePermission } from "@/lib/platform/admin-auth";
 
 export default async function AdminSchedulesPage({ searchParams }: { searchParams: Promise<{ error?: string; notice?: string }> }) {
   const params = await searchParams;
+  await requirePermission("schedules.write", "/admin/schedules");
   const admin = createAdminClient();
   const [{ data: versions }, { data: entries }] = admin ? await Promise.all([
     admin.from("exam_schedule_versions").select("id,label,exam_mode,status,source_url,source_checksum,created_at,academic_terms(name,session_code)").order("created_at", { ascending: false }).limit(20),

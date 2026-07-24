@@ -1,8 +1,13 @@
-.calculator { display: grid; gap: 28px; }
+.calculator {
+  min-width: 0;
+  display: grid;
+  gap: 28px;
+}
 .introCard,
 .panel,
 .results,
 .guideCard {
+  min-width: 0;
   border: 1px solid var(--line);
   background: white;
 }
@@ -82,6 +87,8 @@
   font-size: .8rem;
 }
 .tableWrap {
+  min-width: 0;
+  max-width: 100%;
   overflow-x: auto;
   border: 1px solid var(--line);
 }

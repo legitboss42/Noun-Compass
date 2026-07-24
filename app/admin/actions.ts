@@ -3,7 +3,12 @@
 import { createHash, randomUUID } from "node:crypto";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { requireRole } from "@/lib/platform/auth";
+import { requirePermission } from "@/lib/platform/admin-auth";
+import {
+  requireActionConfirmation,
+  requireAdminReason,
+} from "@/lib/platform/admin-workflows";
+import { writeAuditLog } from "@/lib/platform/audit";
 import { normalizeCourseCode } from "@/lib/platform/course-codes";
 import { parseQuestionCsv } from "@/lib/platform/question-import";
 import { isOfficialNounSourceUrl, parseTimetableCsv } from "@/lib/platform/timetable-import";
@@ -12,7 +17,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 const text = (formData: FormData, name: string) => String(formData.get(name) ?? "").trim();
 
 export async function createQuestion(formData: FormData) {
-  const { user } = await requireRole(["content_editor", "academic_reviewer", "super_admin"], "/admin/questions");
+  const { user } = await requirePermission("questions.write", "/admin/questions");
   const admin = createAdminClient(); if (!admin) redirect("/admin/questions?error=Database+not+configured");
   const courseCode = normalizeCourseCode(text(formData, "courseCode"));
   const { data: bank } = await admin.from("question_banks").select("id").eq("course_code", courseCode).maybeSingle();
@@ -33,15 +38,27 @@ export async function createQuestion(formData: FormData) {
     await admin.from("questions").delete().eq("id", question.id);
     redirect("/admin/questions?error=Question+options+could+not+be+created");
   }
-  await admin.from("audit_logs").insert({ actor_id: user.id, action: "question.created", entity_type: "question", entity_id: question.id, details: { courseCode } });
+  await writeAuditLog({ actorId: user.id, action: "question.created", targetType: "question", targetId: question.id, resultingState: { status: "draft", courseCode } });
   revalidatePath("/admin/questions"); redirect("/admin/questions?notice=Draft+question+created");
 }
 
 export async function changeQuestionStatus(formData: FormData) {
   const status = text(formData, "status"); const questionId = text(formData, "questionId");
   const reviewerStatuses = ["published", "retired"];
-  const { user } = await requireRole(reviewerStatuses.includes(status) ? ["academic_reviewer", "super_admin"] : ["content_editor", "academic_reviewer", "super_admin"], "/admin/questions");
+  const { user } = await requirePermission(reviewerStatuses.includes(status) ? "questions.publish" : "questions.write", "/admin/questions");
   if (!["review", "published", "retired"].includes(status)) redirect("/admin/questions?error=Invalid+question+state");
+  let reason: string | null = null;
+  if (status === "published" || status === "retired") {
+    try {
+      reason = requireAdminReason(text(formData, "reason"));
+      requireActionConfirmation(
+        text(formData, "confirmation"),
+        status === "published" ? "PUBLISH" : "RETIRE",
+      );
+    } catch (error) {
+      redirect(`/admin/questions/${questionId}?error=${encodeURIComponent(error instanceof Error ? error.message : "Confirmation failed.")}`);
+    }
+  }
   const admin = createAdminClient(); if (!admin) redirect("/admin/questions?error=Database+not+configured");
   const { data: question } = await admin.from("questions").select("id,status,current_version").eq("id", questionId).maybeSingle();
   if (!question) redirect("/admin/questions?error=Question+not+found");
@@ -55,13 +72,15 @@ export async function changeQuestionStatus(formData: FormData) {
   }
   const { error } = await admin.from("questions").update({ status, reviewed_by: reviewerStatuses.includes(status) ? user.id : null, reviewed_at: reviewerStatuses.includes(status) ? new Date().toISOString() : null }).eq("id", questionId);
   if (error) redirect("/admin/questions?error=Question+status+could+not+be+updated");
-  await admin.from("content_reviews").insert({ entity_type: "question", entity_id: questionId, decision: status === "review" ? "submitted" : status === "published" ? "approved" : "retired", reviewer_id: user.id });
-  await admin.from("audit_logs").insert({ actor_id: user.id, action: `question.${status}`, entity_type: "question", entity_id: questionId });
+  await admin.from("content_reviews").insert({ entity_type: "question", entity_id: questionId, decision: status === "review" ? "submitted" : status === "published" ? "approved" : "retired", notes: reason, reviewer_id: user.id });
+  await writeAuditLog({ actorId: user.id, action: `question.${status}`, targetType: "question", targetId: questionId, reason, previousState: { status: question.status }, resultingState: { status } });
   revalidatePath("/admin/questions");
+  revalidatePath(`/admin/questions/${questionId}`);
+  redirect(`/admin/questions/${questionId}?notice=Question+status+updated`);
 }
 
 export async function importQuestionCsv(formData: FormData) {
-  const { user } = await requireRole(["content_editor", "academic_reviewer", "super_admin"], "/admin/questions");
+  const { user } = await requirePermission("questions.write", "/admin/questions");
   const parsed = parseQuestionCsv(text(formData, "csv"));
   if (parsed.errors.length) redirect(`/admin/questions?error=${encodeURIComponent(parsed.errors.slice(0, 8).join(" "))}`);
   const admin = createAdminClient();
@@ -126,7 +145,7 @@ export async function importQuestionCsv(formData: FormData) {
 }
 
 export async function publishQuestionBank(formData: FormData) {
-  const { user } = await requireRole(["academic_reviewer", "super_admin"], "/admin/questions");
+  const { user } = await requirePermission("questions.publish", "/admin/questions");
   const bankId = text(formData, "bankId"); const admin = createAdminClient(); if (!admin) redirect("/admin/questions?error=Database+not+configured");
   const { data: questions } = await admin.from("questions").select("id,current_version,sample").eq("bank_id", bankId).eq("status", "published");
   const questionIds = (questions ?? []).map((question) => question.id);
@@ -143,12 +162,12 @@ export async function publishQuestionBank(formData: FormData) {
   const validSamples = (questions ?? []).filter((question) => question.sample && validQuestionIds.has(question.id)).length;
   if (validPublished < 100 || validSamples < 15) redirect(`/admin/questions?error=${encodeURIComponent(`Bank integrity gate failed: ${validPublished} complete approved questions and ${validSamples} complete samples.`)}`);
   await admin.from("question_banks").update({ status: "published", reviewed_by: user.id, reviewed_at: new Date().toISOString() }).eq("id", bankId);
-  await admin.from("audit_logs").insert({ actor_id: user.id, action: "question_bank.published", entity_type: "question_bank", entity_id: bankId, details: { published: validPublished, samples: validSamples } });
+  await writeAuditLog({ actorId: user.id, action: "question_bank.published", targetType: "question_bank", targetId: bankId, resultingState: { status: "published" }, metadata: { published: validPublished, samples: validSamples } });
   revalidatePath("/admin/questions"); revalidatePath("/dashboard/practice"); redirect("/admin/questions?notice=Question+bank+published");
 }
 
 export async function importTimetable(formData: FormData) {
-  const { user } = await requireRole(["content_editor", "academic_reviewer", "super_admin"], "/admin/schedules");
+  const { user } = await requirePermission("schedules.write", "/admin/schedules");
   const csv = text(formData, "csv"); const parsed = parseTimetableCsv(csv);
   if (parsed.errors.length) redirect(`/admin/schedules?error=${encodeURIComponent(parsed.errors.slice(0, 5).join(" "))}`);
   const sourceUrl = text(formData, "sourceUrl"); const sessionCode = text(formData, "sessionCode");
@@ -165,7 +184,7 @@ export async function importTimetable(formData: FormData) {
 }
 
 export async function publishSchedule(formData: FormData) {
-  const { user } = await requireRole(["academic_reviewer", "super_admin"], "/admin/schedules"); const versionId = text(formData, "versionId");
+  const { user } = await requirePermission("schedules.publish", "/admin/schedules"); const versionId = text(formData, "versionId");
   const admin = createAdminClient(); if (!admin) redirect("/admin/schedules?error=Database+not+configured");
   const { data: version } = await admin.from("exam_schedule_versions").select("source_url,source_checksum,status").eq("id", versionId).maybeSingle();
   if (!version || version.status !== "draft" || !isOfficialNounSourceUrl(version.source_url) || !/^[a-f0-9]{64}$/i.test(version.source_checksum)) redirect("/admin/schedules?error=Schedule+source+or+checksum+failed+the+release+gate");

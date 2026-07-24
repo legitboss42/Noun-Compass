@@ -1,5 +1,6 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import { enforceNewsletterRateLimit, normalizeNewsletterEmail, syncSubscriberToBrevo } from "@/lib/newsletter";
+import { getBooleanPlatformSetting } from "@/lib/platform/runtime-settings";
 
 export const runtime = "nodejs";
 
@@ -10,6 +11,12 @@ export async function POST(request: Request) {
     const payload = (await request.json()) as { email?: unknown; consent?: unknown; website?: unknown; source?: unknown };
     if (typeof payload.website === "string" && payload.website.trim()) {
       return Response.json({ message: "Thanks. Your email has been saved." }, { headers: responseHeaders });
+    }
+    if (!(await getBooleanPlatformSetting("newsletter_available", true))) {
+      return Response.json(
+        { message: "Email subscriptions are temporarily unavailable." },
+        { status: 503, headers: responseHeaders },
+      );
     }
     if (payload.consent !== true) throw new Error("Please confirm that you agree to receive email updates.");
 

@@ -1,12 +1,21 @@
 import { NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/platform/auth";
 import { createQuestionStore, StoreError } from "@/lib/platform/question-store";
+import { getBooleanPlatformSetting } from "@/lib/platform/runtime-settings";
 
 const REPORT_TYPES = new Set(["wrong_answer", "unclear_question", "duplicate_question", "poor_explanation", "incorrect_reference", "formatting_issue"]);
 
 export async function POST(request: Request) {
   const user = await getCurrentUser();
   if (!user) return NextResponse.json({ message: "Sign in to report a question." }, { status: 401 });
+  if (
+    !(await getBooleanPlatformSetting("question_reports_available", true))
+  ) {
+    return NextResponse.json(
+      { message: "Question reporting is temporarily unavailable." },
+      { status: 503 },
+    );
+  }
   const body = await request.json().catch(() => null) as { questionId?: string; questionVersionId?: string; sessionId?: string; reportType?: string; details?: string } | null;
   if (!body?.questionId || !body.questionVersionId || !body.reportType || !REPORT_TYPES.has(body.reportType) || (body.details?.length ?? 0) > 1000) return NextResponse.json({ message: "Invalid question report." }, { status: 400 });
   try {

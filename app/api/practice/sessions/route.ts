@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/platform/auth";
 import { normalizeCourseCode } from "@/lib/platform/course-codes";
 import { createQuestionStore, StoreError, type PracticeMode } from "@/lib/platform/question-store";
+import { getBooleanPlatformSetting } from "@/lib/platform/runtime-settings";
 
 export async function POST(request: Request) {
   const user = await getCurrentUser();
@@ -10,6 +11,15 @@ export async function POST(request: Request) {
   const courseCode = normalizeCourseCode(body?.courseCode ?? "");
   const modes: PracticeMode[] = ["diagnostic", "practice", "timed-mock", "revision"];
   if (!courseCode || !modes.includes(body?.mode as PracticeMode)) return NextResponse.json({ message: "Invalid practice request." }, { status: 400 });
+  if (
+    body?.mode === "diagnostic" &&
+    !(await getBooleanPlatformSetting("diagnostic_available", true))
+  ) {
+    return NextResponse.json(
+      { message: "The free diagnostic is temporarily unavailable." },
+      { status: 503 },
+    );
+  }
   try {
     const result = await createQuestionStore().start(user.id, {
       courseCode,

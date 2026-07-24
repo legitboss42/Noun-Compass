@@ -21,8 +21,21 @@ Production checks:
 
 ```bash
 npm run lint
+npx tsc --noEmit
+npm run test:platform
 npm run build
 ```
+
+## Administration dashboard
+
+The production operations dashboard is available under `/admin` for authorised
+Supabase roles. It covers users, roles, memberships, payments, question banks,
+filesystem article validation, support, analytics, settings, schedules, and
+audit history. Privileged operations remain server-only and permission-checked.
+
+See [docs/admin-dashboard.md](docs/admin-dashboard.md) for the route map,
+permission matrix, environment variables, migrations, bootstrap process,
+operational procedures, deployment checklist, and rollback guidance.
 
 ## Content
 

@@ -4,9 +4,14 @@ import { isCheckoutAvailable } from "@/lib/platform/config";
 import { createPaymentReference, initializeFlutterwaveTransaction } from "@/lib/platform/flutterwave";
 import { prepareCheckoutPaymentAttempt } from "@/lib/platform/checkout";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { getBooleanPlatformSetting } from "@/lib/platform/runtime-settings";
 
 export async function POST(request: Request) {
-  if (!isCheckoutAvailable()) return NextResponse.json({ message: "Checkout is not available yet." }, { status: 503 });
+  const checkoutEnabled = await getBooleanPlatformSetting(
+    "checkout_available",
+    true,
+  );
+  if (!checkoutEnabled || !isCheckoutAvailable()) return NextResponse.json({ message: "Checkout is not available yet." }, { status: 503 });
   const user = await getCurrentUser();
   if (!user?.email) return NextResponse.json({ message: "Sign in with a verified email before checkout." }, { status: 401 });
 
