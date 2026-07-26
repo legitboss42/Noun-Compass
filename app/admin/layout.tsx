@@ -21,6 +21,7 @@ const links: readonly (readonly [string, string, AdminPermission])[] = [
   ["Memberships", "/admin/memberships", "memberships.read"],
   ["Payments", "/admin/payments", "payments.read"],
   ["Questions", "/admin/questions", "questions.read"],
+  ["Coverage", "/admin/question-coverage", "questions.read"],
   ["Articles", "/admin/articles", "articles.read"],
   ["Support", "/admin/support", "support.read"],
   ["Analytics", "/admin/analytics", "analytics.read"],

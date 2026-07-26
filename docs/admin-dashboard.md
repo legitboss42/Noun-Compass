@@ -25,6 +25,7 @@ server-only Supabase service-role client.
 | `/admin/payments/[reference]` | Attempt, provider summary, event, activation, and audit detail |
 | `/admin/questions` | Question-bank readiness, import, drafting, filters, and review queue |
 | `/admin/questions/[question-id]` | Version editor, publication workflow, reports, and history |
+| `/admin/question-coverage` | Staff-only sanitised course coverage, readiness, and priority reporting |
 | `/admin/articles` | Repository MDX inventory and validation |
 | `/admin/support` | Prioritised, paginated ticket queue |
 | `/admin/support/[ticket-id]` | Conversation, staff notes, assignment, status, and context |
