@@ -119,3 +119,102 @@
   .exportActions > div:nth-child(2) { display: grid; margin-top: 12px; }
   .exportActions button { width: 100%; min-height: 44px; }
 }
+
+.analyzer {
+  display: grid;
+  gap: 18px;
+}
+
+.analyzerEntry {
+  border: 1px solid #d8e7de;
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 90% 8%, rgba(7, 148, 71, .11), transparent 25%),
+    linear-gradient(145deg, #fff, #f7fcf9);
+  box-shadow: 0 22px 58px rgba(9, 35, 24, .08);
+}
+
+.progressiveSelect select,
+.progressiveSelect button,
+.changeSelection,
+.exportActions,
+.feeSection,
+.feeSummary,
+.finalTotal {
+  border-radius: 12px;
+}
+
+.progressiveSelect select:focus-visible,
+.progressiveSelect button:focus-visible,
+.changeSelection:focus-visible,
+.exportActions button:focus-visible {
+  outline: 3px solid rgba(7, 148, 71, .22);
+  outline-offset: 3px;
+}
+
+.rateAudit {
+  width: 100%;
+  border: 1px solid #ead9a1;
+  border-left: 5px solid #d7ad36;
+  border-radius: 16px;
+}
+
+.generated {
+  width: 100%;
+  border: 1px solid #dce7df;
+  border-radius: 24px;
+  background: #f4f9f6;
+}
+
+.resultHeader {
+  background:
+    radial-gradient(circle at 92% 0%, rgba(91, 229, 151, .2), transparent 26%),
+    linear-gradient(145deg, #003f2d, #071d2c);
+}
+
+.summaryCards,
+.feeSummaryGrid {
+  gap: 10px;
+  padding: 10px;
+  border: 0;
+  background: transparent;
+}
+
+.summaryCards > div,
+.feeSummaryGrid > div {
+  border: 1px solid #dce7df;
+  border-radius: 13px;
+}
+
+.summaryCards .grandCard,
+.feeSummaryGrid .totalCard {
+  background: linear-gradient(145deg, #08783f, #045b35);
+}
+
+.sectionTitle {
+  background: #eef8f2;
+}
+
+.exportActions {
+  width: 100%;
+  border-color: #d8e7de;
+  box-shadow: 0 16px 40px rgba(9, 35, 24, .06);
+}
+
+.finalTotal {
+  gap: 0;
+  background: #071d2c;
+}
+
+@media (max-width: 720px) {
+  .analyzerEntry,
+  .generated {
+    border-radius: 18px;
+  }
+
+  .summaryCards,
+  .feeSummaryGrid {
+    gap: 8px;
+    padding: 8px;
+  }
+}

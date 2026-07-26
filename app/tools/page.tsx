@@ -2,8 +2,99 @@ import Link from "next/link";
 import { Breadcrumbs, DisclaimerBox } from "@/components/article-elements";
 import { createMetadata } from "@/lib/metadata";
 
-export const metadata = createMetadata("NOUN Student Tools", "Practical NOUN tools for checking results, estimating CGPA, reviewing fees, planning study time, and starting free exam practice.", "/tools");
+export const metadata = createMetadata(
+  "NOUN Student Tools",
+  "Use practical NOUN tools for results, school fees, CGPA, study planning, and exam diagnostics.",
+  "/tools",
+);
+
+const tools = [
+  {
+    id: "result-checker",
+    number: "01",
+    title: "NOUN result checker",
+    copy: "Enter your matriculation number to open your result statement on the official NOUN result portal.",
+    href: "/tools/result-checker",
+    action: "Check your result",
+  },
+  {
+    id: "fee-guide",
+    number: "02",
+    title: "School fees checker",
+    copy: "Review the available semester breakdown by faculty, programme, level, and semester, then confirm the final amount on your portal.",
+    href: "/fees",
+    action: "Check your school fees",
+  },
+  {
+    id: "study-planner",
+    number: "03",
+    title: "NOUN study planner",
+    copy: "Build a weekly timetable around your courses, free hours, workdays, and study rhythm.",
+    href: "/tools/study-planner",
+    action: "Open the study planner",
+  },
+  {
+    id: "cgpa-calculator",
+    number: "04",
+    title: "NOUN CGPA calculator",
+    copy: "Enter course units and final scores to estimate grade points, semester GPA, and your running CGPA.",
+    href: "/tools/cgpa-calculator",
+    action: "Open the CGPA calculator",
+  },
+  {
+    id: "exam-diagnostic",
+    number: "05",
+    title: "Free exam diagnostic",
+    copy: "Sign in with a free account to try checked sample questions and see where you need more work.",
+    href: "/dashboard/practice",
+    action: "Start free diagnostic",
+  },
+] as const;
 
 export default function ToolsPage() {
-  return <main id="main-content"><div className="category-hero"><div className="container"><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Tools" }]} /><span className="eyebrow">Plan with clarity</span><h1>Student tools</h1><p>Useful tools for checking records, planning fees, estimating CGPA, organizing study time, and testing your exam readiness.</p></div></div><div className="container narrow section"><section id="result-checker" className="tool-panel"><span className="tool-number">01</span><h2>NOUN result checker</h2><p>Enter your matriculation number to open your result statement on the official NOUN result portal.</p><Link className="button" href="/tools/result-checker">Check your result</Link></section><section id="fee-guide" className="tool-panel"><span className="tool-number">02</span><h2>School fees checker</h2><p>Review the available semester breakdown by faculty, programme, level, and semester. Use the result to plan, then confirm the final amount on your portal before you pay.</p><Link className="button" href="/fees">Check your school fees</Link></section><section id="study-planner" className="tool-panel"><span className="tool-number">03</span><h2>NOUN study planner</h2><p>Build a weekly study timetable around your courses, free hours, workdays, and study rhythm. Course suggestions come from the data already listed on NounCompass.</p><Link className="button" href="/tools/study-planner">Open the study planner</Link></section><section id="cgpa-calculator" className="tool-panel"><span className="tool-number">04</span><h2>NOUN CGPA calculator</h2><p>Enter your course units and final scores to estimate grade points, quality points, semester GPA, and your running CGPA.</p><Link className="button" href="/tools/cgpa-calculator">Open the CGPA calculator</Link></section><section id="exam-diagnostic" className="tool-panel"><span className="tool-number">05</span><h2>Free exam diagnostic</h2><p>Sign in with a free account to try sample questions and see where you need more work. Full practice, timed mocks, and revision tools remain part of the Semester Pass.</p><Link className="button" href="/dashboard/practice">Start free diagnostic</Link><p><Link href="/exam-prep">See supported course coverage first</Link></p></section><DisclaimerBox /></div></main>;
+  return (
+    <main id="main-content" className="experience-page">
+      <div className="category-hero">
+        <div className="container">
+          <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Tools" }]} />
+          <span className="eyebrow">Plan with clarity</span>
+          <h1>Powerful tools for smarter study</h1>
+          <p>
+            Check records, plan fees, estimate CGPA, organise study time, and
+            test your exam readiness with tools built around real NOUN student
+            tasks.
+          </p>
+        </div>
+      </div>
+      <div className="container section tools-directory">
+        <div className="tools-directory-grid">
+          {tools.map((tool) => (
+            <section id={tool.id} className="tool-panel" key={tool.id}>
+              <span className="tool-number">{tool.number}</span>
+              <h2>{tool.title}</h2>
+              <p>{tool.copy}</p>
+              <Link className="button" href={tool.href}>
+                {tool.action}
+              </Link>
+              {tool.id === "exam-diagnostic" ? (
+                <Link className="tool-secondary-link" href="/exam-prep">
+                  See supported course coverage
+                </Link>
+              ) : null}
+            </section>
+          ))}
+        </div>
+        <aside className="tools-directory-note">
+          <span className="eyebrow">Private by design</span>
+          <h2>Use only the information each tool needs</h2>
+          <p>
+            NounCompass does not ask for your NOUN portal password, payment PIN,
+            OTP, or identity documents. Official portal records remain the final
+            authority.
+          </p>
+        </aside>
+        <DisclaimerBox />
+      </div>
+    </main>
+  );
 }

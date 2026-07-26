@@ -23,8 +23,8 @@ export default function FeesPage() {
     description: "Check NOUN fee breakdowns and browse semester course lists with the NounCompass fees checker.",
   };
 
-  return <main id="main-content">
-    <div className={styles.hero}><div className={`container ${styles.heroInner}`}>
+  return <main id="main-content" className="experience-page">
+    <div className="category-hero"><div className="container">
       <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "School Fees Checker" }]} />
       <span className="eyebrow">Plan before you pay</span>
       <h1>NOUN school fees checker</h1>

@@ -1,5 +1,9 @@
 import { notFound } from "next/navigation";
-import { AdminPageHeader } from "@/components/admin/admin-ui";
+import {
+  AdminDataTable,
+  AdminPageHeader,
+  type AdminColumn,
+} from "@/components/admin/admin-ui";
 import { requirePermission } from "@/lib/platform/admin-auth";
 import { formatAdminDate } from "@/lib/platform/admin-format";
 import { createAdminClient } from "@/lib/supabase/admin";
@@ -39,6 +43,19 @@ export default async function AdminSectionPage({
     .limit(100);
   if (error) throw error;
   const rows = (data ?? []) as unknown as Record<string, unknown>[];
+  const columns: AdminColumn<Record<string, unknown>>[] = config.columns
+    .split(",")
+    .slice(1)
+    .map((column) => ({
+      key: column,
+      header: column.replaceAll("_", " "),
+      render: (row) =>
+        row[column] == null
+          ? "—"
+          : column.endsWith("_at")
+            ? formatAdminDate(String(row[column]))
+            : String(row[column]),
+    }));
 
   return (
     <>
@@ -48,34 +65,14 @@ export default async function AdminSectionPage({
         description={config.description}
       />
       <section className="admin-panel">
-        <div className="admin-table-wrap">
-          <table className="admin-table">
-            <caption>{config.title}</caption>
-            <thead>
-              <tr>
-                {config.columns.split(",").slice(1).map((column) => (
-                  <th key={column} scope="col">{column.replaceAll("_", " ")}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((row) => (
-                <tr key={String(row.id)}>
-                  {config.columns.split(",").slice(1).map((column) => (
-                    <td key={column}>
-                      {row[column] == null
-                        ? "—"
-                        : column.endsWith("_at")
-                          ? formatAdminDate(String(row[column]))
-                          : String(row[column])}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        {!rows.length ? <p>No records are currently available.</p> : null}
+        <AdminDataTable
+          caption={config.title}
+          columns={columns}
+          rows={rows}
+          rowKey={(row) => String(row.id)}
+          emptyTitle={`No ${config.title.toLowerCase()}`}
+          emptyDescription="No records are currently available for this operational section."
+        />
       </section>
     </>
   );
