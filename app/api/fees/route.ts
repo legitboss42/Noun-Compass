@@ -1,4 +1,5 @@
 import { extractedCurricula, nounUpdateFeeSnapshotRetrievedAt, pureduFeeSnapshotRetrievedAt } from "@/data/curricula";
+import { courseMaterialDownloadUrl, findCourseMaterial } from "@/lib/course-materials";
 
 export const runtime = "nodejs";
 
@@ -40,9 +41,20 @@ export async function GET(request: Request) {
     return Response.json({ error: "Fee result not found." }, { status: 404, headers: apiHeaders() });
   }
 
+  const courses = foundSemester.courses.map((course) => {
+    const material = findCourseMaterial(course.code, course.title);
+    return {
+      ...course,
+      material: material ? {
+        title: material.title,
+        downloadUrl: courseMaterialDownloadUrl(material),
+      } : null,
+    };
+  });
+
   return Response.json({
     programme: { faculty: foundProgramme.faculty, program: foundProgramme.program },
     level: { level: foundLevel.level, label: foundLevel.label },
-    semester: foundSemester,
+    semester: { ...foundSemester, courses },
   }, { headers: apiHeaders() });
 }

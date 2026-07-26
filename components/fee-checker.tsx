@@ -1,12 +1,14 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import styles from "./fee-checker.module.css";
 
 type CatalogSemester = { semester: string; label: string; available: boolean };
 type CatalogLevel = { level: string; label: string; semesters: CatalogSemester[] };
 type CatalogProgramme = { faculty: string; program: string; levels: CatalogLevel[] };
-type Course = { code: string; title: string; units: number; status: string; courseFee: number; examFee: number };
+type CourseMaterialLink = { title: string; downloadUrl: string };
+type Course = { code: string; title: string; units: number; status: string; courseFee: number; examFee: number; material?: CourseMaterialLink | null };
 type FeeSemester = { semester: string; label: string; semesterFee: number; courses: Course[]; feeSource?: "puredu-live-snapshot" | "nounupdate-live-snapshot"; feeRetrievedAt?: string; sourceTotals?: { courseFee: number; examFee: number; semesterFee: number; allFees: number } };
 type FeeResult = { programme: { faculty: string; program: string }; level: { level: string; label: string }; semester: FeeSemester };
 
@@ -117,11 +119,77 @@ export function FeeChecker() {
 
     <aside className={styles.rateAudit}><div><strong>Latest fee updates we checked</strong><p>Main update: {snapshotDates.puredu ? formatDate(snapshotDates.puredu) : "pending"}; follow-up update: {snapshotDates.nounUpdate ? formatDate(snapshotDates.nounUpdate) : "pending"}. Check your portal before you pay.</p></div><a href="https://nou.edu.ng" target="_blank" rel="noreferrer">Visit official NOUN</a></aside>
 
-    {result && <><div ref={reportRef} className={`${styles.generated} fee-report-printable`}>
-      <div className={styles.resultHeader}><div><span className={styles.kicker}>NOUN Compass · Semester fee breakdown</span><h3>{result.programme.program}</h3><p>{newStudent ? "New student" : "Returning student"} · {result.level.label} · {result.semester.label} · {result.programme.faculty}</p></div><button type="button" className={styles.changeSelection} data-exportIgnore="true" onClick={() => setResult(null)}>Change selection</button></div>
-      <div className={styles.summaryCards}><div><span>Courses listed</span><strong>{courses.length}</strong><small>Compulsory and elective rows</small></div><div><span>Total credit units</span><strong>{totalUnits}</strong><small>Before elective selection</small></div><div><span>Course registration</span><strong>{feesAvailable ? formatNaira(courseTotal) : "Pending"}</strong><small>{feesAvailable ? `${feeSourceName} total shown here` : "No amount available yet"}</small></div><div className={styles.grandCard}><span>Exam registration</span><strong>{feesAvailable ? formatNaira(examTotal) : "Pending"}</strong><small>{feesAvailable ? `${feeSourceName} total shown here` : "No amount available yet"}</small></div></div>
-      <section className={styles.feeSection}><div className={styles.sectionTitle}><div><span>01</span><h4>Semester course and fee list</h4></div><strong>{courses.length} courses</strong></div><p className={styles.electiveNote}>Use this breakdown to plan your fees and review your course rows, then compare it with your current NOUN portal record.</p><div className={styles.tableWrap}><table><thead><tr><th>S/N</th><th>Course code</th><th>Course title</th><th>Units</th><th>Status</th><th>Course registration</th><th>Exam registration</th></tr></thead><tbody>{courses.map((course, index) => <tr key={`${course.code}-${index}`}><td>{index + 1}</td><td><strong>{course.code}</strong></td><td><span className={styles.courseTitle}>{course.title}</span><a className={styles.materialLink} data-export-ignore="true" href={`/course-materials?q=${encodeURIComponent(course.code)}`}>Open course library entry</a></td><td>{course.units}</td><td><span className={course.status === "C" ? styles.compulsory : styles.elective}>{course.status === "C" ? "Compulsory" : course.status === "E" ? "Elective" : course.status}</span></td><td>{feesAvailable ? formatNaira(course.courseFee) : "Pending"}</td><td>{feesAvailable ? formatNaira(course.examFee) : "Pending"}</td></tr>)}</tbody><tfoot><tr><td colSpan={3}>Visible course rows</td><td>{totalUnits} units</td><td>{coreCount} C · {electiveCount} E</td><td>{feesAvailable ? formatNaira(calculatedCourseTotal) : "Pending"}</td><td>{feesAvailable ? formatNaira(calculatedExamTotal) : "Pending"}</td></tr></tfoot></table></div></section>
-      <section className={styles.feeSummary} aria-labelledby="fee-summary-title"><div className={styles.sectionTitle}><div><span>02</span><h4 id="fee-summary-title">Estimated fee summary</h4></div><strong>All listed courses</strong></div><div className={styles.feeSummaryGrid}><div><span>{newStudent ? "New-student semester fee" : "Returning-student semester fee"}</span><strong>{feesAvailable ? formatNaira(result.semester.semesterFee) : "Pending"}</strong><small>Semester amount in checker</small></div><div><span>Course registration total</span><strong>{feesAvailable ? formatNaira(courseTotal) : "Pending"}</strong><small>All listed course rows</small></div><div><span>Exam registration total</span><strong>{feesAvailable ? formatNaira(examTotal) : "Pending"}</strong><small>All listed course rows</small></div><div className={styles.totalCard}><span>Total of all fees</span><strong>{feesAvailable ? formatNaira(completeTotal) : "Pending"}</strong><small>Semester + courses + exams</small></div></div><p className={styles.summaryNote}>{totalsMismatch ? `${feeSourceName}'s totals do not fully match the visible course-row sum in this checker. Compare carefully with your portal before you pay.` : "Use this result for planning, then confirm the final amount on your NOUN portal before payment."}</p></section>
-    </div><div className={styles.exportActions} aria-label="Export fee breakdown"><div><strong>Save this fee breakdown</strong><span>Print it, save it as a PDF, or download a clear PNG image.</span></div><div><button type="button" onClick={() => window.print()}>Print / Save as PDF</button><button type="button" onClick={downloadImage} disabled={exportingImage}>{exportingImage ? "Preparing image..." : "Download as image"}</button></div></div></>}
+    {result && <><article ref={reportRef} className={`${styles.generated} fee-report-printable`}>
+      <header className={styles.documentHeader}>
+        <Image src="/images/brand/nouncompass-logo.svg" alt="NOUN Compass" width={360} height={92} />
+        <span>Fee estimate</span>
+      </header>
+
+      <div className={styles.documentIntro}>
+        <div>
+          <span className={styles.kicker}>Plan clearly before you pay</span>
+          <h3>Your NOUN fee estimate</h3>
+          <p>A clear breakdown of the semester fees and courses in your selected programme.</p>
+        </div>
+        <button type="button" className={styles.changeSelection} data-export-ignore="true" onClick={() => setResult(null)}>Change selection</button>
+      </div>
+
+      <dl className={styles.studentSummary}>
+        <div><dt>Programme</dt><dd>{result.programme.program}</dd></div>
+        <div><dt>Faculty</dt><dd>{result.programme.faculty}</dd></div>
+        <div><dt>Level</dt><dd>{result.level.label}</dd></div>
+        <div><dt>Semester</dt><dd>{result.semester.label}</dd></div>
+        <div><dt>Student type</dt><dd>{newStudent ? "New student" : "Returning student"}</dd></div>
+      </dl>
+
+      <section className={styles.feeSummary} aria-labelledby="fee-summary-title">
+        <div className={styles.sectionTitle}><div><span>01</span><h4 id="fee-summary-title">Estimated fee summary</h4></div><strong>{courses.length} listed courses</strong></div>
+        <div className={styles.feeSummaryGrid}>
+          <div><span>{newStudent ? "New-student semester fee" : "Returning-student semester fee"}</span><strong>{feesAvailable ? formatNaira(result.semester.semesterFee) : "Pending"}</strong><small>Base semester amount</small></div>
+          <div><span>Course registration</span><strong>{feesAvailable ? formatNaira(courseTotal) : "Pending"}</strong><small>{totalUnits} credit units listed</small></div>
+          <div><span>Exam registration</span><strong>{feesAvailable ? formatNaira(examTotal) : "Pending"}</strong><small>Across the listed courses</small></div>
+          <div className={styles.totalCard}><span>Estimated total</span><strong>{feesAvailable ? formatNaira(completeTotal) : "Pending"}</strong><small>Semester + course + exam fees</small></div>
+        </div>
+      </section>
+
+      <section className={styles.feeSection}>
+        <div className={styles.sectionTitle}><div><span>02</span><h4>Semester courses and charges</h4></div><strong>{coreCount} compulsory · {electiveCount} elective</strong></div>
+        <p className={styles.electiveNote}>Review every course against your registration record. A material button appears only where an official-source PDF is indexed.</p>
+        <div className={styles.tableWrap}>
+          <table>
+            <thead><tr><th>S/N</th><th>Course</th><th>Units</th><th>Status</th><th>Course fee</th><th>Exam fee</th><th>Material</th></tr></thead>
+            <tbody>{courses.map((course, index) => <tr key={`${course.code}-${index}`}>
+              <td>{index + 1}</td>
+              <td><strong>{course.code}</strong><span className={styles.courseTitle}>{course.title}</span></td>
+              <td>{course.units}</td>
+              <td><span className={course.status === "C" ? styles.compulsory : styles.elective}>{course.status === "C" ? "Compulsory" : course.status === "E" ? "Elective" : course.status}</span></td>
+              <td>{feesAvailable ? formatNaira(course.courseFee) : "Pending"}</td>
+              <td>{feesAvailable ? formatNaira(course.examFee) : "Pending"}</td>
+              <td>{course.material
+                ? <a className={styles.materialLink} href={course.material.downloadUrl} target="_blank" rel="noopener noreferrer" title={`Download ${course.material.title}`}>Download PDF</a>
+                : <span className={styles.materialPending}>Not listed</span>}</td>
+            </tr>)}</tbody>
+            <tfoot><tr><td colSpan={2}>Listed course totals</td><td>{totalUnits} units</td><td>{coreCount} C · {electiveCount} E</td><td>{feesAvailable ? formatNaira(calculatedCourseTotal) : "Pending"}</td><td>{feesAvailable ? formatNaira(calculatedExamTotal) : "Pending"}</td><td>{courses.filter((course) => course.material).length} materials</td></tr></tfoot>
+          </table>
+        </div>
+      </section>
+
+      <section className={styles.beforePay} aria-labelledby="before-pay-title">
+        <div><span>03</span><h4 id="before-pay-title">Before you pay</h4></div>
+        <ol>
+          <li><strong>Verify your selection</strong><span>Confirm your programme, level and semester.</span></li>
+          <li><strong>Review the course rows</strong><span>Remove courses that are not on your portal record.</span></li>
+          <li><strong>Confirm the final amount</strong><span>Use the amount displayed on the official NOUN portal.</span></li>
+        </ol>
+      </section>
+
+      <p className={styles.summaryNote}>{totalsMismatch ? `${feeSourceName}'s totals do not fully match the visible course-row sum in this checker. Compare carefully with your portal before you pay.` : "Estimate only — confirm every amount and course on the official NOUN portal before payment."}</p>
+
+      <footer className={styles.documentFooter}>
+        <div><strong>Generated by NounCompass</strong><a href="https://nouncompass.me">nouncompass.me</a></div>
+        <span>Independent student guidance · Not an official NOUN invoice</span>
+                <span>Course list continues as needed</span>
+      </footer>
+    </article><div className={styles.exportActions} aria-label="Export fee breakdown"><div><strong>Save this fee estimate</strong><span>The PDF includes the fee summary, complete course list, and clickable course-material links.</span></div><div><button type="button" onClick={() => window.print()}>Print / Save as PDF</button><button type="button" onClick={downloadImage} disabled={exportingImage}>{exportingImage ? "Preparing image..." : "Download as image"}</button></div></div></>}
   </section>;
 }

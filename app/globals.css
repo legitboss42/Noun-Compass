@@ -773,6 +773,26 @@ h6,
 .checkout-action button:disabled { background: #687770; cursor: not-allowed; }
 .payment-success-summary { padding: 18px; background: var(--green-pale); border-left: 4px solid var(--green); }
 .payment-success-summary p { margin: 7px 0 0; color: var(--muted); line-height: 1.55; }
+.payment-thank-you-card { text-align: center; }
+.payment-success-mark {
+  width: 58px;
+  height: 58px;
+  display: grid;
+  place-items: center;
+  margin-inline: auto;
+  border-radius: 50%;
+  background: var(--green);
+  color: #fff;
+  font-size: 1.65rem;
+  font-weight: 900;
+  box-shadow: 0 14px 34px rgba(7, 148, 71, .24);
+}
+.payment-thank-you-card .payment-success-summary {
+  border-left: 0;
+  border-radius: 14px;
+  text-align: left;
+}
+.payment-completion-links { justify-items: center; }
 .payment-receipt { width: min(100%, 720px); }
 .payment-receipt header h1 { margin-bottom: 10px; }
 .payment-receipt header p { margin: 0; color: var(--muted); }
@@ -1238,6 +1258,11 @@ button, a, input, textarea, select { outline-offset: 4px; }
 }
 
 @media print {
+  html,
+  body {
+    background: #fff !important;
+  }
+
   .utility, .site-header, .footer, .skip-link, .receipt-actions, .back-to-top { display: none !important; }
   .receipt-page { min-height: 0; padding: 0; background: white; }
   .payment-receipt { width: 100%; border: 0; box-shadow: none; }
@@ -1250,18 +1275,19 @@ button, a, input, textarea, select { outline-offset: 4px; }
     margin: 0 !important;
   }
   .container:has(.fee-report-printable) > * { display: none !important; }
-  .container:has(.fee-report-printable) > section:has(.fee-report-printable) { display: block !important; }
-  section:has(.fee-report-printable) > * { display: none !important; }
-  section:has(.fee-report-printable) > .fee-report-printable { display: block !important; }
+  .container:has(.fee-report-printable) > section:has(> .fee-report-printable) { display: block !important; }
+  section:has(> .fee-report-printable) > * { display: none !important; }
+  section:has(> .fee-report-printable) > .fee-report-printable { display: block !important; }
   .fee-report-printable {
     width: 100% !important;
+    margin: 0 !important;
     padding: 0 !important;
     background: white !important;
   }
   .fee-report-printable section { break-inside: avoid; }
   .fee-report-printable [data-export-ignore="true"] { display: none !important; }
   .fee-report-printable a { text-decoration: none !important; }
-  @page { size: A4 landscape; margin: 10mm; }
+  @page { size: A4 portrait; margin: 10mm; }
 }
 
 /* Phase 10 brand system overrides */
