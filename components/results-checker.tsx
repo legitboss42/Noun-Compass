@@ -22,7 +22,7 @@ export function ResultsChecker() {
     }
 
     setMatricNo(cleaned);
-    setStatus({ type: "loading", message: `Checking ${cleaned}…` });
+    setStatus({ type: "loading", message: "Opening the official NOUN result portal…" });
 
     try {
       const response = await fetch("/api/results", {
@@ -33,14 +33,14 @@ export function ResultsChecker() {
       const data = (await response.json()) as { success?: boolean; finalUrl?: string; message?: string };
 
       if (!response.ok || !data.success || !data.finalUrl) {
-        throw new Error(data.message || "No result link was returned. Try again shortly.");
+        throw new Error(data.message || "The official result portal could not be opened. Try again shortly.");
       }
 
       window.location.assign(data.finalUrl);
     } catch (error) {
       setStatus({
         type: "error",
-        message: error instanceof Error ? error.message : "The result service is unavailable. Try again shortly.",
+        message: error instanceof Error ? error.message : "The official result portal is unavailable. Try again shortly.",
       });
     }
   }
@@ -50,8 +50,8 @@ export function ResultsChecker() {
       <span className="tool-number">01</span>
       <h2 id="result-checker-heading">Open your NOUN result</h2>
       <p>
-        Enter your matriculation number and we will request a result link, then open the official NOUN result
-        statement page. NOUN Compass does not store your matriculation number or result.
+        Enter your matriculation number to continue to the official NOUN result portal. NounCompass checks the
+        format but does not store your matriculation number or result. You will sign in on the official portal.
       </p>
       <form onSubmit={handleSubmit} noValidate>
         <label htmlFor="matric-no">Matriculation number</label>
@@ -68,7 +68,7 @@ export function ResultsChecker() {
             required
           />
           <button className="button" type="submit" disabled={status.type === "loading"}>
-            {status.type === "loading" ? "Checking…" : "View my result"}
+            {status.type === "loading" ? "Opening…" : "Open official result portal"}
           </button>
         </div>
         <p className="form-help" aria-live="polite">
@@ -76,8 +76,8 @@ export function ResultsChecker() {
         </p>
       </form>
       <p className="form-help">
-        This tool only helps you open the official NOUN result page. Confirm the final record there before relying
-        on it for registration, graduation, or support.
+        Sign in only on the official NOUN page. Confirm the final record there before relying on it for
+        registration, graduation, or support.
       </p>
     </section>
   );

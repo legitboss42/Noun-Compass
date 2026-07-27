@@ -34,11 +34,11 @@ export async function signUp(formData: FormData) {
     password,
     options: {
       data: { display_name: displayName },
-      emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL ?? "https://nouncompass.me"}/account/auth/callback`,
+      emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL ?? "https://nouncompass.me"}/account/auth/callback?next=/dashboard/profile`,
     },
   });
   if (error) redirect(`/account/sign-up?error=${encodeURIComponent("We could not create the account. Check the details and try again.")}`);
-  redirect("/account/sign-in?notice=Check+your+email+to+verify+the+account");
+  redirect("/account/sign-in?notice=Check+your+email+to+verify+the+account&next=/dashboard/profile");
 }
 
 export async function requestPasswordReset(formData: FormData) {

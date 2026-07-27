@@ -2,10 +2,10 @@ import Link from "next/link";
 import { Breadcrumbs, DisclaimerBox } from "@/components/article-elements";
 import { StudyPlanner } from "@/components/study-planner";
 import { createMetadata } from "@/lib/metadata";
-import { getCurrentUser } from "@/lib/platform/auth";
+import { requireUser } from "@/lib/platform/auth";
 import { getStudyPlannerPremiumState } from "@/lib/platform/study-planner-access";
 import { createClient } from "@/lib/supabase/server";
-import { studyPlannerStats } from "@/lib/study-planner-catalog";
+import { studyPlannerCoursesForCodes, studyPlannerStats } from "@/lib/study-planner-catalog";
 
 export const metadata = createMetadata(
   "NOUN Study Planner and Reading Timetable Generator",
@@ -19,19 +19,27 @@ export default async function StudyPlannerPage({
   searchParams: Promise<{ error?: string; notice?: string }>;
 }) {
   const params = await searchParams;
-  const user = await getCurrentUser();
-  const premium = user ? await getStudyPlannerPremiumState(user.id) : false;
+  const user = await requireUser("/tools/study-planner");
+  const premium = await getStudyPlannerPremiumState(user.id);
   const supabase = await createClient();
-  const { data: savedPlan } =
-    user && premium && supabase
-      ? await supabase
+  const [{ data: profile }, { data: savedPlan }] = supabase
+    ? await Promise.all([
+        supabase
+          .from("profiles")
+          .select("selected_course_codes")
+          .eq("id", user.id)
+          .maybeSingle(),
+        premium
+          ? supabase
           .from("study_plans")
           .select("id,reminders_enabled")
           .eq("user_id", user.id)
           .maybeSingle()
-      : { data: null };
+          : Promise.resolve({ data: null }),
+      ])
+    : [{ data: null }, { data: null }];
   const { count: savedCalendarSessionCount } =
-    user && premium && supabase && savedPlan
+    premium && supabase && savedPlan
       ? await supabase
           .from("study_plan_sessions")
           .select("id", { count: "exact", head: true })
@@ -79,9 +87,9 @@ export default async function StudyPlannerPage({
           notice={params.notice}
           premium={premium}
           savedCalendarSessionCount={savedCalendarSessionCount ?? 0}
-          signedIn={Boolean(user)}
           stats={studyPlannerStats}
           remindersEnabled={savedPlan?.reminders_enabled ?? false}
+          registeredCourses={studyPlannerCoursesForCodes((profile?.selected_course_codes ?? []) as string[])}
         />
 
         <div className="seo-intro">

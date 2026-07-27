@@ -96,3 +96,16 @@ export function searchStudyPlannerCourses(query: string, limit = 8) {
     .slice(0, limit)
     .map((item) => item.course);
 }
+
+export function studyPlannerCoursesForCodes(codes: string[]) {
+  return [...new Set(codes.map(normalizeCode).filter(Boolean))].map((code) =>
+    catalogMap.get(code) ?? {
+      code,
+      title: "Registered course",
+      units: null,
+      materialAvailable: false,
+      source: "material-library" as const,
+      faculties: [],
+    },
+  );
+}

@@ -69,6 +69,8 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   reset();
   window.addEventListener("pageshow", reset);
   window.addEventListener("load", reset);
+  window.addEventListener("beforeunload", reset);
+  window.addEventListener("pagehide", reset);
 })();`;
   const analyticsLoader = `window.addEventListener('load', () => {
   const bootAnalytics = () => {

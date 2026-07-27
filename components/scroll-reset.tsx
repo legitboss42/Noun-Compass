@@ -35,6 +35,13 @@ export function ScrollReset() {
       enforceTop();
     };
 
+    const handleBeforeUnload = () => {
+      if ("scrollRestoration" in window.history) {
+        window.history.scrollRestoration = "manual";
+      }
+      scrollToTop();
+    };
+
     const handleClick = (event: MouseEvent) => {
       if (
         event.defaultPrevented ||
@@ -67,11 +74,15 @@ export function ScrollReset() {
 
     window.addEventListener("pageshow", handlePageShow);
     window.addEventListener("load", handleLoad);
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    window.addEventListener("pagehide", handleBeforeUnload);
     document.addEventListener("click", handleClick, true);
 
     return () => {
       window.removeEventListener("pageshow", handlePageShow);
       window.removeEventListener("load", handleLoad);
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+      window.removeEventListener("pagehide", handleBeforeUnload);
       document.removeEventListener("click", handleClick, true);
     };
   }, [pathname, query]);

@@ -25,6 +25,37 @@
   background: white;
   color: #12243B;
 }
+.registeredImport {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px 18px;
+  align-items: center;
+  margin-bottom: 18px;
+  padding: 16px;
+  border: 1px solid #cfe5d7;
+  border-radius: 14px;
+  background: #eff9f3;
+}
+.registeredImport div { min-width: 0; }
+.registeredImport strong, .registeredImport span { display: block; }
+.registeredImport strong { color: #12243b; }
+.registeredImport span { margin-top: 5px; overflow-wrap: anywhere; color: #586879; font-size: .78rem; line-height: 1.5; }
+.registeredImport button, .registeredImport > a {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 14px;
+  border: 1px solid #079447;
+  border-radius: 10px;
+  background: #079447;
+  color: #fff;
+  font: inherit;
+  font-size: .76rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+.registeredImport p { grid-column: 1 / -1; margin: 0; color: #075c33; font-size: .76rem; }
 .courseSearch { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: start; }
 .searchInputWrap input { width: 100%; }
 .suggestionBox { margin-top: 12px; border: 1px solid rgba(18, 36, 59, 0.08); background: white; }
@@ -94,6 +125,7 @@
 
 @media (max-width: 720px) {
   .courseSearch,
+  .registeredImport,
   .resultsHeader,
   .availabilityHead,
   .availabilityRow,

@@ -281,7 +281,7 @@ export function StudyPlanner({
   premium,
   remindersEnabled,
   savedCalendarSessionCount,
-  signedIn,
+  registeredCourses,
   stats,
 }: {
   error?: string;
@@ -289,7 +289,7 @@ export function StudyPlanner({
   premium: boolean;
   remindersEnabled: boolean;
   savedCalendarSessionCount: number;
-  signedIn: boolean;
+  registeredCourses: StudyPlannerCourse[];
   stats: PlannerStats;
 }) {
   const [studentType, setStudentType] = useState<"new" | "returning">(() => {
@@ -351,6 +351,7 @@ export function StudyPlanner({
   });
   const [result, setResult] = useState<PlanResult | null>(null);
   const [loadingSuggestions, setLoadingSuggestions] = useState(false);
+  const [registeredImportMessage, setRegisteredImportMessage] = useState("");
 
   useEffect(() => {
     window.localStorage.setItem(plannerStorageKey, JSON.stringify({
@@ -419,6 +420,26 @@ export function StudyPlanner({
     const parsed = parseManualCourse(courseQuery);
     if (!parsed) return;
     addCourse(parsed);
+  };
+
+  const importRegisteredCourses = () => {
+    const available = registeredCourses.filter((course) => !selectedCourses.some((selected) => selected.code === course.code));
+    if (!available.length) {
+      setRegisteredImportMessage("Every registered course is already in this planner.");
+      return;
+    }
+    setSelectedCourses((current) => [
+      ...current,
+      ...available.map((course) => ({
+        code: course.code,
+        title: course.title,
+        units: course.units,
+        materialAvailable: course.materialAvailable,
+        difficulty: "unsure" as const,
+      })),
+    ]);
+    setResult(null);
+    setRegisteredImportMessage(`${available.length} registered course${available.length === 1 ? "" : "s"} imported from your dashboard.`);
   };
 
   const updateCourse = (code: string, difficulty: SelectedCourse["difficulty"]) => {
@@ -502,6 +523,24 @@ export function StudyPlanner({
             <p>Type a course code or title. Suggestions come from the course data already available on NounCompass.</p>
           </div>
         </div>
+        {registeredCourses.length ? (
+          <div className={styles.registeredImport}>
+            <div>
+              <strong>{registeredCourses.length} course{registeredCourses.length === 1 ? "" : "s"} saved in your dashboard</strong>
+              <span>{registeredCourses.map((course) => course.code).join(", ")}</span>
+            </div>
+            <button type="button" onClick={importRegisteredCourses}>Import registered courses</button>
+            {registeredImportMessage && <p role="status">{registeredImportMessage}</p>}
+          </div>
+        ) : (
+          <div className={styles.registeredImport}>
+            <div>
+              <strong>No registered courses saved yet</strong>
+              <span>Add your current courses once, then import them into future study plans.</span>
+            </div>
+            <Link href="/dashboard/profile">Set up registered courses</Link>
+          </div>
+        )}
         <div className={styles.courseSearch}>
           <label className={styles.searchInputWrap}>
             <span className="sr-only">Search course code or title</span>
@@ -585,9 +624,7 @@ export function StudyPlanner({
             Semester Pass members can save the generated sessions, download a calendar file, and receive reminder notifications before each study block.
           </p>
         </div>
-        {!signedIn ? (
-          <Link className="button" href="/account/sign-in?next=/tools/study-planner">Sign in to save sessions</Link>
-        ) : !premium ? (
+        {!premium ? (
           <Link className="button" href="/membership">Unlock with Semester Pass</Link>
         ) : (
           <div className={styles.calendarActions}>
