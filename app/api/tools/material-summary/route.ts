@@ -17,7 +17,7 @@ export async function POST(request: Request) {
   });
   if (limit.limited) {
     return NextResponse.json(
-      { message: "Daily AI summary limit reached. Please try again later." },
+      { message: "Daily exam summary limit reached. Please try again later." },
       { status: 429, headers: rateLimitHeaders(limit) },
     );
   }

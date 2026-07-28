@@ -7,7 +7,7 @@ import { membershipIsActive } from "@/lib/platform/membership";
 import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
-  title: "AI Practice",
+  title: "Practice Exam",
   robots: { index: false, follow: false },
   alternates: null,
 };
@@ -45,8 +45,8 @@ export default async function DashboardAiPracticePage({
     <>
       <header className="platform-heading">
         <div>
-          <span className="eyebrow">AI-powered revision</span>
-          <h1>Generate personal practice questions</h1>
+          <span className="eyebrow">Practice exam</span>
+          <h1>Generate a personal practice exam</h1>
           <p>
             Choose an official NOUN course material and NounCompass will generate a
             private practice set from the extracted material text. Published question
@@ -54,7 +54,7 @@ export default async function DashboardAiPracticePage({
           </p>
         </div>
       </header>
-      <section className="platform-stat-grid" aria-label="AI practice safeguards">
+      <section className="platform-stat-grid" aria-label="Practice exam safeguards">
         <article>
           <span>Source controlled</span>
           <strong>Official</strong>
@@ -86,7 +86,7 @@ export default async function DashboardAiPracticePage({
           <span className="eyebrow">Semester setup required</span>
           <h2>No registered course materials available yet</h2>
           <p>
-            Add your registered course codes in the dashboard first. AI Practice
+            Add your registered course codes in the dashboard first. Practice Exam
             will then show only official materials that match those courses.
           </p>
           <Link className="button" href="/dashboard/profile">

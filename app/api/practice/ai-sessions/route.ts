@@ -14,7 +14,7 @@ export async function POST(request: Request) {
   const user = await getCurrentUser();
   if (!user) {
     return NextResponse.json(
-      { message: "Sign in to generate AI practice questions." },
+      { message: "Sign in to generate a Practice Exam." },
       { status: 401 },
     );
   }
@@ -27,7 +27,7 @@ export async function POST(request: Request) {
   });
   if (limit.limited) {
     return NextResponse.json(
-      { message: "Daily AI practice generation limit reached. Please try again later." },
+      { message: "Daily Practice Exam generation limit reached. Please try again later." },
       { status: 429, headers: rateLimitHeaders(limit) },
     );
   }
@@ -52,7 +52,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ message: error.message }, { status: error.status });
     }
     return NextResponse.json(
-      { message: "AI practice questions could not be generated." },
+      { message: "Practice Exam questions could not be generated." },
       { status: 500 },
     );
   }

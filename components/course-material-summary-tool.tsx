@@ -52,11 +52,11 @@ export function CourseMaterialSummaryTool({ materialKey, premium, registered, si
   }
 
   if (!signedIn) {
-    return <a href="/account/sign-in?next=/course-materials">Sign in for AI summary</a>;
+    return <a href="/account/sign-in?next=/course-materials">Sign in for exam summary</a>;
   }
 
   if (!premium) {
-    return <a href="/membership">Unlock AI summary</a>;
+    return <a href="/membership">Unlock exam summary</a>;
   }
 
   if (!registered) {
@@ -66,7 +66,7 @@ export function CourseMaterialSummaryTool({ materialKey, premium, registered, si
   return (
     <div className="material-summary-tool">
       <button type="button" onClick={generateSummary} disabled={busy}>
-        {busy ? "Generating summary..." : "Generate AI summary"}
+        {busy ? "Generating summary..." : "Generate exam summary"}
       </button>
       {busy ? <p role="status">Reading the course material and building your exam-focused summary.</p> : null}
       {error ? <p className="form-message form-message-error" role="alert">{error}</p> : null}
@@ -79,7 +79,7 @@ export function CourseMaterialSummaryTool({ materialKey, premium, registered, si
           <article ref={reportRef} className="material-summary-document">
             <header>
               <Image src="/images/brand/nouncompass-logo.svg" alt="NOUN Compass" width={310} height={80} />
-              <span>Premium course summary</span>
+              <span>Premium exam summary</span>
             </header>
             <section className="material-summary-hero">
               <span>{result.courseCode}</span>

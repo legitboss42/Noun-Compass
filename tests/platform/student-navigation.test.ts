@@ -17,6 +17,11 @@ test("study planner has its own active item", () => {
   assert.equal(getStudentNavigationKey("/tools/study-planner", true), "planner");
 });
 
+test("course materials and summaries activate resources", () => {
+  assert.equal(getStudentNavigationKey("/course-materials", true), "resources");
+  assert.equal(getStudentNavigationKey("/dashboard/material-summaries", true), "resources");
+});
+
 test("account routes do not swallow the dashboard route", () => {
   assert.equal(getStudentNavigationKey("/dashboard", true), "dashboard");
   assert.equal(getStudentNavigationKey("/dashboard/profile", true), "account");

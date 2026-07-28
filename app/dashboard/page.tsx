@@ -374,7 +374,7 @@ export default async function DashboardPage({
             <span>
               {aiSession.status === "completed"
                 ? `Last AI score: ${String(aiSession.score ?? 0)}%`
-                : `Continue ${String(aiSession.course_code ?? "AI practice")} · ${String(aiSession.question_count ?? 0)} questions`}
+                : `Continue ${String(aiSession.course_code ?? "Practice Exam")} · ${String(aiSession.question_count ?? 0)} questions`}
             </span>
           ) : (
             <span>Use practice questions as more checked banks are released.</span>

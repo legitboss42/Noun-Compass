@@ -109,13 +109,13 @@ export function AiPracticeRunner({
     let cancelled = false;
     async function loadSession() {
       setBusy(true);
-      setStatus("Loading your unfinished AI practice session...");
+      setStatus("Loading your unfinished practice exam...");
       try {
         const response = await fetch(`/api/practice/ai-sessions/${resumeSessionId}`);
         const payload = await response.json() as StartPayload;
         if (cancelled) return;
         if (!response.ok || !payload.session || !payload.questions?.length) {
-          setStatus(payload.message || "This AI practice session could not be loaded.");
+          setStatus(payload.message || "This practice exam could not be loaded.");
           return;
         }
         const savedAnswers = payload.responses ?? {};
@@ -129,7 +129,7 @@ export function AiPracticeRunner({
         setResult(null);
         setStatus(payload.status === "completed" ? "This session was already completed." : "");
       } catch {
-        if (!cancelled) setStatus("This AI practice session could not be loaded.");
+        if (!cancelled) setStatus("This practice exam could not be loaded.");
       } finally {
         if (!cancelled) setBusy(false);
       }
@@ -160,7 +160,7 @@ export function AiPracticeRunner({
       });
       const payload = await response.json() as StartPayload;
       if (!response.ok || !payload.session || !payload.questions?.length) {
-        setStatus(payload.message || "AI practice could not start.");
+        setStatus(payload.message || "Practice Exam could not start.");
         return;
       }
       setSessionId(payload.session.id);
@@ -173,7 +173,7 @@ export function AiPracticeRunner({
         mode: payload.session.mode,
       });
     } catch {
-      setStatus("AI practice could not start. Try again in a moment.");
+      setStatus("Practice Exam could not start. Try again in a moment.");
     } finally {
       setBusy(false);
     }
@@ -187,7 +187,7 @@ export function AiPracticeRunner({
   async function finish() {
     if (!sessionId) return;
     setBusy(true);
-    setStatus("Scoring your AI practice session...");
+    setStatus("Scoring your practice exam...");
     try {
       const response = await fetch(`/api/practice/ai-sessions/${sessionId}/complete`, {
         method: "POST",
@@ -264,7 +264,7 @@ export function AiPracticeRunner({
     <section className="platform-panel ai-practice-panel">
       <div className="section-heading">
         <div>
-          <span className="eyebrow">Personal AI practice</span>
+          <span className="eyebrow">Practice Exam</span>
           <h2>Generate questions from a NOUN course material</h2>
         </div>
       </div>
@@ -347,7 +347,7 @@ export function AiPracticeRunner({
       <p className="platform-privacy-note">
         {premium
           ? `Semester Pass active. This selected material allows up to ${questionLimit} generated questions.`
-          : "Free trial: one AI practice generation per day, up to 15 questions."}
+          : "Free trial: one Practice Exam generation per day, up to 15 questions."}
       </p>
 
       {busy ? (
@@ -359,7 +359,7 @@ export function AiPracticeRunner({
       {status && !busy ? <p className="form-message form-message-error" role="status">{status}</p> : null}
       <div className="platform-form-actions">
         <button className="button" disabled={busy || !materialKey} onClick={start} type="button">
-          {busy ? "Generating..." : "Generate AI practice"}
+          {busy ? "Generating..." : "Generate Practice Exam"}
         </button>
         {premium ? (
           <span>Results are saved to your Exam Preparation history.</span>

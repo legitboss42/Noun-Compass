@@ -33,7 +33,7 @@ export function getStudentNavigationKey(pathname: string, signedIn: boolean): St
   if (pathname === "/dashboard") return "dashboard";
   if (matchesPrefix(pathname, ["/dashboard/practice", "/dashboard/ai-practice", "/practice", "/exam-prep"])) return "exams";
   if (matchesPrefix(pathname, ["/tools/study-planner"])) return "planner";
-  if (matchesPrefix(pathname, ["/course-materials", "/student-guides", "/articles"])) return "resources";
+  if (matchesPrefix(pathname, ["/dashboard/material-summaries", "/course-materials", "/student-guides", "/articles"])) return "resources";
   if (matchesPrefix(pathname, ["/dashboard/profile", "/membership", "/account/payment", "/dashboard/support"])) return "account";
   if (!signedIn && pathname === "/") return "dashboard";
   if (!signedIn && matchesPrefix(pathname, ["/account"])) return "account";

@@ -30,9 +30,8 @@ export async function POST(
       return NextResponse.json({ message: error.message }, { status: error.status });
     }
     return NextResponse.json(
-      { message: "AI practice session could not be completed." },
+      { message: "Practice Exam session could not be completed." },
       { status: 500 },
     );
   }
 }
-

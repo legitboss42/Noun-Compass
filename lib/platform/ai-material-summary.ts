@@ -150,15 +150,15 @@ export async function generateCourseMaterialSummary(userId: string, materialKey:
   if (!material) throw new AiSummaryError("Choose a valid official course material.", 400);
 
   if (!await userHasPremium(userId)) {
-    throw new AiSummaryError("Course-material AI summaries are available to active Semester Pass members.", 403);
+    throw new AiSummaryError("Exam summaries are available to active Semester Pass members.", 403);
   }
   if (!await userHasRegisteredCourse(userId, material.code)) {
     throw new AiSummaryError(
-      "AI summaries are limited to courses saved in your dashboard registered-course list.",
+      "Exam summaries are limited to courses saved in your dashboard registered-course list.",
       403,
     );
   }
-  if (!aiQuestionDraftsConfigured()) throw new AiSummaryError("AI summaries are not configured yet.", 503);
+  if (!aiQuestionDraftsConfigured()) throw new AiSummaryError("Exam summaries are not configured yet.", 503);
   const excerpt = await extractMaterialText(material);
   const model = process.env.OPENROUTER_MODEL!.trim();
   const apiKey = process.env.OPENROUTER_API_KEY!.replace(/\s+/g, "");

@@ -8,8 +8,9 @@ import { createClient } from "@/lib/supabase/server";
 const dashboardLinks = [
   ["Overview", "/dashboard"],
   ["Semester setup", "/dashboard/profile"],
-  ["Exam preparation", "/dashboard/practice"],
-  ["AI practice", "/dashboard/ai-practice"],
+  ["Practice history", "/dashboard/practice"],
+  ["Practice Exam", "/dashboard/ai-practice"],
+  ["Exam summaries", "/dashboard/material-summaries"],
   ["Support", "/dashboard/support"],
   ["Membership", "/membership"],
 ] as const;

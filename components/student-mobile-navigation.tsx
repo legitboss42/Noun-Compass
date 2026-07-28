@@ -20,8 +20,9 @@ type StudentMobileHeaderProps = {
 const drawerLinks = [
   ["Dashboard", "/dashboard"],
   ["Profile", "/dashboard/profile"],
-  ["Exam preparation", "/dashboard/practice"],
-  ["AI practice", "/dashboard/ai-practice"],
+  ["Practice history", "/dashboard/practice"],
+  ["Practice Exam", "/dashboard/ai-practice"],
+  ["Exam summaries", "/dashboard/material-summaries"],
   ["Study planner", "/tools/study-planner"],
   ["Course materials", "/course-materials"],
   ["Membership", "/membership"],

@@ -121,13 +121,13 @@ async function assertQuota(userId: string, premium: boolean) {
     .select("id", { count: "exact", head: true })
     .eq("user_id", userId)
     .gte("created_at", since.toISOString());
-  if (error) throw new AiPracticeError("Could not check your AI practice quota.", 500);
+  if (error) throw new AiPracticeError("Could not check your Practice Exam quota.", 500);
   const limit = premium ? MAX_PREMIUM_DAILY_SESSIONS : MAX_FREE_DAILY_SESSIONS;
   if ((count ?? 0) >= limit) {
     throw new AiPracticeError(
       premium
-        ? "You have reached today’s AI practice limit. Try again tomorrow."
-        : "Free AI practice is limited to one generation per day. Upgrade to the Semester Pass for more.",
+        ? "You have reached today’s Practice Exam limit. Try again tomorrow."
+        : "Free Practice Exam access is limited to one generation per day. Upgrade to the Semester Pass for more.",
       403,
     );
   }
@@ -142,11 +142,11 @@ async function extractPdfText(material: CourseMaterial) {
   }
   const length = Number(response.headers.get("content-length") ?? 0);
   if (length > MAX_PDF_BYTES) {
-    throw new AiPracticeError("This material is too large for instant AI practice. Choose a smaller course material for now.", 413);
+    throw new AiPracticeError("This material is too large for an instant Practice Exam. Choose a smaller course material for now.", 413);
   }
   const arrayBuffer = await response.arrayBuffer();
   if (arrayBuffer.byteLength > MAX_PDF_BYTES) {
-    throw new AiPracticeError("This material is too large for instant AI practice. Choose a smaller course material for now.", 413);
+    throw new AiPracticeError("This material is too large for an instant Practice Exam. Choose a smaller course material for now.", 413);
   }
   const { default: pdfParse } = await import("pdf-parse/lib/pdf-parse");
   const parsed = await pdfParse(Buffer.from(arrayBuffer));
@@ -241,7 +241,7 @@ async function generateQuestions(input: {
   mode: AiPracticeMode;
 }) {
   if (!aiQuestionDraftsConfigured()) {
-    throw new AiPracticeError("AI practice is not configured yet.", 503);
+    throw new AiPracticeError("Practice Exam generation is not configured yet.", 503);
   }
   const model = process.env.OPENROUTER_MODEL!.trim();
   const apiKey = process.env.OPENROUTER_API_KEY!.replace(/\s+/g, "");
@@ -339,7 +339,7 @@ export async function completeAiPracticeSession(
     .select("id,user_id,question_count,generated_questions,status")
     .eq("id", sessionId)
     .maybeSingle();
-  if (!session || session.user_id !== userId) throw new AiPracticeError("AI practice session not found.", 404);
+  if (!session || session.user_id !== userId) throw new AiPracticeError("Practice Exam session not found.", 404);
 
   const questions = session.generated_questions as AiPracticeQuestion[];
   const review = questions.map((question) => {
@@ -386,7 +386,7 @@ export async function getAiPracticeSession(
     .select("id,user_id,course_code,course_title,mode,question_count,generated_questions,responses,status")
     .eq("id", sessionId)
     .maybeSingle();
-  if (!session || session.user_id !== userId) throw new AiPracticeError("AI practice session not found.", 404);
+  if (!session || session.user_id !== userId) throw new AiPracticeError("Practice Exam session not found.", 404);
   const questions = session.generated_questions as AiPracticeQuestion[];
   return {
     session: {

@@ -69,7 +69,7 @@ export default async function PaymentCallbackPage({ searchParams }: { searchPara
       <div className="platform-auth-links payment-completion-links">
         <Link className="button" href="/dashboard">Go to your dashboard</Link>
         <Link href={`/account/payment/receipt/${reference}`}>View payment receipt</Link>
-        <Link href="/dashboard/practice">Start exam practice</Link>
+        <Link href="/dashboard/ai-practice">Open Practice Exam</Link>
       </div>
     </> : <div className="platform-auth-links">
       <Link className="button" href="/dashboard">Return to dashboard</Link>

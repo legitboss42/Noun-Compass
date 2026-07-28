@@ -23,7 +23,7 @@ export async function GET(
       return NextResponse.json({ message: error.message }, { status: error.status });
     }
     return NextResponse.json(
-      { message: "AI practice session could not be loaded." },
+      { message: "Practice Exam session could not be loaded." },
       { status: 500 },
     );
   }
