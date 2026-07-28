@@ -2,11 +2,13 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import { maxAiPracticeQuestionsForMaterial } from "@/lib/platform/ai-practice-materials";
 
 type MaterialOption = {
   key: string;
   code: string;
   title: string;
+  creditUnits?: string;
   faculty?: string;
   level?: string;
   semester?: string;
@@ -54,8 +56,10 @@ type CompletePayload = {
 
 export function AiPracticeRunner({
   materials,
+  premium,
 }: {
   materials: MaterialOption[];
+  premium: boolean;
 }) {
   const [query, setQuery] = useState("");
   const [materialKey, setMaterialKey] = useState(materials[0]?.key ?? "");
@@ -83,6 +87,18 @@ export function AiPracticeRunner({
   }, [materials, query]);
 
   const current = questions[index];
+  const selectedMaterial = materials.find((material) => material.key === materialKey) ?? materials[0];
+  const questionLimit = selectedMaterial
+    ? maxAiPracticeQuestionsForMaterial(selectedMaterial, premium)
+    : 15;
+  const questionOptions = useMemo(
+    () => [5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+      .filter((value) => value <= questionLimit),
+    [questionLimit],
+  );
+  const selectedQuestionCount = questionOptions.includes(Number(questionCount))
+    ? questionCount
+    : String(questionOptions[questionOptions.length - 1] ?? 5);
 
   async function start() {
     setBusy(true);
@@ -99,7 +115,7 @@ export function AiPracticeRunner({
           materialKey,
           mode,
           difficulty: Number(difficulty),
-          questionCount: Number(questionCount),
+          questionCount: Number(selectedQuestionCount),
         }),
       });
       const payload = await response.json() as StartPayload;
@@ -109,6 +125,7 @@ export function AiPracticeRunner({
       }
       setSessionId(payload.session.id);
       setSessionLabel(`${payload.session.courseCode} — ${payload.session.courseTitle}`);
+      setQuestionCount(String(payload.session.questionCount));
       setQuestions(payload.questions);
       setStatus("");
       window.gtag?.("event", "ai_practice_started", {
@@ -280,13 +297,18 @@ export function AiPracticeRunner({
         </label>
         <label>
           Questions
-          <select value={questionCount} onChange={(event) => setQuestionCount(event.target.value)}>
-            <option value="5">5 questions</option>
-            <option value="10">10 questions</option>
-            <option value="15">15 questions</option>
+          <select value={selectedQuestionCount} onChange={(event) => setQuestionCount(event.target.value)}>
+            {questionOptions.map((value) => (
+              <option key={value} value={value}>{value} questions</option>
+            ))}
           </select>
         </label>
       </div>
+      <p className="platform-privacy-note">
+        {premium
+          ? `Semester Pass active. This selected material allows up to ${questionLimit} generated questions.`
+          : "Free trial: one AI practice generation per day, up to 15 questions."}
+      </p>
 
       {busy ? (
         <p className="form-message form-message-success ai-loading" role="status">
@@ -299,7 +321,11 @@ export function AiPracticeRunner({
         <button className="button" disabled={busy || !materialKey} onClick={start} type="button">
           {busy ? "Generating..." : "Generate AI practice"}
         </button>
-        <Link href="/membership">Need higher limits? View Semester Pass</Link>
+        {premium ? (
+          <span>Results are saved to your Exam Preparation history.</span>
+        ) : (
+          <Link href="/membership">Need higher limits? View Semester Pass</Link>
+        )}
       </div>
     </section>
   );

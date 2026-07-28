@@ -3,6 +3,7 @@ import Link from "next/link";
 import { AiPracticeRunner } from "@/components/ai-practice-runner";
 import { listAiPracticeMaterialsForCourseCodes } from "@/lib/platform/ai-practice-materials";
 import { requireUser } from "@/lib/platform/auth";
+import { membershipIsActive } from "@/lib/platform/membership";
 import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
@@ -14,14 +15,26 @@ export const metadata: Metadata = {
 export default async function DashboardAiPracticePage() {
   const user = await requireUser("/dashboard/ai-practice");
   const supabase = await createClient();
-  const { data: profile } =
-    (await supabase
+  const now = new Date().toISOString();
+  const [{ data: profile }, { data: membership }] = await Promise.all([
+    supabase
       ?.from("profiles")
       .select("selected_course_codes")
       .eq("id", user.id)
-      .maybeSingle()) ?? { data: null };
+      .maybeSingle() ?? Promise.resolve({ data: null }),
+    supabase
+      ?.from("memberships")
+      .select("status,ends_at")
+      .eq("user_id", user.id)
+      .eq("status", "active")
+      .gt("ends_at", now)
+      .order("ends_at", { ascending: false })
+      .limit(1)
+      .maybeSingle() ?? Promise.resolve({ data: null }),
+  ]);
   const selectedCodes = (profile?.selected_course_codes ?? []) as string[];
   const materials = listAiPracticeMaterialsForCourseCodes(selectedCodes);
+  const premium = membershipIsActive(membership?.status, membership?.ends_at);
 
   return (
     <>
@@ -49,12 +62,16 @@ export default async function DashboardAiPracticePage() {
         </article>
         <article>
           <span>Semester Pass</span>
-          <strong>More</strong>
-          <small>Paid members receive higher daily generation and question limits.</small>
+          <strong>{premium ? "Active" : "Free"}</strong>
+          <small>
+            {premium
+              ? "Your paid access is active, so higher course-based question limits apply."
+              : "Free accounts can generate one 15-question practice set per day."}
+          </small>
         </article>
       </section>
       {materials.length ? (
-        <AiPracticeRunner materials={materials} />
+        <AiPracticeRunner materials={materials} premium={premium} />
       ) : (
         <section className="platform-panel empty-state">
           <span className="eyebrow">Semester setup required</span>

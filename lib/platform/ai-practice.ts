@@ -5,11 +5,10 @@ import { courseMaterials, type CourseMaterial } from "@/lib/course-materials";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { membershipIsActive } from "./membership";
 import { aiQuestionDraftsConfigured } from "./ai-question-drafts-core";
+import { maxAiPracticeQuestionsForMaterial } from "./ai-practice-materials";
 
 const MAX_FREE_DAILY_SESSIONS = 1;
 const MAX_PREMIUM_DAILY_SESSIONS = 10;
-const MAX_FREE_QUESTIONS = 5;
-const MAX_PREMIUM_QUESTIONS = 15;
 const MAX_PDF_BYTES = 14 * 1024 * 1024;
 const MAX_EXCERPT_LENGTH = 22_000;
 const MIN_EXTRACTED_CHARS = 900;
@@ -85,10 +84,10 @@ function normalizeDifficulty(value: unknown) {
   return [1, 2, 3].includes(parsed) ? parsed : 1;
 }
 
-function normalizeQuestionCount(value: unknown, premium: boolean) {
-  const max = premium ? MAX_PREMIUM_QUESTIONS : MAX_FREE_QUESTIONS;
+function normalizeQuestionCount(value: unknown, premium: boolean, material: CourseMaterial) {
+  const max = maxAiPracticeQuestionsForMaterial(material, premium);
   const parsed = Number(value);
-  if (!Number.isFinite(parsed)) return Math.min(max, premium ? 10 : 5);
+  if (!Number.isFinite(parsed)) return Math.min(max, premium ? max : 5);
   return Math.max(1, Math.min(max, Math.floor(parsed)));
 }
 
@@ -109,6 +108,8 @@ async function getPremiumState(userId: string) {
     .from("memberships")
     .select("status,ends_at")
     .eq("user_id", userId)
+    .eq("status", "active")
+    .gt("ends_at", new Date().toISOString())
     .order("ends_at", { ascending: false })
     .limit(1)
     .maybeSingle();
@@ -288,7 +289,7 @@ export async function startAiPracticeSession(
 
   const mode = normalizeMode(input.mode);
   const difficulty = normalizeDifficulty(input.difficulty);
-  const questionCount = normalizeQuestionCount(input.questionCount, premium);
+  const questionCount = normalizeQuestionCount(input.questionCount, premium, material);
   const excerpt = await extractPdfText(material);
   const { questions, model } = await generateQuestions({
     material,

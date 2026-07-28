@@ -12,6 +12,7 @@ export function listAiPracticeMaterials(limit = courseMaterials.length) {
     key: materialKeyForIndex(index),
     code: material.code,
     title: material.title,
+    creditUnits: material.creditUnits,
     faculty: material.faculty,
     level: material.level,
     semester: material.semester,
@@ -28,8 +29,18 @@ export function listAiPracticeMaterialsForCourseCodes(codes: string[]) {
       key: materialKeyForIndex(index),
       code: material.code,
       title: material.title,
+      creditUnits: material.creditUnits,
       faculty: material.faculty,
       level: material.level,
       semester: material.semester,
     }));
+}
+
+export function maxAiPracticeQuestionsForMaterial(
+  material: { creditUnits?: string | null },
+  premium: boolean,
+) {
+  if (!premium) return 15;
+  const units = Number.parseInt(String(material.creditUnits ?? ""), 10);
+  return units >= 3 ? 100 : 70;
 }

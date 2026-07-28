@@ -3,11 +3,34 @@ import Link from "next/link";
 import { PracticeRunner } from "@/components/practice-runner";
 import { requireUser } from "@/lib/platform/auth";
 import { createQuestionStore } from "@/lib/platform/question-store";
+import { createAdminClient } from "@/lib/supabase/admin";
+
+type AiPracticeHistoryRow = {
+  id: string;
+  course_code: string | null;
+  course_title: string | null;
+  mode: string | null;
+  status: string | null;
+  score: number | null;
+  question_count: number | null;
+  created_at: string;
+  completed_at: string | null;
+};
 
 export default async function DashboardPracticePage() {
   const user = await requireUser("/dashboard/practice");
   const { banks, premium, dueCount, sessions } = await createQuestionStore().dashboard(user.id);
+  const admin = createAdminClient();
+  const { data: aiSessions } = admin
+    ? await admin
+        .from("ai_practice_sessions")
+        .select("id,course_code,course_title,mode,status,score,question_count,created_at,completed_at")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false })
+        .limit(10)
+    : { data: [] };
   const completed = sessions.find((session) => session.status === "completed");
+  const aiHistory = (aiSessions ?? []) as AiPracticeHistoryRow[];
 
   return (
     <>
@@ -29,6 +52,7 @@ export default async function DashboardPracticePage() {
       <section className="platform-stat-grid" aria-label="Practice progress">
         <article><span>Revision due</span><strong>{dueCount}</strong><small>Questions scheduled for review now</small></article>
         <article><span>Sessions</span><strong>{sessions.length}</strong><small>Your ten most recent sessions</small></article>
+        <article><span>AI practice</span><strong>{aiHistory.length}</strong><small>Your ten most recent generated sessions</small></article>
         <article><span>Latest score</span><strong>{completed ? `${String(completed.score)}%` : "-"}</strong><small>From your most recent completed session</small></article>
       </section>
 
@@ -56,6 +80,35 @@ export default async function DashboardPracticePage() {
           </div>
         </section>
       ) : null}
+
+      <section className="platform-panel">
+        <div className="platform-panel-heading">
+          <div>
+            <span className="eyebrow">Saved to your profile</span>
+            <h2>AI practice history</h2>
+          </div>
+          <Link href="/dashboard/ai-practice">Generate new practice</Link>
+        </div>
+        {aiHistory.length ? (
+          <div className="platform-ticket-list">
+            {aiHistory.map((session) => (
+              <article key={session.id}>
+                <div>
+                  <strong>
+                    {session.course_code ?? "Course"} - {session.course_title ?? "AI practice"}
+                  </strong>
+                  <span>{session.status ?? "started"}</span>
+                </div>
+                <small>
+                  {session.score === null ? "No score yet" : `${session.score}%`} - {String(session.question_count ?? 0)} questions - {String(session.mode ?? "practice")} - {new Intl.DateTimeFormat("en-NG", { dateStyle: "medium", timeStyle: "short", timeZone: "Africa/Lagos" }).format(new Date(session.created_at))}
+                </small>
+              </article>
+            ))}
+          </div>
+        ) : (
+          <p>No AI-generated practice sessions yet.</p>
+        )}
+      </section>
     </>
   );
 }

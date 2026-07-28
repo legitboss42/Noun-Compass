@@ -4,6 +4,7 @@ import {
   listAiPracticeMaterials,
   listAiPracticeMaterialsForCourseCodes,
   materialKeyForIndex,
+  maxAiPracticeQuestionsForMaterial,
 } from "../../lib/platform/ai-practice-materials";
 
 test("AI practice exposes official course-material choices with stable keys", () => {
@@ -23,4 +24,10 @@ test("AI practice can filter materials to registered dashboard courses", () => {
   const materials = listAiPracticeMaterialsForCourseCodes(["ACC101"]);
   assert.ok(materials.length >= 1);
   assert.equal(materials.every((material) => material.code === "ACC101"), true);
+});
+
+test("AI practice question limits follow membership and course units", () => {
+  assert.equal(maxAiPracticeQuestionsForMaterial({ creditUnits: "2" }, false), 15);
+  assert.equal(maxAiPracticeQuestionsForMaterial({ creditUnits: "2" }, true), 70);
+  assert.equal(maxAiPracticeQuestionsForMaterial({ creditUnits: "3" }, true), 100);
 });
