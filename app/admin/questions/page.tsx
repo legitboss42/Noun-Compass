@@ -5,7 +5,9 @@ import {
   AdminPagination,
   AdminStatusBadge,
 } from "@/components/admin/admin-ui";
+import { AiQuestionDraftTool } from "@/components/admin/ai-question-draft-tool";
 import { requirePermission } from "@/lib/platform/admin-auth";
+import { aiQuestionDraftsConfigured } from "@/lib/platform/ai-question-drafts";
 import { safePage } from "@/lib/platform/admin-format";
 import { createAdminClient } from "@/lib/supabase/admin";
 import {
@@ -127,6 +129,13 @@ export default async function AdminQuestionsPage({
             <Link className="admin-button admin-button-secondary" href="/admin/questions">Reset</Link>
           </div>
         </form>
+      </section>
+
+      <section className="admin-panel">
+        <details>
+          <summary>Generate draft CSV with AI</summary>
+          <AiQuestionDraftTool configured={aiQuestionDraftsConfigured()} />
+        </details>
       </section>
 
       <section className="admin-panel">

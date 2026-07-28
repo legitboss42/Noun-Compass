@@ -55,12 +55,21 @@ type PlanResult = {
   notes: string[];
 };
 
+type SavedCalendarSession = {
+  id: string;
+  title: string;
+  course_code: string | null;
+  course_title: string | null;
+  starts_at: string;
+  ends_at: string;
+};
+
 const defaultDays: DayAvailability[] = [
   { day: "Monday", workday: true, startTime: "19:00", hours: 2 },
-  { day: "Tuesday", workday: true, startTime: "19:00", hours: 2 },
-  { day: "Wednesday", workday: true, startTime: "19:00", hours: 2 },
-  { day: "Thursday", workday: true, startTime: "19:00", hours: 2 },
-  { day: "Friday", workday: true, startTime: "19:00", hours: 1.5 },
+  { day: "Tuesday", workday: true, startTime: "20:00", hours: 2 },
+  { day: "Wednesday", workday: true, startTime: "19:30", hours: 2 },
+  { day: "Thursday", workday: true, startTime: "20:00", hours: 2 },
+  { day: "Friday", workday: true, startTime: "18:30", hours: 1.5 },
   { day: "Saturday", workday: false, startTime: "09:00", hours: 4 },
   { day: "Sunday", workday: false, startTime: "16:00", hours: 3 },
 ];
@@ -96,6 +105,16 @@ function parseManualCourse(value: string): SelectedCourse | null {
   };
 }
 
+function toSelectedCourse(course: StudyPlannerCourse): SelectedCourse {
+  return {
+    code: course.code,
+    title: course.title,
+    units: course.units,
+    materialAvailable: course.materialAvailable,
+    difficulty: "unsure",
+  };
+}
+
 function difficultyWeight(value: SelectedCourse["difficulty"]) {
   if (value === "challenging") return 1.35;
   if (value === "standard") return 1;
@@ -124,6 +143,24 @@ function labelToMinutes(value: string) {
   const meridiem = match[3].toUpperCase();
   const normalizedHour = meridiem === "AM" ? hour % 12 : (hour % 12) + 12;
   return normalizedHour * 60 + minutes;
+}
+
+function formatSavedSessionTime(startValue: string, endValue: string) {
+  const start = new Date(startValue);
+  const end = new Date(endValue);
+  if (!Number.isFinite(start.getTime()) || !Number.isFinite(end.getTime())) return "Time unavailable";
+  const dateFormatter = new Intl.DateTimeFormat("en-NG", {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+    timeZone: "Africa/Lagos",
+  });
+  const timeFormatter = new Intl.DateTimeFormat("en-NG", {
+    hour: "numeric",
+    minute: "2-digit",
+    timeZone: "Africa/Lagos",
+  });
+  return `${dateFormatter.format(start)}, ${timeFormatter.format(start)} - ${timeFormatter.format(end)}`;
 }
 
 function nextDateForDay(day: string, from: Date) {
@@ -281,6 +318,7 @@ export function StudyPlanner({
   premium,
   remindersEnabled,
   savedCalendarSessionCount,
+  savedCalendarSessions,
   registeredCourses,
   stats,
 }: {
@@ -289,6 +327,7 @@ export function StudyPlanner({
   premium: boolean;
   remindersEnabled: boolean;
   savedCalendarSessionCount: number;
+  savedCalendarSessions: SavedCalendarSession[];
   registeredCourses: StudyPlannerCourse[];
   stats: PlannerStats;
 }) {
@@ -328,14 +367,15 @@ export function StudyPlanner({
   const [courseQuery, setCourseQuery] = useState("");
   const [courseSuggestions, setCourseSuggestions] = useState<StudyPlannerCourse[]>([]);
   const [selectedCourses, setSelectedCourses] = useState<SelectedCourse[]>(() => {
-    if (typeof window === "undefined") return [];
+    const registeredDefaults = registeredCourses.map(toSelectedCourse);
+    if (typeof window === "undefined") return registeredDefaults;
     try {
       const saved = window.localStorage.getItem(plannerStorageKey);
-      if (!saved) return [];
+      if (!saved) return registeredDefaults;
       const parsed = JSON.parse(saved) as { selectedCourses?: SelectedCourse[] };
-      return parsed.selectedCourses ?? [];
+      return parsed.selectedCourses?.length ? parsed.selectedCourses : registeredDefaults;
     } catch {
-      return [];
+      return registeredDefaults;
     }
   });
   const [days, setDays] = useState<DayAvailability[]>(() => {
@@ -351,6 +391,7 @@ export function StudyPlanner({
   });
   const [result, setResult] = useState<PlanResult | null>(null);
   const [loadingSuggestions, setLoadingSuggestions] = useState(false);
+  const [generatingPlan, setGeneratingPlan] = useState(false);
   const [registeredImportMessage, setRegisteredImportMessage] = useState("");
 
   useEffect(() => {
@@ -458,8 +499,12 @@ export function StudyPlanner({
   };
 
   const generatePlan = () => {
-    const plan = buildPlan({ courses: selectedCourses, days, studentType, rhythm, sessionLengthMinutes });
-    setResult(plan);
+    setGeneratingPlan(true);
+    window.requestAnimationFrame(() => {
+      const plan = buildPlan({ courses: selectedCourses, days, studentType, rhythm, sessionLengthMinutes });
+      setResult(plan);
+      setGeneratingPlan(false);
+    });
   };
 
   const canGenerate = selectedCourses.length > 0 && days.some((day) => day.hours > 0);
@@ -612,9 +657,13 @@ export function StudyPlanner({
       </section>
 
       <div className={styles.actionRow}>
-        <button type="button" className="button" onClick={generatePlan} disabled={!canGenerate}>Generate study timetable</button>
+        <button type="button" className="button" onClick={generatePlan} disabled={!canGenerate || generatingPlan} aria-busy={generatingPlan}>
+          {generatingPlan ? <span className={styles.spinner} aria-hidden="true" /> : null}
+          {generatingPlan ? "Generating timetable..." : "Generate study timetable"}
+        </button>
         <button type="button" className={styles.secondaryButton} onClick={() => window.print()} disabled={!result}>Print timetable</button>
       </div>
+      {generatingPlan ? <p className={styles.loadingStatus} role="status">Building your timetable from your courses and weekly availability.</p> : null}
 
       <section className={styles.calendarPanel} aria-labelledby="planner-calendar-title">
         <div>
@@ -645,6 +694,17 @@ export function StudyPlanner({
                 ? `${savedCalendarSessionCount} upcoming session${savedCalendarSessionCount === 1 ? "" : "s"} saved.`
                 : "Generate and save a timetable before exporting."}
             </small>
+            {savedCalendarSessions.length ? (
+              <ol className={styles.savedSessionList} aria-label="Upcoming saved study sessions">
+                {savedCalendarSessions.map((session) => (
+                  <li key={session.id}>
+                    <strong>{session.course_code ?? session.title}</strong>
+                    <span>{formatSavedSessionTime(session.starts_at, session.ends_at)}</span>
+                    {session.course_title ? <small>{session.course_title}</small> : null}
+                  </li>
+                ))}
+              </ol>
+            ) : null}
           </div>
         )}
       </section>

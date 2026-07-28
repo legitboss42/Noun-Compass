@@ -46,6 +46,19 @@ export default async function StudyPlannerPage({
           .eq("plan_id", savedPlan.id)
           .eq("user_id", user.id)
       : { count: 0 };
+  const savedSessionCutoff = new Date();
+  savedSessionCutoff.setHours(savedSessionCutoff.getHours() - 1);
+  const { data: savedCalendarSessions } =
+    premium && supabase && savedPlan
+      ? await supabase
+          .from("study_plan_sessions")
+          .select("id,title,course_code,course_title,starts_at,ends_at")
+          .eq("plan_id", savedPlan.id)
+          .eq("user_id", user.id)
+          .gte("starts_at", savedSessionCutoff.toISOString())
+          .order("starts_at", { ascending: true })
+          .limit(10)
+      : { data: [] };
 
   const toolSchema = {
     "@context": "https://schema.org",
@@ -87,6 +100,7 @@ export default async function StudyPlannerPage({
           notice={params.notice}
           premium={premium}
           savedCalendarSessionCount={savedCalendarSessionCount ?? 0}
+          savedCalendarSessions={savedCalendarSessions ?? []}
           stats={studyPlannerStats}
           remindersEnabled={savedPlan?.reminders_enabled ?? false}
           registeredCourses={studyPlannerCoursesForCodes((profile?.selected_course_codes ?? []) as string[])}
