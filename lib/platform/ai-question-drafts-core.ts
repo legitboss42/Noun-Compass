@@ -24,7 +24,7 @@ export function aiQuestionDraftsConfigured(env = process.env) {
   return (
     env.AI_QUESTION_DRAFTS_ENABLED === "true" &&
     env.AI_PROVIDER?.trim() === "openrouter" &&
-    Boolean(env.OPENROUTER_API_KEY?.trim()) &&
+    Boolean(env.OPENROUTER_API_KEY?.replace(/\s+/g, "")) &&
     Boolean(env.OPENROUTER_MODEL?.trim())
   );
 }

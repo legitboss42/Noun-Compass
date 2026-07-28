@@ -136,7 +136,7 @@ export async function generateQuestionDraftCsv(
 
   const count = normalizeQuestionCount(input.questionCount);
   const model = process.env.OPENROUTER_MODEL!.trim();
-  const apiKey = process.env.OPENROUTER_API_KEY!.trim();
+  const apiKey = process.env.OPENROUTER_API_KEY!.replace(/\s+/g, "");
   const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
     method: "POST",
     headers: {
