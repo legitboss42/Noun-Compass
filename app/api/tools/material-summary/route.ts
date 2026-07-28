@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/platform/auth";
+import { examSummariesAvailable, examSummariesMaintenanceMessage } from "@/lib/platform/exam-summaries";
 import {
   AiSummaryError,
   generateCourseMaterialSummary,
@@ -13,6 +14,9 @@ export const dynamic = "force-dynamic";
 export async function POST(request: Request) {
   const user = await getCurrentUser();
   if (!user) return NextResponse.json({ message: "Sign in to generate a course summary." }, { status: 401 });
+  if (!examSummariesAvailable) {
+    return NextResponse.json({ message: examSummariesMaintenanceMessage }, { status: 503 });
+  }
   const body = await request.json().catch(() => null) as { materialKey?: string } | null;
   const materialKey = body?.materialKey ?? "";
   try {

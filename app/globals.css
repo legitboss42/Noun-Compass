@@ -748,6 +748,7 @@ h6,
 .platform-ticket-list button, .admin-inline-actions button, .platform-import-row button { width: fit-content; border: 1px solid var(--line); background: white; color: var(--green-dark); padding: 8px 11px; font-size: .75rem; font-weight: 800; cursor: pointer; }
 
 .material-summary-tool { flex-basis: 100%; display: grid; gap: 10px; margin-top: 8px; }
+.maintenance-pill { width: fit-content; display: inline-flex; align-items: center; min-height: 36px; border: 1px solid #f2c96f; border-radius: 999px; background: #fff8e2; color: #665520; padding: 8px 12px; font-size: .72rem; font-weight: 900; }
 .material-summary-tool > button, .material-summary-actions button { width: fit-content; min-height: 44px; border: 0; border-radius: 999px; background: var(--gold); color: #182033; padding: 10px 14px; font-size: .7rem; font-weight: 900; cursor: pointer; }
 .material-summary-tool > button:disabled, .material-summary-actions button:disabled { opacity: .7; cursor: wait; }
 .material-summary-tool > p { margin: 0; color: var(--muted); font-size: .78rem; }

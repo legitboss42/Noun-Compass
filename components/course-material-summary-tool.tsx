@@ -23,12 +23,13 @@ type CourseSummaryResult = {
 type Props = {
   materialKey: string;
   premium: boolean;
+  maintenance?: boolean;
   initialResult?: CourseSummaryResult | null;
   registered: boolean;
   signedIn: boolean;
 };
 
-export function CourseMaterialSummaryTool({ materialKey, premium, initialResult = null, registered, signedIn }: Props) {
+export function CourseMaterialSummaryTool({ materialKey, premium, maintenance = false, initialResult = null, registered, signedIn }: Props) {
   const reportRef = useRef<HTMLDivElement>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -55,6 +56,10 @@ export function CourseMaterialSummaryTool({ materialKey, premium, initialResult 
 
   if (!signedIn) {
     return <a href="/account/sign-in?next=/course-materials">Sign in for exam summary</a>;
+  }
+
+  if (maintenance) {
+    return <span className="maintenance-pill">Exam summaries under maintenance</span>;
   }
 
   if (!premium) {

@@ -12,6 +12,7 @@ import { createMetadata } from "@/lib/metadata";
 import { getCurrentUser } from "@/lib/platform/auth";
 import { materialKeyForIndex } from "@/lib/platform/ai-practice-materials";
 import { normalizeCourseCode } from "@/lib/platform/course-codes";
+import { examSummariesAvailable } from "@/lib/platform/exam-summaries";
 import { membershipIsActive } from "@/lib/platform/membership";
 import { createClient } from "@/lib/supabase/server";
 import { site } from "@/data/site";
@@ -314,6 +315,7 @@ export default async function CourseMaterialsPage({
                   <CourseMaterialSummaryTool
                     materialKey={materialKeyForIndex(courseMaterials.indexOf(material))}
                     premium={premium}
+                    maintenance={!examSummariesAvailable}
                     registered={registeredCourseCodes.has(normalizeCourseCode(material.code))}
                     signedIn={Boolean(user)}
                   />

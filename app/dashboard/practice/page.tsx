@@ -44,7 +44,7 @@ export default async function DashboardPracticePage() {
         </div>
         <div className="platform-form-actions">
           <Link className="button" href="/dashboard/ai-practice">Open Practice Exam</Link>
-          <Link className="button button-secondary" href="/dashboard/material-summaries">Open Exam summaries</Link>
+          <Link className="button button-secondary" href="/course-materials">Open course materials</Link>
         </div>
       </header>
 
