@@ -751,26 +751,30 @@ h6,
 .material-summary-tool > button, .material-summary-actions button { width: fit-content; min-height: 44px; border: 0; border-radius: 999px; background: var(--gold); color: #182033; padding: 10px 14px; font-size: .7rem; font-weight: 900; cursor: pointer; }
 .material-summary-tool > button:disabled, .material-summary-actions button:disabled { opacity: .7; cursor: wait; }
 .material-summary-tool > p { margin: 0; color: var(--muted); font-size: .78rem; }
-.material-summary-result { display: grid; gap: 12px; margin-top: 14px; }
+.material-summary-result { min-width: 0; max-width: 100%; display: grid; gap: 12px; margin-top: 14px; overflow: hidden; }
 .material-summary-actions { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px; border: 1px solid var(--line); background: var(--green-pale); }
-.material-summary-document { display: grid; gap: 22px; padding: clamp(22px, 4vw, 36px); border: 1px solid #dce7df; background: #f7fbf8; color: #102035; }
+.material-summary-document { min-width: 0; width: 100%; max-width: 100%; box-sizing: border-box; display: grid; gap: 22px; padding: clamp(18px, 3vw, 36px); border: 1px solid #dce7df; background: #f7fbf8; color: #102035; overflow: hidden; }
 .material-summary-document header, .material-summary-document footer { display: flex; align-items: center; justify-content: space-between; gap: 18px; border-bottom: 1px solid #dce7df; padding-bottom: 16px; }
+.material-summary-document header img { max-width: min(100%, 310px); height: auto; }
 .material-summary-document footer { display: block; border-top: 1px solid #dce7df; border-bottom: 0; padding-top: 16px; padding-bottom: 0; }
 .material-summary-document header span, .material-summary-hero span { color: var(--green); font-size: .72rem; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; }
 .material-summary-hero { padding: 24px; border-radius: 26px; background: linear-gradient(135deg, #063d2f, #0b8550); color: white; }
-.material-summary-hero h2 { margin: 8px 0; color: white; font-size: clamp(1.8rem, 4vw, 3rem); line-height: 1.05; }
-.material-summary-hero p { margin: 0; color: #d9f6e5; line-height: 1.65; }
+.material-summary-hero h2 { margin: 8px 0; color: white; font-size: clamp(1.8rem, 4vw, 3rem); line-height: 1.05; overflow-wrap: anywhere; hyphens: auto; }
+.material-summary-hero p { margin: 0; color: #d9f6e5; line-height: 1.65; overflow-wrap: anywhere; }
 .material-summary-meta, .material-summary-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; background: #dce7df; border: 1px solid #dce7df; }
 .material-summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-.material-summary-meta div, .material-summary-grid > div { background: white; padding: 16px; }
+.material-summary-meta div, .material-summary-grid > div { min-width: 0; background: white; padding: 16px; overflow-wrap: anywhere; }
 .material-summary-meta dt { color: var(--muted); font-size: .68rem; font-weight: 800; text-transform: uppercase; }
-.material-summary-meta dd { margin: 6px 0 0; font-weight: 800; }
+.material-summary-meta dd { margin: 6px 0 0; font-weight: 800; overflow-wrap: anywhere; }
 .material-summary-areas { display: grid; gap: 14px; }
-.material-summary-areas article { display: grid; gap: 8px; padding: 18px; border: 1px solid #dce7df; background: white; }
+.material-summary-areas article { min-width: 0; display: grid; gap: 8px; padding: 18px; border: 1px solid #dce7df; background: white; overflow-wrap: anywhere; }
 .material-summary-areas article > span { width: fit-content; border-radius: 999px; background: var(--green-pale); color: var(--green-dark); padding: 5px 9px; font-size: .68rem; font-weight: 900; }
 .material-summary-document h3, .material-summary-document h4 { margin: 0; color: #102035; }
 .material-summary-document p, .material-summary-document li { color: #42566c; line-height: 1.6; }
 .material-summary-document ul { margin: 0; padding-left: 20px; }
+.platform-course-grid > article:has(.material-summary-document),
+.material-list > article:has(.material-summary-document) { grid-column: 1 / -1; overflow: visible; }
+.platform-course-grid > article:has(.material-summary-document) .course-prep-actions { display: grid; grid-template-columns: 1fr; align-items: stretch; }
 
 @media (max-width: 720px) {
   .material-summary-meta, .material-summary-grid { grid-template-columns: 1fr; }

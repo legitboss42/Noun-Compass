@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { CourseMaterialSummaryTool } from "@/components/course-material-summary-tool";
 import { courseMaterials } from "@/lib/course-materials";
+import { listSavedCourseMaterialSummaries } from "@/lib/platform/ai-material-summary";
 import { materialKeyForIndex } from "@/lib/platform/ai-practice-materials";
 import { normalizeCourseCode } from "@/lib/platform/course-codes";
 import { membershipIsActive } from "@/lib/platform/membership";
@@ -43,6 +44,9 @@ export default async function MaterialSummariesPage() {
   const registeredMaterials = courseMaterials
     .map((material, index) => ({ material, materialKey: materialKeyForIndex(index) }))
     .filter(({ material }) => registeredCourseCodes.has(normalizeCourseCode(material.code)));
+  const savedSummaries = (await listSavedCourseMaterialSummaries(user.id))
+    .filter((summary) => registeredCourseCodes.has(normalizeCourseCode(summary.courseCode)));
+  const savedMaterialKeys = new Set(savedSummaries.map((summary) => summary.materialKey));
 
   return (
     <>
@@ -56,6 +60,35 @@ export default async function MaterialSummariesPage() {
           </p>
         </div>
       </header>
+
+      {savedSummaries.length ? (
+        <section className="platform-panel">
+          <div className="section-heading">
+            <div>
+              <span className="eyebrow">Saved for 30 days</span>
+              <h2>Saved exam summaries</h2>
+            </div>
+          </div>
+          <div className="platform-course-grid">
+            {savedSummaries.map((summary) => (
+              <article key={summary.materialKey}>
+                <span>{summary.courseCode}</span>
+                <h3>{summary.courseTitle}</h3>
+                <p>
+                  Saved until {new Intl.DateTimeFormat("en-NG", { dateStyle: "medium", timeZone: "Africa/Lagos" }).format(new Date(summary.expiresAt))}.
+                </p>
+                <CourseMaterialSummaryTool
+                  materialKey={summary.materialKey}
+                  premium={premium}
+                  initialResult={summary}
+                  registered
+                  signedIn
+                />
+              </article>
+            ))}
+          </div>
+        </section>
+      ) : null}
 
       {!registeredCourseCodes.size ? (
         <section className="platform-panel">
@@ -99,6 +132,13 @@ export default async function MaterialSummariesPage() {
               </article>
             ))}
           </div>
+          {savedMaterialKeys.size ? (
+            <p className="form-help">
+              Courses with saved summaries open from your profile cache until
+              they expire, so you can download them again without generating a
+              new summary.
+            </p>
+          ) : null}
         </section>
       ) : (
         <section className="platform-panel">

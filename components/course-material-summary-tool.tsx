@@ -7,6 +7,7 @@ type CourseSummaryResult = {
   courseCode: string;
   courseTitle: string;
   generatedAt: string;
+  expiresAt?: string;
   summary: {
     title: string;
     examFocus: string;
@@ -22,15 +23,16 @@ type CourseSummaryResult = {
 type Props = {
   materialKey: string;
   premium: boolean;
+  initialResult?: CourseSummaryResult | null;
   registered: boolean;
   signedIn: boolean;
 };
 
-export function CourseMaterialSummaryTool({ materialKey, premium, registered, signedIn }: Props) {
+export function CourseMaterialSummaryTool({ materialKey, premium, initialResult = null, registered, signedIn }: Props) {
   const reportRef = useRef<HTMLDivElement>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
-  const [result, setResult] = useState<CourseSummaryResult | null>(null);
+  const [result, setResult] = useState<CourseSummaryResult | null>(initialResult);
 
   async function generateSummary() {
     setBusy(true);
@@ -74,6 +76,11 @@ export function CourseMaterialSummaryTool({ materialKey, premium, registered, si
         <section className="material-summary-result">
           <div className="material-summary-actions">
             <strong>{result.courseCode} summary ready</strong>
+            {result.expiresAt ? (
+              <span>
+                Saved until {new Intl.DateTimeFormat("en-NG", { dateStyle: "medium", timeZone: "Africa/Lagos" }).format(new Date(result.expiresAt))}
+              </span>
+            ) : null}
             <button type="button" onClick={() => window.print()}>Print / Save as PDF</button>
           </div>
           <article ref={reportRef} className="material-summary-document">

@@ -10,12 +10,14 @@ import { normalizeCourseCode } from "./course-codes";
 const MAX_PDF_BYTES = 16 * 1024 * 1024;
 const MAX_EXCERPT_LENGTH = 32_000;
 const MIN_EXTRACTED_CHARS = 900;
+const SUMMARY_CACHE_DAYS = 30;
 
 export type CourseSummaryResult = {
   courseCode: string;
   courseTitle: string;
   materialTitle: string;
   generatedAt: string;
+  expiresAt?: string;
   model: string;
   summary: {
     title: string;
@@ -31,6 +33,11 @@ export type CourseSummaryResult = {
     revisionChecklist: string[];
     caution: string;
   };
+};
+
+export type SavedCourseSummary = CourseSummaryResult & {
+  materialKey: string;
+  expiresAt: string;
 };
 
 export class AiSummaryError extends Error {
@@ -71,6 +78,106 @@ async function userHasRegisteredCourse(userId: string, courseCode: string) {
     : [];
 
   return selectedCourseCodes.includes(normalizeCourseCode(courseCode));
+}
+
+function addDays(value: Date, days: number) {
+  const next = new Date(value);
+  next.setDate(next.getDate() + days);
+  return next;
+}
+
+function coerceCachedSummary(payload: unknown, fallback: {
+  courseCode: string;
+  courseTitle: string;
+  expiresAt: string;
+  generatedAt: string;
+  materialTitle: string;
+  model: string | null;
+}) {
+  if (!payload || typeof payload !== "object" || Array.isArray(payload)) return null;
+  const cached = payload as CourseSummaryResult;
+  if (!cached.summary || typeof cached.summary !== "object") return null;
+  return {
+    ...cached,
+    courseCode: cached.courseCode || fallback.courseCode,
+    courseTitle: cached.courseTitle || fallback.courseTitle,
+    materialTitle: cached.materialTitle || fallback.materialTitle,
+    generatedAt: cached.generatedAt || fallback.generatedAt,
+    expiresAt: cached.expiresAt || fallback.expiresAt,
+    model: cached.model || fallback.model || "saved",
+  } satisfies CourseSummaryResult;
+}
+
+async function verifySummaryAccess(userId: string, material: CourseMaterial) {
+  if (!await userHasPremium(userId)) {
+    throw new AiSummaryError("Exam summaries are available to active Semester Pass members.", 403);
+  }
+  if (!await userHasRegisteredCourse(userId, material.code)) {
+    throw new AiSummaryError(
+      "Exam summaries are limited to courses saved in your dashboard registered-course list.",
+      403,
+    );
+  }
+}
+
+export async function getCachedCourseMaterialSummary(userId: string, materialKey: string): Promise<CourseSummaryResult | null> {
+  const material = resolveAiPracticeMaterial(materialKey);
+  if (!material) throw new AiSummaryError("Choose a valid official course material.", 400);
+
+  await verifySummaryAccess(userId, material);
+
+  const admin = createAdminClient();
+  if (!admin) throw new AiSummaryError("Summary database is not configured.", 503);
+
+  const { data, error } = await admin
+    .from("course_material_summaries")
+    .select("course_code,course_title,material_title,model,summary_payload,generated_at,expires_at")
+    .eq("user_id", userId)
+    .eq("material_key", materialKey)
+    .gt("expires_at", new Date().toISOString())
+    .maybeSingle();
+
+  if (error) {
+    if (["42P01", "42703"].includes(error.code ?? "")) return null;
+    throw new AiSummaryError("Saved summary could not be loaded.", 503);
+  }
+  if (!data) return null;
+
+  return coerceCachedSummary(data.summary_payload, {
+    courseCode: data.course_code,
+    courseTitle: data.course_title,
+    materialTitle: data.material_title,
+    generatedAt: data.generated_at,
+    expiresAt: data.expires_at,
+    model: data.model,
+  });
+}
+
+export async function listSavedCourseMaterialSummaries(userId: string): Promise<SavedCourseSummary[]> {
+  const admin = createAdminClient();
+  if (!admin) return [];
+
+  const { data, error } = await admin
+    .from("course_material_summaries")
+    .select("material_key,course_code,course_title,material_title,model,summary_payload,generated_at,expires_at")
+    .eq("user_id", userId)
+    .gt("expires_at", new Date().toISOString())
+    .order("generated_at", { ascending: false })
+    .limit(20);
+
+  if (error) return [];
+
+  return (data ?? []).flatMap((row) => {
+    const summary = coerceCachedSummary(row.summary_payload, {
+      courseCode: row.course_code,
+      courseTitle: row.course_title,
+      materialTitle: row.material_title,
+      generatedAt: row.generated_at,
+      expiresAt: row.expires_at,
+      model: row.model,
+    });
+    return summary ? [{ ...summary, materialKey: row.material_key, expiresAt: row.expires_at }] : [];
+  });
 }
 
 async function extractMaterialText(material: CourseMaterial) {
@@ -149,15 +256,10 @@ export async function generateCourseMaterialSummary(userId: string, materialKey:
   const material = resolveAiPracticeMaterial(materialKey);
   if (!material) throw new AiSummaryError("Choose a valid official course material.", 400);
 
-  if (!await userHasPremium(userId)) {
-    throw new AiSummaryError("Exam summaries are available to active Semester Pass members.", 403);
-  }
-  if (!await userHasRegisteredCourse(userId, material.code)) {
-    throw new AiSummaryError(
-      "Exam summaries are limited to courses saved in your dashboard registered-course list.",
-      403,
-    );
-  }
+  await verifySummaryAccess(userId, material);
+  const cached = await getCachedCourseMaterialSummary(userId, materialKey);
+  if (cached) return cached;
+
   if (!aiQuestionDraftsConfigured()) throw new AiSummaryError("Exam summaries are not configured yet.", 503);
   const excerpt = await extractMaterialText(material);
   const model = process.env.OPENROUTER_MODEL!.trim();
@@ -186,11 +288,14 @@ export async function generateCourseMaterialSummary(userId: string, materialKey:
   const payload = await response.json() as { choices?: Array<{ message?: { content?: string } }> };
   const content = payload.choices?.[0]?.message?.content;
   if (!content) throw new AiSummaryError("AI provider returned no summary.", 502);
+  const generatedAt = new Date();
+  const expiresAt = addDays(generatedAt, SUMMARY_CACHE_DAYS).toISOString();
   const result = {
     courseCode: material.code,
     courseTitle: material.title,
     materialTitle: material.title,
-    generatedAt: new Date().toISOString(),
+    generatedAt: generatedAt.toISOString(),
+    expiresAt,
     model,
     summary: parseSummary(content),
   };
@@ -208,6 +313,23 @@ export async function generateCourseMaterialSummary(userId: string, materialKey:
       updated_at: result.generatedAt,
     },
     { onConflict: "user_id,tool_key" },
+  );
+  await admin?.from("course_material_summaries").upsert(
+    {
+      user_id: userId,
+      material_key: materialKey,
+      course_code: result.courseCode,
+      course_title: result.courseTitle,
+      material_title: result.materialTitle,
+      material_url: material.url,
+      source_label: "Official NOUN eCourseware",
+      model: result.model,
+      summary_payload: result,
+      generated_at: result.generatedAt,
+      expires_at: expiresAt,
+      updated_at: result.generatedAt,
+    },
+    { onConflict: "user_id,material_key" },
   );
   return result;
 }
