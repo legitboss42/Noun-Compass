@@ -1,17 +1,35 @@
 import { extractedCurricula, nounUpdateFeeSnapshotRetrievedAt, pureduFeeSnapshotRetrievedAt } from "@/data/curricula";
 import { courseMaterialDownloadUrl, findCourseMaterial } from "@/lib/course-materials";
+import { getCurrentUser } from "@/lib/platform/auth";
+import { enforceRateLimit, rateLimitHeaders } from "@/lib/platform/rate-limit";
 
 export const runtime = "nodejs";
 
 function apiHeaders(extra: Record<string, string> = {}) {
   return {
-    "Cache-Control": "public, max-age=3600, s-maxage=86400",
+    "Cache-Control": "private, no-store",
     "X-Robots-Tag": "noindex, nofollow, noarchive",
     ...extra,
   };
 }
 
 export async function GET(request: Request) {
+  const user = await getCurrentUser();
+  if (!user) return Response.json({ message: "Sign in to use the fee checker." }, { status: 401, headers: apiHeaders() });
+
+  const limit = enforceRateLimit({
+    bucket: "fees",
+    key: user.id,
+    limit: 60,
+    windowMs: 60 * 60 * 1000,
+  });
+  if (limit.limited) {
+    return Response.json(
+      { message: "Too many fee-checker requests. Please try again later." },
+      { status: 429, headers: apiHeaders(rateLimitHeaders(limit)) },
+    );
+  }
+
   const params = new URL(request.url).searchParams;
   const faculty = params.get("faculty");
   const program = params.get("program");

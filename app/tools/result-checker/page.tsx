@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Breadcrumbs, DisclaimerBox } from "@/components/article-elements";
 import { ResultsChecker } from "@/components/results-checker";
 import { createMetadata } from "@/lib/metadata";
+import { requireUser } from "@/lib/platform/auth";
 
 export const metadata: Metadata = {
   ...createMetadata(
@@ -12,7 +13,8 @@ export const metadata: Metadata = {
   keywords: ["NOUN result checker", "check NOUN result", "NOUN result statement", "NOUN CGPA", "NOUN matric number"],
 };
 
-export default function ResultCheckerToolPage() {
+export default async function ResultCheckerToolPage() {
+  await requireUser("/tools/result-checker");
   const toolSchema = {
     "@context": "https://schema.org",
     "@type": "WebApplication",

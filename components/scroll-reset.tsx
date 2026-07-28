@@ -1,9 +1,11 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useLayoutEffect } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 
 function scrollToTop() {
+  document.documentElement.scrollTop = 0;
+  document.body.scrollTop = 0;
   window.scrollTo({ top: 0, left: 0, behavior: "auto" });
 }
 
@@ -19,6 +21,10 @@ export function ScrollReset() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const query = searchParams.toString();
+
+  useLayoutEffect(() => {
+    enforceTop();
+  }, [pathname, query]);
 
   useEffect(() => {
     if ("scrollRestoration" in window.history) {
@@ -69,6 +75,21 @@ export function ScrollReset() {
 
       if (targetUrl === currentUrl) {
         enforceTop();
+        return;
+      }
+
+      window.sessionStorage.setItem("nouncompass-force-scroll-top", "1");
+    };
+
+    const handlePopState = () => {
+      window.sessionStorage.setItem("nouncompass-force-scroll-top", "1");
+      enforceTop();
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible" && window.sessionStorage.getItem("nouncompass-force-scroll-top") === "1") {
+        window.sessionStorage.removeItem("nouncompass-force-scroll-top");
+        enforceTop();
       }
     };
 
@@ -76,6 +97,8 @@ export function ScrollReset() {
     window.addEventListener("load", handleLoad);
     window.addEventListener("beforeunload", handleBeforeUnload);
     window.addEventListener("pagehide", handleBeforeUnload);
+    window.addEventListener("popstate", handlePopState);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
     document.addEventListener("click", handleClick, true);
 
     return () => {
@@ -83,6 +106,8 @@ export function ScrollReset() {
       window.removeEventListener("load", handleLoad);
       window.removeEventListener("beforeunload", handleBeforeUnload);
       window.removeEventListener("pagehide", handleBeforeUnload);
+      window.removeEventListener("popstate", handlePopState);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
       document.removeEventListener("click", handleClick, true);
     };
   }, [pathname, query]);

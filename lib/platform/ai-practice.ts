@@ -1,11 +1,11 @@
 import "server-only";
 
 import { randomUUID } from "crypto";
-import { courseMaterials, type CourseMaterial } from "@/lib/course-materials";
+import type { CourseMaterial } from "@/lib/course-materials";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { membershipIsActive } from "./membership";
 import { aiQuestionDraftsConfigured } from "./ai-question-drafts-core";
-import { maxAiPracticeQuestionsForMaterial } from "./ai-practice-materials";
+import { maxAiPracticeQuestionsForMaterial, resolveAiPracticeMaterial } from "./ai-practice-materials";
 
 const MAX_FREE_DAILY_SESSIONS = 1;
 const MAX_PREMIUM_DAILY_SESSIONS = 10;
@@ -68,16 +68,6 @@ export class AiPracticeError extends Error {
   constructor(message: string, readonly status = 400) {
     super(message);
   }
-}
-
-function resolveMaterial(key: string): CourseMaterial | null {
-  const match = /^([A-Z]{2,4}\d{3}):(\d+)$/i.exec(key.trim());
-  if (!match) return null;
-  const index = Number(match[2]);
-  const material = courseMaterials[index];
-  if (!material || material.code !== match[1].toUpperCase()) return null;
-  if (!/^https:\/\/nou\.edu\.ng\/coursewarecontent\//i.test(material.url)) return null;
-  return material;
 }
 
 function normalizeMode(value: unknown): AiPracticeMode {
@@ -287,7 +277,7 @@ export async function startAiPracticeSession(
   userId: string,
   input: AiPracticeStartInput,
 ): Promise<AiPracticeStartResult> {
-  const material = resolveMaterial(input.materialKey);
+  const material = resolveAiPracticeMaterial(input.materialKey);
   if (!material) throw new AiPracticeError("Choose a valid official course material.", 400);
   const premium = await getPremiumState(userId);
   await assertQuota(userId, premium);

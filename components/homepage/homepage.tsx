@@ -12,6 +12,7 @@ import {
   HomepageDesktopNavigation,
   HomepageAuthLinks,
   HomepageMobileMenu,
+  PremiumAwareMembershipAction,
 } from "@/components/homepage/home-interactions";
 import { socialLinks, site } from "@/data/site";
 import type { ArticleMeta } from "@/lib/articles";
@@ -297,10 +298,7 @@ function MembershipSection({ membership }: { membership: MembershipSummary }) {
           <span>One-time payment</span>
           <strong>{membership.price}</strong>
           <p>{membership.durationDays} days of access. No automatic renewal.</p>
-          <Link className={styles.primaryButton} href="/membership">
-            View Semester Pass
-            <HomeIcon name="arrow" size={18} />
-          </Link>
+          <PremiumAwareMembershipAction />
           <small>
             Secure checkout uses the existing Flutterwave flow when available.
           </small>

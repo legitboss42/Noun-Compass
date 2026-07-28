@@ -55,10 +55,18 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   const googleAnalyticsId = "G-TVWNP6J0GF";
   const scrollResetBootstrap = `(() => {
   const reset = () => {
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
     window.scrollTo(0, 0);
     requestAnimationFrame(() => {
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
       window.scrollTo(0, 0);
-      requestAnimationFrame(() => window.scrollTo(0, 0));
+      requestAnimationFrame(() => {
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+        window.scrollTo(0, 0);
+      });
     });
   };
 

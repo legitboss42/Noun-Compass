@@ -7,6 +7,16 @@ export function materialKeyForIndex(index: number) {
   return `${material.code}:${index}`;
 }
 
+export function resolveAiPracticeMaterial(key: string) {
+  const match = /^([A-Z]{2,4}\d{3}):(\d+)$/i.exec(key.trim());
+  if (!match) return null;
+  const index = Number(match[2]);
+  const material = courseMaterials[index];
+  if (!material || material.code !== match[1].toUpperCase()) return null;
+  if (!/^https:\/\/nou\.edu\.ng\/coursewarecontent\//i.test(material.url)) return null;
+  return material;
+}
+
 export function listAiPracticeMaterials(limit = courseMaterials.length) {
   return courseMaterials.slice(0, limit).map((material, index) => ({
     key: materialKeyForIndex(index),

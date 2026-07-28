@@ -2,10 +2,11 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { HomeIcon } from "@/components/homepage/home-icons";
 import { homeNavigation } from "@/components/homepage/home-data";
 import { useSignedInSession } from "@/lib/platform/use-auth-session";
+import { createClient } from "@/lib/supabase/client";
 import {
   getStudentNavigationKey,
   signedInStudentNavigation,
@@ -33,6 +34,57 @@ export function HomepageAuthLinks() {
         Get started
       </Link>
     </>
+  );
+}
+
+export function PremiumAwareMembershipAction() {
+  const signedIn = useSignedInSession();
+  const [premium, setPremium] = useState(false);
+
+  useEffect(() => {
+    if (!signedIn) {
+      return;
+    }
+    let active = true;
+    const supabase = createClient();
+    supabase.auth.getUser().then(async ({ data }) => {
+      const userId = data.user?.id;
+      if (!userId) return;
+      const { data: membership } = await supabase
+        .from("memberships")
+        .select("status,ends_at")
+        .eq("user_id", userId)
+        .eq("status", "active")
+        .gt("ends_at", new Date().toISOString())
+        .order("ends_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      if (!active) return;
+      setPremium(Boolean(
+        membership?.status === "active" &&
+        membership.ends_at &&
+        new Date(membership.ends_at).getTime() > Date.now(),
+      ));
+    }).catch(() => {});
+    return () => {
+      active = false;
+    };
+  }, [signedIn]);
+
+  if (signedIn && premium) {
+    return (
+      <Link className={styles.primaryButton} href="/dashboard/practice">
+        Use premium tools
+        <HomeIcon name="arrow" size={18} />
+      </Link>
+    );
+  }
+
+  return (
+    <Link className={styles.primaryButton} href="/membership">
+      View Semester Pass
+      <HomeIcon name="arrow" size={18} />
+    </Link>
   );
 }
 

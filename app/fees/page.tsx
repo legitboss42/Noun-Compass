@@ -5,12 +5,14 @@ import { FeeChecker } from "@/components/fee-checker";
 import { SocialLinks } from "@/components/social-links";
 import { getArticlesByCategory } from "@/lib/articles";
 import { createMetadata } from "@/lib/metadata";
+import { requireUser } from "@/lib/platform/auth";
 import styles from "./fees.module.css";
 import { nounUpdateFeeSnapshotRetrievedAt, pureduFeeSnapshotRetrievedAt } from "@/data/curricula";
 
 export const metadata = createMetadata("NOUN School Fees Checker & Cost Breakdown", "Check estimated NOUN school fees by programme, level, and semester, then review course, exam, and compulsory charges before paying.", "/fees");
 
-export default function FeesPage() {
+export default async function FeesPage() {
+  await requireUser("/fees");
   const articles = getArticlesByCategory("fees");
   const formatDate = (value: string) => new Intl.DateTimeFormat("en-NG", { dateStyle: "long" }).format(new Date(value));
   const toolSchema = {

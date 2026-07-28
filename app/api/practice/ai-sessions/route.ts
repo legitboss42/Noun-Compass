@@ -5,6 +5,7 @@ import {
   startAiPracticeSession,
   type AiPracticeMode,
 } from "@/lib/platform/ai-practice";
+import { enforceRateLimit, rateLimitHeaders } from "@/lib/platform/rate-limit";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -15,6 +16,19 @@ export async function POST(request: Request) {
     return NextResponse.json(
       { message: "Sign in to generate AI practice questions." },
       { status: 401 },
+    );
+  }
+
+  const limit = enforceRateLimit({
+    bucket: "ai-practice-session-start",
+    key: user.id,
+    limit: 10,
+    windowMs: 24 * 60 * 60 * 1000,
+  });
+  if (limit.limited) {
+    return NextResponse.json(
+      { message: "Daily AI practice generation limit reached. Please try again later." },
+      { status: 429, headers: rateLimitHeaders(limit) },
     );
   }
 
@@ -43,4 +57,3 @@ export async function POST(request: Request) {
     );
   }
 }
-

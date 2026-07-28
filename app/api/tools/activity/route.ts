@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/platform/auth";
+import { enforceRateLimit, rateLimitHeaders } from "@/lib/platform/rate-limit";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 export const runtime = "nodejs";
@@ -10,6 +11,7 @@ const allowedTools = new Set([
   "cgpa-calculator",
   "study-planner",
   "result-checker",
+  "material-summary",
 ]);
 
 function sanitizeSummary(value: unknown) {
@@ -20,6 +22,18 @@ function sanitizeSummary(value: unknown) {
 export async function POST(request: Request) {
   const user = await getCurrentUser();
   if (!user) return NextResponse.json({ saved: false }, { status: 401 });
+  const limit = enforceRateLimit({
+    bucket: "tool-activity-save",
+    key: user.id,
+    limit: 120,
+    windowMs: 60 * 60 * 1000,
+  });
+  if (limit.limited) {
+    return NextResponse.json(
+      { saved: false, message: "Too many tool updates. Please try again later." },
+      { status: 429, headers: rateLimitHeaders(limit) },
+    );
+  }
 
   const body = await request.json().catch(() => null) as {
     toolKey?: string;

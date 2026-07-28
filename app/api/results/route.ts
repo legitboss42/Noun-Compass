@@ -1,4 +1,6 @@
 import { NextResponse } from "next/server";
+import { getCurrentUser } from "@/lib/platform/auth";
+import { enforceRateLimit, rateLimitHeaders } from "@/lib/platform/rate-limit";
 import {
   isValidMatriculationNumber,
   normalizeMatriculationNumber,
@@ -7,6 +9,24 @@ import {
 
 export async function POST(request: Request) {
   try {
+    const user = await getCurrentUser();
+    if (!user) {
+      return NextResponse.json({ success: false, message: "Sign in to use the result checker." }, { status: 401, headers: noIndexHeaders() });
+    }
+
+    const limit = enforceRateLimit({
+      bucket: "result-checker",
+      key: user.id,
+      limit: 20,
+      windowMs: 60 * 60 * 1000,
+    });
+    if (limit.limited) {
+      return NextResponse.json(
+        { success: false, message: "Too many result-checker requests. Please try again later." },
+        { status: 429, headers: noIndexHeaders(rateLimitHeaders(limit)) },
+      );
+    }
+
     const body = (await request.json()) as { matricNo?: unknown };
     const matricNo = normalizeMatriculationNumber(body.matricNo);
 
@@ -24,6 +44,6 @@ export async function POST(request: Request) {
   }
 }
 
-function noIndexHeaders() {
-  return { "Cache-Control": "no-store", "X-Robots-Tag": "noindex, nofollow, noarchive" };
+function noIndexHeaders(extra: Record<string, string> = {}) {
+  return { "Cache-Control": "no-store", "X-Robots-Tag": "noindex, nofollow, noarchive", ...extra };
 }

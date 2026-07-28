@@ -1,6 +1,7 @@
 import { Breadcrumbs, DisclaimerBox } from "@/components/article-elements";
 import { CgpaCalculator } from "@/components/cgpa-calculator";
 import { createMetadata } from "@/lib/metadata";
+import { requireUser } from "@/lib/platform/auth";
 
 export const metadata = createMetadata(
   "NOUN CGPA Calculator and Grade Point Estimator",
@@ -8,7 +9,8 @@ export const metadata = createMetadata(
   "/tools/cgpa-calculator",
 );
 
-export default function CgpaCalculatorPage() {
+export default async function CgpaCalculatorPage() {
+  await requireUser("/tools/cgpa-calculator");
   const toolSchema = {
     "@context": "https://schema.org",
     "@type": "WebApplication",

@@ -2,11 +2,24 @@ import { NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/platform/auth";
 import { normalizeCourseCode } from "@/lib/platform/course-codes";
 import { createQuestionStore, StoreError, type PracticeMode } from "@/lib/platform/question-store";
+import { enforceRateLimit, rateLimitHeaders } from "@/lib/platform/rate-limit";
 import { getBooleanPlatformSetting } from "@/lib/platform/runtime-settings";
 
 export async function POST(request: Request) {
   const user = await getCurrentUser();
   if (!user) return NextResponse.json({ message: "Sign in to start practice." }, { status: 401 });
+  const limit = enforceRateLimit({
+    bucket: "practice-session-start",
+    key: user.id,
+    limit: 60,
+    windowMs: 24 * 60 * 60 * 1000,
+  });
+  if (limit.limited) {
+    return NextResponse.json(
+      { message: "Daily practice-session limit reached. Please try again later." },
+      { status: 429, headers: rateLimitHeaders(limit) },
+    );
+  }
   const body = await request.json().catch(() => null) as { courseCode?: string; mode?: string; module?: string; unit?: string; difficulty?: number; questionCount?: number } | null;
   const courseCode = normalizeCourseCode(body?.courseCode ?? "");
   const modes: PracticeMode[] = ["diagnostic", "practice", "timed-mock", "revision"];

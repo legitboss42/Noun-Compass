@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { Breadcrumbs, DisclaimerBox } from "@/components/article-elements";
+import { CourseMaterialSummaryTool } from "@/components/course-material-summary-tool";
 import {
   courseMaterialDownloadUrl,
   courseMaterials,
@@ -8,6 +9,11 @@ import {
   courseMaterialsRetrievedAt,
 } from "@/lib/course-materials";
 import { createMetadata } from "@/lib/metadata";
+import { getCurrentUser } from "@/lib/platform/auth";
+import { materialKeyForIndex } from "@/lib/platform/ai-practice-materials";
+import { normalizeCourseCode } from "@/lib/platform/course-codes";
+import { membershipIsActive } from "@/lib/platform/membership";
+import { createClient } from "@/lib/supabase/server";
 import { site } from "@/data/site";
 
 export async function generateMetadata({
@@ -74,6 +80,33 @@ export default async function CourseMaterialsPage({
   const checked = new Intl.DateTimeFormat("en-NG", {
     dateStyle: "long",
   }).format(new Date(courseMaterialsRetrievedAt));
+  const user = await getCurrentUser();
+  const supabase = user ? await createClient() : null;
+  const [{ data: membership }, { data: profile }] =
+    user && supabase
+      ? await Promise.all([
+          supabase
+            .from("memberships")
+            .select("status,ends_at")
+            .eq("user_id", user.id)
+            .eq("status", "active")
+            .gt("ends_at", new Date().toISOString())
+            .order("ends_at", { ascending: false })
+            .limit(1)
+            .maybeSingle(),
+          supabase
+            .from("profiles")
+            .select("selected_course_codes")
+            .eq("id", user.id)
+            .maybeSingle(),
+        ])
+      : [{ data: null }, { data: null }];
+  const premium = membershipIsActive(membership?.status, membership?.ends_at);
+  const registeredCourseCodes = new Set(
+    Array.isArray(profile?.selected_course_codes)
+      ? profile.selected_course_codes.map((code) => normalizeCourseCode(String(code))).filter(Boolean)
+      : [],
+  );
 
   const pageHref = (nextPage: number) => {
     const next = new URLSearchParams();
@@ -278,6 +311,12 @@ export default async function CourseMaterialsPage({
                   >
                     Open NOUN Page
                   </a>
+                  <CourseMaterialSummaryTool
+                    materialKey={materialKeyForIndex(courseMaterials.indexOf(material))}
+                    premium={premium}
+                    registered={registeredCourseCodes.has(normalizeCourseCode(material.code))}
+                    signedIn={Boolean(user)}
+                  />
                 </div>
                 <span className="request-material">
                   Need to compare versions or page details? Open the linked
