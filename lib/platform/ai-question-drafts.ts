@@ -135,14 +135,15 @@ export async function generateQuestionDraftCsv(
   assertDraftInput(input);
 
   const count = normalizeQuestionCount(input.questionCount);
-  const model = process.env.OPENROUTER_MODEL!;
+  const model = process.env.OPENROUTER_MODEL!.trim();
+  const apiKey = process.env.OPENROUTER_API_KEY!.trim();
   const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
     method: "POST",
     headers: {
-      "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
+      "Authorization": `Bearer ${apiKey}`,
       "Content-Type": "application/json",
-      "HTTP-Referer": process.env.OPENROUTER_SITE_URL || process.env.NEXT_PUBLIC_SITE_URL || "https://nouncompass.me",
-      "X-OpenRouter-Title": process.env.OPENROUTER_APP_TITLE || "NounCompass",
+      "HTTP-Referer": process.env.OPENROUTER_SITE_URL?.trim() || process.env.NEXT_PUBLIC_SITE_URL?.trim() || "https://nouncompass.me",
+      "X-OpenRouter-Title": process.env.OPENROUTER_APP_TITLE?.trim() || "NounCompass",
     },
     body: JSON.stringify({
       model,

@@ -23,9 +23,9 @@ const MAX_QUESTION_COUNT = 25;
 export function aiQuestionDraftsConfigured(env = process.env) {
   return (
     env.AI_QUESTION_DRAFTS_ENABLED === "true" &&
-    env.AI_PROVIDER === "openrouter" &&
-    Boolean(env.OPENROUTER_API_KEY) &&
-    Boolean(env.OPENROUTER_MODEL)
+    env.AI_PROVIDER?.trim() === "openrouter" &&
+    Boolean(env.OPENROUTER_API_KEY?.trim()) &&
+    Boolean(env.OPENROUTER_MODEL?.trim())
   );
 }
 
