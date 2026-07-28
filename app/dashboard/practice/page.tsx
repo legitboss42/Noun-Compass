@@ -102,6 +102,9 @@ export default async function DashboardPracticePage() {
                 <small>
                   {session.score === null ? "No score yet" : `${session.score}%`} - {String(session.question_count ?? 0)} questions - {String(session.mode ?? "practice")} - {new Intl.DateTimeFormat("en-NG", { dateStyle: "medium", timeStyle: "short", timeZone: "Africa/Lagos" }).format(new Date(session.created_at))}
                 </small>
+                {session.status === "active" ? (
+                  <Link href={`/dashboard/ai-practice?session=${session.id}`}>Continue test</Link>
+                ) : null}
               </article>
             ))}
           </div>

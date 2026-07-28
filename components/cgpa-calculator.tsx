@@ -1,7 +1,8 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { saveToolActivity } from "@/lib/platform/tool-activity-client";
 import styles from "./cgpa-calculator.module.css";
 
 type CourseRow = {
@@ -159,6 +160,26 @@ export function CgpaCalculator() {
       ),
     };
   }, [semesters]);
+
+  useEffect(() => {
+    if (!computed.completedCourses) return;
+    const timer = window.setTimeout(() => {
+      saveToolActivity("cgpa-calculator", {
+        cgpa: computed.roundedCgpa,
+        classOfDegree: computed.classOfDegree,
+        completedCourses: computed.completedCourses,
+        totalUnits: computed.totalUnits,
+        semesters: computed.semesters.length,
+      });
+    }, 800);
+    return () => window.clearTimeout(timer);
+  }, [
+    computed.classOfDegree,
+    computed.completedCourses,
+    computed.roundedCgpa,
+    computed.semesters.length,
+    computed.totalUnits,
+  ]);
 
   const addSemester = () => {
     const nextId = semesters.length

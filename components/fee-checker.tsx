@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { saveToolActivity } from "@/lib/platform/tool-activity-client";
 import styles from "./fee-checker.module.css";
 
 type CatalogSemester = { semester: string; label: string; available: boolean };
@@ -61,7 +62,22 @@ export function FeeChecker() {
       const query = new URLSearchParams({ faculty, program: programmeName, level: levelValue, semester: semesterValue });
       const response = await fetch(`/api/fees?${query.toString()}`);
       if (!response.ok) throw new Error("Unavailable");
-      setResult(await response.json());
+      const nextResult = await response.json() as FeeResult;
+      setResult(nextResult);
+      const nextCourses = nextResult.semester.courses ?? [];
+      const nextCourseTotal = nextResult.semester.sourceTotals?.courseFee ?? nextCourses.reduce((sum, course) => sum + course.courseFee, 0);
+      const nextExamTotal = nextResult.semester.sourceTotals?.examFee ?? nextCourses.reduce((sum, course) => sum + course.examFee, 0);
+      const nextTotal = nextResult.semester.sourceTotals?.allFees ?? (nextResult.semester.semesterFee + nextCourseTotal + nextExamTotal);
+      saveToolActivity("fee-checker", {
+        programme: nextResult.programme.program,
+        faculty: nextResult.programme.faculty,
+        level: nextResult.level.label,
+        semester: nextResult.semester.label,
+        total: nextTotal,
+        courses: nextCourses.length,
+        units: nextCourses.reduce((sum, course) => sum + course.units, 0),
+        feesAvailable: Boolean(nextResult.semester.feeSource),
+      });
     } catch {
       setError("This fee breakdown could not be loaded. Please try again.");
     } finally {

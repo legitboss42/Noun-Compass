@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import { saveToolActivity } from "@/lib/platform/tool-activity-client";
 
 type Status = { type: "idle" | "loading" | "error"; message: string };
 
@@ -33,9 +34,14 @@ export function ResultsChecker() {
       const data = (await response.json()) as { success?: boolean; finalUrl?: string; message?: string };
 
       if (!response.ok || !data.success || !data.finalUrl) {
+        saveToolActivity("result-checker", {
+          status: "failed",
+          reason: data.message || "portal_unavailable",
+        });
         throw new Error(data.message || "The official result portal could not be opened. Try again shortly.");
       }
 
+      saveToolActivity("result-checker", { status: "opened" });
       window.location.assign(data.finalUrl);
     } catch (error) {
       setStatus({

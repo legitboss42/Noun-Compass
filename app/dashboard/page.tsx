@@ -9,6 +9,42 @@ import {
   findCourseMaterial,
 } from "@/lib/course-materials";
 
+type ToolActivityRow = {
+  tool_key: string;
+  summary: Record<string, unknown> | null;
+  updated_at: string;
+};
+
+type StudySessionRow = {
+  title: string | null;
+  course_code: string | null;
+  course_title: string | null;
+  starts_at: string;
+  ends_at: string;
+};
+
+type AiSessionRow = {
+  id: string;
+  course_code: string | null;
+  course_title: string | null;
+  status: string | null;
+  score: number | null;
+  question_count: number | null;
+  created_at: string;
+};
+
+const formatNaira = (value: unknown) =>
+  typeof value === "number" && Number.isFinite(value)
+    ? `₦${value.toLocaleString("en-NG")}`
+    : "Pending";
+
+const formatDashboardDateTime = (value: string) =>
+  new Intl.DateTimeFormat("en-NG", {
+    dateStyle: "medium",
+    timeStyle: "short",
+    timeZone: "Africa/Lagos",
+  }).format(new Date(value));
+
 export default async function DashboardPage({
   searchParams,
 }: {
@@ -34,6 +70,9 @@ export default async function DashboardPage({
     { data: membership },
     { data: notices },
     { data: revisions },
+    { data: toolActivity },
+    { data: nextStudySession },
+    { data: latestAiSession },
   ] = supabase
     ? await Promise.all([
         supabase.from("profiles").select("*").eq("id", user.id).maybeSingle(),
@@ -56,8 +95,28 @@ export default async function DashboardPage({
           .eq("user_id", user.id)
           .lte("due_at", new Date().toISOString())
           .limit(20),
+        supabase
+          .from("user_tool_activity")
+          .select("tool_key,summary,updated_at")
+          .eq("user_id", user.id)
+          .in("tool_key", ["fee-checker", "cgpa-calculator", "study-planner", "result-checker"]),
+        supabase
+          .from("study_plan_sessions")
+          .select("title,course_code,course_title,starts_at,ends_at")
+          .eq("user_id", user.id)
+          .gte("starts_at", new Date().toISOString())
+          .order("starts_at", { ascending: true })
+          .limit(1)
+          .maybeSingle(),
+        supabase
+          .from("ai_practice_sessions")
+          .select("id,course_code,course_title,status,score,question_count,created_at")
+          .eq("user_id", user.id)
+          .order("created_at", { ascending: false })
+          .limit(1)
+          .maybeSingle(),
       ])
-    : [{ data: null }, { data: null }, { data: [] }, { data: [] }];
+    : [{ data: null }, { data: null }, { data: [] }, { data: [] }, { data: [] }, { data: null }, { data: null }];
 
   const selectedCodes = (profile?.selected_course_codes ?? []) as string[];
   const { data: scheduleEntries } =
@@ -85,6 +144,17 @@ export default async function DashboardPage({
       },
   );
   const premium = membershipIsActive(membership?.status, membership?.ends_at);
+  const activityByTool = new Map(
+    ((toolActivity ?? []) as ToolActivityRow[]).map((activity) => [
+      activity.tool_key,
+      activity,
+    ]),
+  );
+  const feeSummary = activityByTool.get("fee-checker")?.summary;
+  const cgpaSummary = activityByTool.get("cgpa-calculator")?.summary;
+  const plannerSummary = activityByTool.get("study-planner")?.summary;
+  const upcomingStudy = nextStudySession as StudySessionRow | null;
+  const aiSession = latestAiSession as AiSessionRow | null;
 
   return (
     <>
@@ -266,23 +336,49 @@ export default async function DashboardPage({
       <section className="platform-action-grid">
         <Link href="/fees">
           <strong>Estimate fees</strong>
-          <span>
-            Use programme and semester data, then confirm on your portal.
-          </span>
+          {feeSummary ? (
+            <span>
+              {formatNaira(feeSummary.total)} estimated for {String(feeSummary.semester ?? "your last semester")} · {String(feeSummary.courses ?? 0)} courses
+            </span>
+          ) : (
+            <span>Use programme and semester data, then confirm on your portal.</span>
+          )}
         </Link>
         <Link href="/tools/cgpa-calculator">
           <strong>Check CGPA</strong>
-          <span>Estimate grade points without storing result records.</span>
+          {cgpaSummary ? (
+            <span>
+              Current estimate: {Number(cgpaSummary.cgpa ?? 0).toFixed(2)} · {String(cgpaSummary.classOfDegree ?? "Class pending")}
+            </span>
+          ) : (
+            <span>Estimate grade points without storing result records.</span>
+          )}
         </Link>
         <Link href="/tools/study-planner">
           <strong>Build study timetable</strong>
-          <span>Plan reading around your actual free hours.</span>
+          {upcomingStudy ? (
+            <span>
+              Next: {upcomingStudy.course_code ?? upcomingStudy.title ?? "Study block"} · {formatDashboardDateTime(upcomingStudy.starts_at)}
+            </span>
+          ) : plannerSummary?.nextSession && typeof plannerSummary.nextSession === "object" ? (
+            <span>
+              Last generated: {String((plannerSummary.nextSession as Record<string, unknown>).label ?? "Study block")} · {String((plannerSummary.nextSession as Record<string, unknown>).day ?? "next available day")}
+            </span>
+          ) : (
+            <span>Plan reading around your actual free hours.</span>
+          )}
         </Link>
-        <Link href="/dashboard/practice">
+        <Link href={aiSession?.status === "active" ? `/dashboard/ai-practice?session=${aiSession.id}` : "/dashboard/practice"}>
           <strong>Prepare for exams</strong>
-          <span>
-            Use practice questions as more checked banks are released.
-          </span>
+          {aiSession ? (
+            <span>
+              {aiSession.status === "completed"
+                ? `Last AI score: ${String(aiSession.score ?? 0)}%`
+                : `Continue ${String(aiSession.course_code ?? "AI practice")} · ${String(aiSession.question_count ?? 0)} questions`}
+            </span>
+          ) : (
+            <span>Use practice questions as more checked banks are released.</span>
+          )}
         </Link>
       </section>
     </>

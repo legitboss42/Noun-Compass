@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { savePremiumStudyPlan, updateStudyPlannerReminders } from "@/app/tools/study-planner/actions";
+import { saveToolActivity } from "@/lib/platform/tool-activity-client";
 import type { StudyPlannerCourse } from "@/lib/study-planner-catalog";
 import styles from "./study-planner.module.css";
 
@@ -503,6 +504,22 @@ export function StudyPlanner({
     window.requestAnimationFrame(() => {
       const plan = buildPlan({ courses: selectedCourses, days, studentType, rhythm, sessionLengthMinutes });
       setResult(plan);
+      if (plan) {
+        const firstSession = plan.days.flatMap((day) => day.sessions.map((session) => ({ day: day.day, session })))[0];
+        saveToolActivity("study-planner", {
+          courses: selectedCourses.length,
+          weeklyHours: plan.totalHours,
+          sessionLengthMinutes: plan.sessionLengthMinutes,
+          nextSession: firstSession
+            ? {
+                day: firstSession.day,
+                label: firstSession.session.label,
+                start: firstSession.session.start,
+                end: firstSession.session.end,
+              }
+            : null,
+        });
+      }
       setGeneratingPlan(false);
     });
   };

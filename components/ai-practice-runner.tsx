@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { maxAiPracticeQuestionsForMaterial } from "@/lib/platform/ai-practice-materials";
 
 type MaterialOption = {
@@ -35,6 +35,8 @@ type StartPayload = {
     premium: boolean;
   };
   questions?: Question[];
+  responses?: Record<string, string>;
+  status?: string;
 };
 
 type ReviewItem = {
@@ -57,9 +59,11 @@ type CompletePayload = {
 export function AiPracticeRunner({
   materials,
   premium,
+  resumeSessionId,
 }: {
   materials: MaterialOption[];
   premium: boolean;
+  resumeSessionId?: string;
 }) {
   const [query, setQuery] = useState("");
   const [materialKey, setMaterialKey] = useState(materials[0]?.key ?? "");
@@ -99,6 +103,42 @@ export function AiPracticeRunner({
   const selectedQuestionCount = questionOptions.includes(Number(questionCount))
     ? questionCount
     : String(questionOptions[questionOptions.length - 1] ?? 5);
+
+  useEffect(() => {
+    if (!resumeSessionId) return;
+    let cancelled = false;
+    async function loadSession() {
+      setBusy(true);
+      setStatus("Loading your unfinished AI practice session...");
+      try {
+        const response = await fetch(`/api/practice/ai-sessions/${resumeSessionId}`);
+        const payload = await response.json() as StartPayload;
+        if (cancelled) return;
+        if (!response.ok || !payload.session || !payload.questions?.length) {
+          setStatus(payload.message || "This AI practice session could not be loaded.");
+          return;
+        }
+        const savedAnswers = payload.responses ?? {};
+        const firstUnanswered = payload.questions.findIndex((question) => !savedAnswers[question.id]);
+        setSessionId(payload.session.id);
+        setSessionLabel(`${payload.session.courseCode} — ${payload.session.courseTitle}`);
+        setQuestionCount(String(payload.session.questionCount));
+        setQuestions(payload.questions);
+        setAnswers(savedAnswers);
+        setIndex(firstUnanswered >= 0 ? firstUnanswered : 0);
+        setResult(null);
+        setStatus(payload.status === "completed" ? "This session was already completed." : "");
+      } catch {
+        if (!cancelled) setStatus("This AI practice session could not be loaded.");
+      } finally {
+        if (!cancelled) setBusy(false);
+      }
+    }
+    void loadSession();
+    return () => {
+      cancelled = true;
+    };
+  }, [resumeSessionId]);
 
   async function start() {
     setBusy(true);

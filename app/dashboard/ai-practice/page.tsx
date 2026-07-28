@@ -12,8 +12,13 @@ export const metadata: Metadata = {
   alternates: null,
 };
 
-export default async function DashboardAiPracticePage() {
+export default async function DashboardAiPracticePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ session?: string }>;
+}) {
   const user = await requireUser("/dashboard/ai-practice");
+  const params = await searchParams;
   const supabase = await createClient();
   const now = new Date().toISOString();
   const [{ data: profile }, { data: membership }] = await Promise.all([
@@ -71,7 +76,11 @@ export default async function DashboardAiPracticePage() {
         </article>
       </section>
       {materials.length ? (
-        <AiPracticeRunner materials={materials} premium={premium} />
+        <AiPracticeRunner
+          materials={materials}
+          premium={premium}
+          resumeSessionId={params.session}
+        />
       ) : (
         <section className="platform-panel empty-state">
           <span className="eyebrow">Semester setup required</span>

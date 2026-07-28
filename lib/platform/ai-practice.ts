@@ -45,6 +45,11 @@ export type AiPracticeStartResult = {
   questions: PublicAiPracticeQuestion[];
 };
 
+export type AiPracticeResumeResult = AiPracticeStartResult & {
+  responses: Record<string, string>;
+  status: string;
+};
+
 export type AiPracticeCompleteResult = {
   score: number;
   correct: number;
@@ -378,4 +383,32 @@ export async function completeAiPracticeSession(
   }
 
   return { score, correct, total, review };
+}
+
+export async function getAiPracticeSession(
+  userId: string,
+  sessionId: string,
+): Promise<AiPracticeResumeResult> {
+  const admin = createAdminClient();
+  if (!admin) throw new AiPracticeError("Practice database is not configured.", 503);
+  const { data: session } = await admin
+    .from("ai_practice_sessions")
+    .select("id,user_id,course_code,course_title,mode,question_count,generated_questions,responses,status")
+    .eq("id", sessionId)
+    .maybeSingle();
+  if (!session || session.user_id !== userId) throw new AiPracticeError("AI practice session not found.", 404);
+  const questions = session.generated_questions as AiPracticeQuestion[];
+  return {
+    session: {
+      id: session.id,
+      courseCode: session.course_code,
+      courseTitle: session.course_title,
+      mode: session.mode as AiPracticeMode,
+      questionCount: session.question_count,
+      premium: await getPremiumState(userId),
+    },
+    questions: publicQuestions(questions),
+    responses: (session.responses ?? {}) as Record<string, string>,
+    status: String(session.status ?? "active"),
+  };
 }
