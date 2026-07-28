@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { AiPracticeRunner } from "@/components/ai-practice-runner";
-import { listAiPracticeMaterials } from "@/lib/platform/ai-practice-materials";
+import { listAiPracticeMaterialsForCourseCodes } from "@/lib/platform/ai-practice-materials";
 import { requireUser } from "@/lib/platform/auth";
+import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
   title: "AI Practice",
@@ -10,8 +12,16 @@ export const metadata: Metadata = {
 };
 
 export default async function DashboardAiPracticePage() {
-  await requireUser("/dashboard/ai-practice");
-  const materials = listAiPracticeMaterials(2600);
+  const user = await requireUser("/dashboard/ai-practice");
+  const supabase = await createClient();
+  const { data: profile } =
+    (await supabase
+      ?.from("profiles")
+      .select("selected_course_codes")
+      .eq("id", user.id)
+      .maybeSingle()) ?? { data: null };
+  const selectedCodes = (profile?.selected_course_codes ?? []) as string[];
+  const materials = listAiPracticeMaterialsForCourseCodes(selectedCodes);
 
   return (
     <>
@@ -43,7 +53,21 @@ export default async function DashboardAiPracticePage() {
           <small>Paid members receive higher daily generation and question limits.</small>
         </article>
       </section>
-      <AiPracticeRunner materials={materials} />
+      {materials.length ? (
+        <AiPracticeRunner materials={materials} />
+      ) : (
+        <section className="platform-panel empty-state">
+          <span className="eyebrow">Semester setup required</span>
+          <h2>No registered course materials available yet</h2>
+          <p>
+            Add your registered course codes in the dashboard first. AI Practice
+            will then show only official materials that match those courses.
+          </p>
+          <Link className="button" href="/dashboard/profile">
+            Add registered courses
+          </Link>
+        </section>
+      )}
     </>
   );
 }

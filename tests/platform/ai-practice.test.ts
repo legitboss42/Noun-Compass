@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import {
   listAiPracticeMaterials,
+  listAiPracticeMaterialsForCourseCodes,
   materialKeyForIndex,
 } from "../../lib/platform/ai-practice-materials";
 
@@ -16,4 +17,10 @@ test("AI practice material options keep course identity visible", () => {
   const [first] = listAiPracticeMaterials(1);
   assert.ok(first.code);
   assert.ok(first.title);
+});
+
+test("AI practice can filter materials to registered dashboard courses", () => {
+  const materials = listAiPracticeMaterialsForCourseCodes(["ACC101"]);
+  assert.ok(materials.length >= 1);
+  assert.equal(materials.every((material) => material.code === "ACC101"), true);
 });

@@ -73,14 +73,13 @@ export function AiPracticeRunner({
 
   const filtered = useMemo(() => {
     const term = query.trim().toLowerCase();
-    if (!term) return materials.slice(0, 80);
+    if (!term) return materials;
     return materials
       .filter((material) =>
         `${material.code} ${material.title} ${material.faculty ?? ""}`
           .toLowerCase()
           .includes(term),
-      )
-      .slice(0, 80);
+      );
   }, [materials, query]);
 
   const current = questions[index];
@@ -214,6 +213,7 @@ export function AiPracticeRunner({
       </div>
       <p>
         These questions are generated for your private practice from official course-material text.
+        Only materials matching your registered dashboard courses are shown here.
         They are not reviewed NounCompass bank questions and they are not official NOUN exam questions.
       </p>
 
@@ -304,4 +304,3 @@ export function AiPracticeRunner({
     </section>
   );
 }
-
