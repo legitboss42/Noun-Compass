@@ -2,7 +2,19 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   async redirects() {
+    const editorialProfileRedirects = [
+      "/authors/editorial-team",
+      "/authors/victor",
+      "/reviewers/student-workflow",
+      "/reviewers/student-finance",
+    ].map((source) => ({
+      source,
+      destination: "https://webgrowth.info/victorious/",
+      permanent: true,
+    }));
+
     return [
+      ...editorialProfileRedirects,
       {
         source: "/articles/how-to-fix-missing-noun-e-wallet-balance",
         destination: "/articles/fix-missing-noun-e-wallet-balance",
