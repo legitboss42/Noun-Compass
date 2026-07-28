@@ -20,7 +20,10 @@ export default async function DashboardPracticePage() {
             correct answers move through 1, 3, 7, 14, and 30-day intervals.
           </p>
         </div>
-        {!premium && <Link className="button" href="/membership">See semester pass</Link>}
+        <div className="platform-form-actions">
+          <Link className="button" href="/dashboard/ai-practice">Generate AI practice</Link>
+          {!premium && <Link className="button button-secondary" href="/membership">See semester pass</Link>}
+        </div>
       </header>
 
       <section className="platform-stat-grid" aria-label="Practice progress">

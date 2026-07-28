@@ -487,6 +487,13 @@ h6,
   box-shadow: var(--surface-shadow);
 }
 
+.ai-practice-panel, .ai-practice-runner { border-radius: var(--radius-lg); }
+.ai-practice-result { display: grid; gap: 16px; }
+.ai-loading { display: inline-flex; align-items: center; gap: 10px; }
+.ai-loading span { width: 18px; height: 18px; border-radius: 999px; border: 3px solid rgba(14, 122, 62, .2); border-top-color: var(--green); animation: ai-spin .8s linear infinite; }
+@keyframes ai-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .ai-loading span { animation: none; } }
+
 .empty-state {
   padding: clamp(28px, 5vw, 50px);
   border: 1px dashed #afc8b9;

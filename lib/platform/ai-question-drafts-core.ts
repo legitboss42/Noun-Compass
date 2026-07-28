@@ -20,7 +20,9 @@ export const QUESTION_DRAFT_CSV_HEADERS = [
 const DEFAULT_QUESTION_COUNT = 10;
 const MAX_QUESTION_COUNT = 25;
 
-export function aiQuestionDraftsConfigured(env = process.env) {
+export function aiQuestionDraftsConfigured(
+  env: Record<string, string | undefined> = process.env,
+) {
   return (
     env.AI_QUESTION_DRAFTS_ENABLED === "true" &&
     env.AI_PROVIDER?.trim() === "openrouter" &&

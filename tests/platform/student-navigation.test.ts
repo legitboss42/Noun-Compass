@@ -9,6 +9,7 @@ test("dashboard activates the dashboard mobile nav item", () => {
 test("practice and public exam-prep routes activate exams", () => {
   assert.equal(getStudentNavigationKey("/dashboard/practice", true), "exams");
   assert.equal(getStudentNavigationKey("/dashboard/practice/session", true), "exams");
+  assert.equal(getStudentNavigationKey("/dashboard/ai-practice", true), "exams");
   assert.equal(getStudentNavigationKey("/exam-prep/GST101", true), "exams");
 });
 

@@ -870,6 +870,12 @@ h6,
 .practice-options label { display: grid; grid-template-columns: auto 1fr; gap: 12px; align-items: start; padding: 15px; border: 1px solid var(--line); cursor: pointer; }
 .practice-options label:has(input:checked) { border-color: var(--green); background: var(--green-pale); }
 .practice-options span { display: flex; gap: 10px; line-height: 1.45; }
+.ai-practice-panel, .ai-practice-runner { border-radius: var(--radius-lg); }
+.ai-practice-result { display: grid; gap: 16px; }
+.ai-loading { display: inline-flex; align-items: center; gap: 10px; }
+.ai-loading span { width: 18px; height: 18px; border-radius: 999px; border: 3px solid rgba(14, 122, 62, .2); border-top-color: var(--green); animation: ai-spin .8s linear infinite; }
+@keyframes ai-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .ai-loading span { animation: none; } }
 
 @media (max-width: 900px) {
   .platform-layout, .platform-layout-admin, .membership-layout { grid-template-columns: 1fr; }

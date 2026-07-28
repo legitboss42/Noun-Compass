@@ -9,6 +9,7 @@ const dashboardLinks = [
   ["Overview", "/dashboard"],
   ["Semester setup", "/dashboard/profile"],
   ["Exam preparation", "/dashboard/practice"],
+  ["AI practice", "/dashboard/ai-practice"],
   ["Support", "/dashboard/support"],
   ["Membership", "/membership"],
 ] as const;

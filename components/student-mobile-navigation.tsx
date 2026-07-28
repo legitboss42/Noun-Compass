@@ -21,6 +21,7 @@ const drawerLinks = [
   ["Dashboard", "/dashboard"],
   ["Profile", "/dashboard/profile"],
   ["Exam preparation", "/dashboard/practice"],
+  ["AI practice", "/dashboard/ai-practice"],
   ["Study planner", "/tools/study-planner"],
   ["Course materials", "/course-materials"],
   ["Membership", "/membership"],

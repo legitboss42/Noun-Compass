@@ -31,7 +31,7 @@ function matchesPrefix(pathname: string, prefixes: string[]) {
 
 export function getStudentNavigationKey(pathname: string, signedIn: boolean): StudentNavKey | null {
   if (pathname === "/dashboard") return "dashboard";
-  if (matchesPrefix(pathname, ["/dashboard/practice", "/practice", "/exam-prep"])) return "exams";
+  if (matchesPrefix(pathname, ["/dashboard/practice", "/dashboard/ai-practice", "/practice", "/exam-prep"])) return "exams";
   if (matchesPrefix(pathname, ["/tools/study-planner"])) return "planner";
   if (matchesPrefix(pathname, ["/course-materials", "/student-guides", "/articles"])) return "resources";
   if (matchesPrefix(pathname, ["/dashboard/profile", "/membership", "/account/payment", "/dashboard/support"])) return "account";
