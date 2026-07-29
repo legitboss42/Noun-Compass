@@ -5,14 +5,14 @@ import { FeeChecker } from "@/components/fee-checker";
 import { SocialLinks } from "@/components/social-links";
 import { getArticlesByCategory } from "@/lib/articles";
 import { createMetadata } from "@/lib/metadata";
-import { requireUser } from "@/lib/platform/auth";
+import { getCurrentUser } from "@/lib/platform/auth";
 import styles from "./fees.module.css";
 import { nounUpdateFeeSnapshotRetrievedAt, pureduFeeSnapshotRetrievedAt } from "@/data/curricula";
 
 export const metadata = createMetadata("NOUN School Fees Checker & Cost Breakdown", "Check estimated NOUN school fees by programme, level, and semester, then review course, exam, and compulsory charges before paying.", "/fees");
 
 export default async function FeesPage() {
-  await requireUser("/fees");
+  const user = await getCurrentUser();
   const articles = getArticlesByCategory("fees");
   const formatDate = (value: string) => new Intl.DateTimeFormat("en-NG", { dateStyle: "long" }).format(new Date(value));
   const toolSchema = {
@@ -40,7 +40,7 @@ export default async function FeesPage() {
         <p>The checker gives you one place to review semester fees, course registration, and exam registration. Use it to compare totals, review course rows, and prepare before you enter the portal.</p>
         <div className={styles.accuracyNote}><strong>Before you pay</strong><p>This checker was last refreshed on {formatDate(pureduFeeSnapshotRetrievedAt)} with fallback updates on {formatDate(nounUpdateFeeSnapshotRetrievedAt)}. Always use the final amount shown on your NOUN portal before you make payment.</p></div>
       </section>
-      <FeeChecker />
+      {user ? <FeeChecker /> : <section className="platform-panel"><span className="eyebrow">Account required</span><h2>Sign in to use the fee checker</h2><p>Create a free NounCompass account or sign in to generate your semester fee estimate. This keeps your latest fee-check result available in your student workspace.</p><div className="platform-auth-links"><Link className="button" href="/account/sign-in?next=/fees">Sign in</Link><Link href="/account/sign-up">Create free account</Link></div></section>}
       <section className={styles.workflowLinks}>
         <span className="eyebrow">Next steps</span>
         <h2>Understand each step before paying</h2>

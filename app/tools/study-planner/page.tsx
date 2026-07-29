@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Breadcrumbs, DisclaimerBox } from "@/components/article-elements";
 import { StudyPlanner } from "@/components/study-planner";
 import { createMetadata } from "@/lib/metadata";
-import { requireUser } from "@/lib/platform/auth";
+import { getCurrentUser } from "@/lib/platform/auth";
 import { getStudyPlannerPremiumState } from "@/lib/platform/study-planner-access";
 import { createClient } from "@/lib/supabase/server";
 import { studyPlannerCoursesForCodes, studyPlannerStats } from "@/lib/study-planner-catalog";
@@ -19,10 +19,10 @@ export default async function StudyPlannerPage({
   searchParams: Promise<{ error?: string; notice?: string }>;
 }) {
   const params = await searchParams;
-  const user = await requireUser("/tools/study-planner");
-  const premium = await getStudyPlannerPremiumState(user.id);
-  const supabase = await createClient();
-  const [{ data: profile }, { data: savedPlan }] = supabase
+  const user = await getCurrentUser();
+  const premium = user ? await getStudyPlannerPremiumState(user.id) : false;
+  const supabase = user ? await createClient() : null;
+  const [{ data: profile }, { data: savedPlan }] = user && supabase
     ? await Promise.all([
         supabase
           .from("profiles")
@@ -39,7 +39,7 @@ export default async function StudyPlannerPage({
       ])
     : [{ data: null }, { data: null }];
   const { count: savedCalendarSessionCount } =
-    premium && supabase && savedPlan
+    user && premium && supabase && savedPlan
       ? await supabase
           .from("study_plan_sessions")
           .select("id", { count: "exact", head: true })
@@ -49,7 +49,7 @@ export default async function StudyPlannerPage({
   const savedSessionCutoff = new Date();
   savedSessionCutoff.setHours(savedSessionCutoff.getHours() - 1);
   const { data: savedCalendarSessions } =
-    premium && supabase && savedPlan
+    user && premium && supabase && savedPlan
       ? await supabase
           .from("study_plan_sessions")
           .select("id,title,course_code,course_title,starts_at,ends_at")
@@ -95,7 +95,7 @@ export default async function StudyPlannerPage({
       </div>
 
       <div className="container section">
-        <StudyPlanner
+        {user ? <StudyPlanner
           error={params.error}
           notice={params.notice}
           premium={premium}
@@ -104,7 +104,7 @@ export default async function StudyPlannerPage({
           stats={studyPlannerStats}
           remindersEnabled={savedPlan?.reminders_enabled ?? false}
           registeredCourses={studyPlannerCoursesForCodes((profile?.selected_course_codes ?? []) as string[])}
-        />
+        /> : <section className="platform-panel"><span className="eyebrow">Account required</span><h2>Sign in to build your study timetable</h2><p>Create a free account or sign in to generate a planner from your registered courses. Calendar sync and reminders stay reserved for Semester Pass members.</p><div className="platform-auth-links"><Link className="button" href="/account/sign-in?next=/tools/study-planner">Sign in</Link><Link href="/account/sign-up">Create free account</Link></div></section>}
 
         <div className="seo-intro">
           <h2>How to use this planner well</h2>
