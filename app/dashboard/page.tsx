@@ -334,6 +334,10 @@ export default async function DashboardPage({
         </section>
       ) : null}
       <section className="platform-action-grid">
+        <Link href="/dashboard/ai-assistant">
+          <strong>Open study assistant</strong>
+          <span>Ask a registered course material, review performance, or explain a saved result.</span>
+        </Link>
         <Link href="/fees">
           <strong>Estimate fees</strong>
           {feeSummary ? (

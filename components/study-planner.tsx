@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { savePremiumStudyPlan, updateStudyPlannerReminders } from "@/app/tools/study-planner/actions";
+import type { StudyPlanResult } from "@/lib/platform/study-planner-ai-core";
 import { saveToolActivity } from "@/lib/platform/tool-activity-client";
 import type { StudyPlannerCourse } from "@/lib/study-planner-catalog";
 import styles from "./study-planner.module.css";
@@ -40,6 +41,7 @@ type PlannedSession = {
   label: string;
   type: "course" | "buffer";
   course?: SelectedCourse;
+  reason?: string;
 };
 
 type PlannedDay = {
@@ -48,13 +50,7 @@ type PlannedDay = {
   sessions: PlannedSession[];
 };
 
-type PlanResult = {
-  totalHours: number;
-  sessionLengthMinutes: number;
-  courseBreakdown: Array<SelectedCourse & { sessions: number; plannedHours: number }>;
-  days: PlannedDay[];
-  notes: string[];
-};
+type PlanResult = StudyPlanResult;
 
 type SavedCalendarSession = {
   id: string;
@@ -88,6 +84,18 @@ const dayIndexes = new Map([
 
 function normalizeCode(value: string) {
   return value.toUpperCase().replace(/[^A-Z0-9]/g, "");
+}
+
+function isPlanResult(value: unknown): value is PlanResult {
+  if (!value || typeof value !== "object") return false;
+  const plan = value as Partial<PlanResult>;
+  return (
+    typeof plan.totalHours === "number" &&
+    typeof plan.sessionLengthMinutes === "number" &&
+    Array.isArray(plan.courseBreakdown) &&
+    Array.isArray(plan.days) &&
+    Array.isArray(plan.notes)
+  );
 }
 
 function parseManualCourse(value: string): SelectedCourse | null {
@@ -310,6 +318,8 @@ function buildPlan({
     })),
     days: days.map((day) => plans.get(day.day) ?? { day: day.day, workday: day.workday, sessions: [] }),
     notes,
+    weeklyGoal: "Maintain steady progress across every selected course without exceeding your available study hours.",
+    generationSource: "deterministic",
   };
 }
 
@@ -320,6 +330,7 @@ export function StudyPlanner({
   remindersEnabled,
   savedCalendarSessionCount,
   savedCalendarSessions,
+  initialPlan,
   registeredCourses,
   stats,
 }: {
@@ -329,6 +340,7 @@ export function StudyPlanner({
   remindersEnabled: boolean;
   savedCalendarSessionCount: number;
   savedCalendarSessions: SavedCalendarSession[];
+  initialPlan?: StudyPlanResult | null;
   registeredCourses: StudyPlannerCourse[];
   stats: PlannerStats;
 }) {
@@ -390,10 +402,11 @@ export function StudyPlanner({
       return defaultDays;
     }
   });
-  const [result, setResult] = useState<PlanResult | null>(null);
+  const [result, setResult] = useState<PlanResult | null>(() => isPlanResult(initialPlan) ? initialPlan : null);
   const [loadingSuggestions, setLoadingSuggestions] = useState(false);
   const [generatingPlan, setGeneratingPlan] = useState(false);
   const [registeredImportMessage, setRegisteredImportMessage] = useState("");
+  const [generationMessage, setGenerationMessage] = useState("");
 
   useEffect(() => {
     window.localStorage.setItem(plannerStorageKey, JSON.stringify({
@@ -499,17 +512,58 @@ export function StudyPlanner({
     setResult(null);
   };
 
-  const generatePlan = () => {
+  const registeredCodeSet = useMemo(
+    () => new Set(registeredCourses.map((course) => normalizeCode(course.code))),
+    [registeredCourses],
+  );
+  const registeredSelectedCourses = useMemo(
+    () => selectedCourses.filter((course) => registeredCodeSet.has(normalizeCode(course.code))),
+    [registeredCodeSet, selectedCourses],
+  );
+
+  const generatePlan = async () => {
+    if (!registeredSelectedCourses.length) {
+      setGenerationMessage("Save your current courses in the dashboard, then import them here for AI planning.");
+      return;
+    }
     setGeneratingPlan(true);
-    window.requestAnimationFrame(() => {
-      const plan = buildPlan({ courses: selectedCourses, days, studentType, rhythm, sessionLengthMinutes });
+    setGenerationMessage("");
+    try {
+      const response = await fetch("/api/tools/study-planner/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          courses: registeredSelectedCourses,
+          days,
+          studentType,
+          rhythm,
+          sessionLengthMinutes,
+        }),
+      });
+      const data = await response.json() as {
+        plan?: unknown;
+        notice?: string;
+        message?: string;
+        remaining?: number;
+        weeklyLimit?: number;
+      };
+      if (!response.ok || !isPlanResult(data.plan)) {
+        throw new Error(data.message || "AI planning could not be completed.");
+      }
+      const plan = data.plan;
       setResult(plan);
+      setGenerationMessage(
+        data.notice ||
+        `AI timetable created. ${data.remaining ?? 0} of ${data.weeklyLimit ?? 0} AI generation${data.weeklyLimit === 1 ? "" : "s"} remaining this week.`,
+      );
       if (plan) {
         const firstSession = plan.days.flatMap((day) => day.sessions.map((session) => ({ day: day.day, session })))[0];
         saveToolActivity("study-planner", {
-          courses: selectedCourses.length,
+          courses: registeredSelectedCourses.length,
           weeklyHours: plan.totalHours,
           sessionLengthMinutes: plan.sessionLengthMinutes,
+          generationSource: plan.generationSource,
+          model: plan.model ?? null,
           nextSession: firstSession
             ? {
                 day: firstSession.day,
@@ -520,11 +574,32 @@ export function StudyPlanner({
             : null,
         });
       }
+    } catch (error) {
+      const fallback = buildPlan({
+        courses: registeredSelectedCourses,
+        days,
+        studentType,
+        rhythm,
+        sessionLengthMinutes,
+      });
+      setResult(fallback);
+      setGenerationMessage(
+        `${error instanceof Error ? error.message : "AI planning is temporarily unavailable."} ${fallback ? "A reliable timetable was generated instead." : "Increase your availability and try again."}`,
+      );
+      if (fallback) {
+        saveToolActivity("study-planner", {
+          courses: registeredSelectedCourses.length,
+          weeklyHours: fallback.totalHours,
+          sessionLengthMinutes: fallback.sessionLengthMinutes,
+          generationSource: "deterministic",
+        });
+      }
+    } finally {
       setGeneratingPlan(false);
-    });
+    }
   };
 
-  const canGenerate = selectedCourses.length > 0 && days.some((day) => day.hours > 0);
+  const canGenerate = registeredSelectedCourses.length > 0 && days.some((day) => day.hours > 0);
 
   return (
     <div className={styles.planner}>
@@ -532,9 +607,10 @@ export function StudyPlanner({
       {notice ? <p className="form-message form-message-success" role="status">{notice}</p> : null}
 
       <section className={styles.introCard}>
-        <span className="eyebrow">Study planner</span>
+        <span className="eyebrow">AI-powered study planner</span>
         <h2>Build a weekly NOUN reading timetable around your real availability</h2>
-        <p>This first version is built for distance-learning students who work and study. Add your courses, tell the planner when you are actually free, and generate a timetable that spreads the reading load across the week.</p>
+        <p>The planner uses your dashboard-registered courses, course pressure and available hours to suggest a balanced week. Every AI response is checked against your exact times before it can be shown or saved.</p>
+        <p>Free accounts receive one AI-generated timetable per week; Semester Pass members receive seven. The built-in reliable planner remains available when the AI limit or provider is unavailable.</p>
         <div className={styles.statsRow}>
           <div><strong>{stats.recognizedCourseCodes.toLocaleString()}</strong><span>recognized course codes in the suggestion catalog</span></div>
           <div><strong>{stats.recognizedWithMaterials.toLocaleString()}</strong><span>recognized course codes with downloadable official-source materials</span></div>
@@ -676,11 +752,13 @@ export function StudyPlanner({
       <div className={styles.actionRow}>
         <button type="button" className="button" onClick={generatePlan} disabled={!canGenerate || generatingPlan} aria-busy={generatingPlan}>
           {generatingPlan ? <span className={styles.spinner} aria-hidden="true" /> : null}
-          {generatingPlan ? "Generating timetable..." : "Generate study timetable"}
+          {generatingPlan ? "Generating timetable..." : "Generate AI timetable"}
         </button>
         <button type="button" className={styles.secondaryButton} onClick={() => window.print()} disabled={!result}>Print timetable</button>
       </div>
-      {generatingPlan ? <p className={styles.loadingStatus} role="status">Building your timetable from your courses and weekly availability.</p> : null}
+      {generatingPlan ? <p className={styles.loadingStatus} role="status">AI is balancing your registered courses, difficulty and weekly availability. Safety checks run before the timetable appears.</p> : null}
+      {!generatingPlan && generationMessage ? <p className={styles.generationMessage} role="status">{generationMessage}</p> : null}
+      {!registeredCourses.length ? <p className={styles.generationMessage}>AI planning requires registered courses. <Link href="/dashboard/profile">Add your registered courses</Link>.</p> : null}
 
       <section className={styles.calendarPanel} aria-labelledby="planner-calendar-title">
         <div>
@@ -730,8 +808,9 @@ export function StudyPlanner({
         <section className={styles.results}>
           <div className={styles.resultsHeader}>
             <div>
-              <span className="eyebrow">Your timetable</span>
+              <span className="eyebrow">{result.generationSource === "ai" ? "AI-personalized timetable" : "Reliable timetable"}</span>
               <h2>Your weekly NOUN reading plan</h2>
+              <p className={styles.weeklyGoal}>{result.weeklyGoal}</p>
             </div>
             <div className={styles.resultMeta}>
               <strong>{result.totalHours.toFixed(1)} hours/week</strong>
@@ -763,6 +842,7 @@ export function StudyPlanner({
                       <li key={`${day.day}-${index}`}>
                         <strong>{session.start} - {session.end}</strong>
                         <span>{session.label}</span>
+                        {session.reason ? <small>{session.reason}</small> : null}
                         {session.course?.materialAvailable && <Link href={`/course-materials?q=${encodeURIComponent(session.course.code)}`}>Materials</Link>}
                       </li>
                     ))}

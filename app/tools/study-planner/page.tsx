@@ -1,9 +1,11 @@
 import Link from "next/link";
-import { Breadcrumbs, DisclaimerBox } from "@/components/article-elements";
+import { DisclaimerBox } from "@/components/article-elements";
 import { StudyPlanner } from "@/components/study-planner";
+import { ToolPageHero } from "@/components/tool-page-hero";
 import { createMetadata } from "@/lib/metadata";
 import { getCurrentUser } from "@/lib/platform/auth";
 import { getStudyPlannerPremiumState } from "@/lib/platform/study-planner-access";
+import type { StudyPlanResult } from "@/lib/platform/study-planner-ai-core";
 import { createClient } from "@/lib/supabase/server";
 import { studyPlannerCoursesForCodes, studyPlannerStats } from "@/lib/study-planner-catalog";
 
@@ -29,13 +31,11 @@ export default async function StudyPlannerPage({
           .select("selected_course_codes")
           .eq("id", user.id)
           .maybeSingle(),
-        premium
-          ? supabase
+        supabase
           .from("study_plans")
-          .select("id,reminders_enabled")
+          .select("id,reminders_enabled,ai_plan_payload")
           .eq("user_id", user.id)
-          .maybeSingle()
-          : Promise.resolve({ data: null }),
+          .maybeSingle(),
       ])
     : [{ data: null }, { data: null }];
   const { count: savedCalendarSessionCount } =
@@ -72,29 +72,16 @@ export default async function StudyPlannerPage({
   };
 
   return (
-    <main id="main-content">
-      <div className="category-hero">
-        <div className="container">
-          <Breadcrumbs
-            items={[
-              { label: "Home", href: "/" },
-              { label: "Tools", href: "/tools" },
-              { label: "Study Planner" },
-            ]}
-          />
-          <span className="eyebrow">Plan with clarity</span>
-          <h1>NOUN study planner</h1>
-          <p>
-            Create a realistic weekly reading timetable around your actual
-            work-life schedule. Course suggestions come from the curriculum and
-            material data already available on NounCompass, but your final
-            registered course list should always come from official NOUN
-            records.
-          </p>
-        </div>
-      </div>
+    <main id="main-content" className="tool-public-page">
+      <ToolPageHero
+        title="NOUN study planner"
+        eyebrow="Plan with clarity"
+        intro="Build a realistic weekly reading timetable around your registered courses, available hours, and work-life schedule."
+        signedIn={Boolean(user)}
+        signInHref="/account/sign-in?next=/tools/study-planner"
+      />
 
-      <div className="container section">
+      <div id="tool-workspace" className="container section tool-page-content">
         {user ? <StudyPlanner
           error={params.error}
           notice={params.notice}
@@ -103,8 +90,9 @@ export default async function StudyPlannerPage({
           savedCalendarSessions={savedCalendarSessions ?? []}
           stats={studyPlannerStats}
           remindersEnabled={savedPlan?.reminders_enabled ?? false}
+          initialPlan={(savedPlan?.ai_plan_payload as StudyPlanResult | null) ?? null}
           registeredCourses={studyPlannerCoursesForCodes((profile?.selected_course_codes ?? []) as string[])}
-        /> : <section className="platform-panel"><span className="eyebrow">Account required</span><h2>Sign in to build your study timetable</h2><p>Create a free account or sign in to generate a planner from your registered courses. Calendar sync and reminders stay reserved for Semester Pass members.</p><div className="platform-auth-links"><Link className="button" href="/account/sign-in?next=/tools/study-planner">Sign in</Link><Link href="/account/sign-up">Create free account</Link></div></section>}
+        /> : <section className="platform-panel tool-account-gate"><span className="eyebrow">Account required</span><h2>Sign in to build your study timetable</h2><p>Create a free account or sign in to generate a planner from your registered courses. Calendar sync and reminders stay reserved for Semester Pass members.</p><div className="platform-auth-links"><Link className="button" href="/account/sign-in?next=/tools/study-planner">Sign in</Link><Link href="/account/sign-up">Create free account</Link></div></section>}
 
         <div className="seo-intro">
           <h2>How to use this planner well</h2>

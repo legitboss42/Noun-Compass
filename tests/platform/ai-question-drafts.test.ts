@@ -15,6 +15,17 @@ test("AI question drafting stays disabled until every required env var is presen
     OPENROUTER_API_KEY: "key",
     OPENROUTER_MODEL: "model",
   }), true);
+  assert.equal(aiQuestionDraftsConfigured({
+    AI_QUESTION_DRAFTS_ENABLED: "true",
+    AI_PROVIDER: "groq",
+    GROQ_API_KEY: "key",
+    GROQ_MODEL: "qwen/qwen3.6-27b",
+  }), true);
+  assert.equal(aiQuestionDraftsConfigured({
+    AI_QUESTION_DRAFTS_ENABLED: "true",
+    AI_PROVIDER: "groq",
+    GROQ_MODEL: "qwen/qwen3.6-27b",
+  }), false);
 });
 
 test("question count is bounded for provider cost and review quality", () => {

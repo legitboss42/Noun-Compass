@@ -91,6 +91,9 @@
   animation: plannerSpin .7s linear infinite;
 }
 .loadingStatus { margin: -16px 0 0; color: #586879; font-size: .86rem; }
+.generationMessage { margin: -12px 0 0; padding: 12px 14px; border: 1px solid #cfe7d8; border-radius: 10px; background: #f1faf5; color: #174d34; font-size: .86rem; line-height: 1.55; }
+.generationMessage a { color: #085a2d; font-weight: 800; text-decoration: underline; text-underline-offset: 3px; }
+.weeklyGoal { max-width: 66ch; margin: 8px 0 0; color: #475d6f; line-height: 1.6; }
 .calendarPanel { display: grid; grid-template-columns: minmax(0, 1fr) minmax(260px, 380px); gap: 20px; align-items: start; border-left: 4px solid #0E7A3E; }
 .calendarPanel h2 { margin: 8px 0 10px; font-size: clamp(1.5rem, 3vw, 2.2rem); letter-spacing: -.05em; }
 .calendarPanel p { max-width: 64ch; margin: 0; color: #586879; line-height: 1.65; }
@@ -122,6 +125,7 @@
 .dayCard li { display: grid; gap: 4px; padding: 12px; background: #f7faf8; border-left: 3px solid #0E7A3E; }
 .dayCard li strong { color: #12243B; font-size: .82rem; }
 .dayCard li span { color: #586879; font-size: .86rem; line-height: 1.5; }
+.dayCard li small { color: #476657; font-size: .76rem; line-height: 1.45; }
 .dayCard li a { color: #085A2D; font-size: .78rem; font-weight: 800; }
 .notePanel ul { margin: 14px 0 0; padding-left: 18px; }
 .notePanel li + li { margin-top: 8px; }

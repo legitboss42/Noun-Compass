@@ -6,6 +6,7 @@ import {
   normalizeQuestionCount,
   validateAiQuestionDraftCsv,
 } from "./ai-question-drafts-core";
+import { getAiProviderConfig } from "./ai-provider";
 
 const MAX_EXCERPT_LENGTH = 24_000;
 
@@ -135,16 +136,12 @@ export async function generateQuestionDraftCsv(
   assertDraftInput(input);
 
   const count = normalizeQuestionCount(input.questionCount);
-  const model = process.env.OPENROUTER_MODEL!.trim();
-  const apiKey = process.env.OPENROUTER_API_KEY!.replace(/\s+/g, "");
-  const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+  const provider = getAiProviderConfig();
+  if (!provider) throw new Error("AI question drafting is not configured.");
+  const { model } = provider;
+  const response = await fetch(provider.endpoint, {
     method: "POST",
-    headers: {
-      "Authorization": `Bearer ${apiKey}`,
-      "Content-Type": "application/json",
-      "HTTP-Referer": process.env.OPENROUTER_SITE_URL?.trim() || process.env.NEXT_PUBLIC_SITE_URL?.trim() || "https://nouncompass.me",
-      "X-OpenRouter-Title": process.env.OPENROUTER_APP_TITLE?.trim() || "NounCompass",
-    },
+    headers: provider.headers,
     body: JSON.stringify({
       model,
       messages: [

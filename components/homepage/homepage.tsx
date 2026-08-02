@@ -84,7 +84,7 @@ function HeroSection() {
             </p>
             <div className={styles.heroActions}>
               <Link className={styles.primaryButton} href="/exam-prep">
-                Explore exam preparation
+                Start exam practice
                 <HomeIcon name="arrow" size={18} />
               </Link>
               <Link className={styles.secondaryButton} href="/course-materials">

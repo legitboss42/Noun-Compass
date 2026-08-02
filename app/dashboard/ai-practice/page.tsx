@@ -48,9 +48,9 @@ export default async function DashboardAiPracticePage({
           <span className="eyebrow">Practice exam</span>
           <h1>Generate a personal practice exam</h1>
           <p>
-            Choose an official NOUN course material and NounCompass will generate a
-            private practice set from the extracted material text. Published question
-            banks remain human-reviewed separately.
+            Choose an official NOUN course material and NounCompass will map its units
+            and page ranges before generating a private, source-grounded practice set.
+            Completed batches are saved so longer exams can resume safely.
           </p>
         </div>
       </header>

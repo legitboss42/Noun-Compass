@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Breadcrumbs, DisclaimerBox } from "@/components/article-elements";
+import { SectionScrollButton } from "@/components/section-scroll-button";
 import { createMetadata } from "@/lib/metadata";
 
 export const metadata = createMetadata(
@@ -53,8 +54,8 @@ const tools = [
 
 export default function ToolsPage() {
   return (
-    <main id="main-content" className="experience-page">
-      <div className="category-hero">
+    <main id="main-content" className="experience-page tools-landing-page">
+      <div className="category-hero category-hero-enhanced">
         <div className="container">
           <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Tools" }]} />
           <span className="eyebrow">Plan with clarity</span>
@@ -64,9 +65,14 @@ export default function ToolsPage() {
             test your exam readiness with tools built around real NOUN student
             tasks.
           </p>
+          <div className="category-hero-actions">
+            <SectionScrollButton className="button" targetId="tools-directory">Choose a student tool</SectionScrollButton>
+            <Link className="category-hero-secondary" href="/student-guides">Browse student guides <span aria-hidden="true">&rarr;</span></Link>
+          </div>
+          <aside className="category-hero-note"><strong>Five practical tools.</strong><span>Start with the task you need to finish, then confirm every final record on the official NOUN platform.</span></aside>
         </div>
       </div>
-      <div className="container section tools-directory">
+      <div id="tools-directory" className="container section tools-directory">
         <div className="tools-directory-grid">
           {tools.map((tool) => (
             <section id={tool.id} className="tool-panel" key={tool.id}>

@@ -6,6 +6,7 @@ import {
   type AdminColumn,
 } from "@/components/admin/admin-ui";
 import { CopyPathButton } from "@/components/admin/copy-path-button";
+import { AdminAiAssistant } from "@/components/admin/admin-ai-assistant";
 import { requirePermission } from "@/lib/platform/admin-auth";
 import {
   inspectArticles,
@@ -180,6 +181,7 @@ export default async function AdminArticlesPage({
           <small>Metadata, image, frontmatter, or related-link issues</small>
         </article>
       </div>
+      <AdminAiAssistant feature="admin-content-review" articles={allArticles.map((article) => ({ slug: article.slug, title: article.title }))} />
       <section className="admin-panel">
         <form className="admin-filters" method="get">
           <label>

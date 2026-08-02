@@ -15,6 +15,7 @@ export default async function FeesPage() {
   const user = await getCurrentUser();
   const articles = getArticlesByCategory("fees");
   const formatDate = (value: string) => new Intl.DateTimeFormat("en-NG", { dateStyle: "long" }).format(new Date(value));
+  const prioritizedArticles = [...articles].sort((left, right) => feeGuidePriority(left) - feeGuidePriority(right)).slice(0, 6);
   const toolSchema = {
     "@context": "https://schema.org",
     "@type": "WebApplication",
@@ -26,41 +27,40 @@ export default async function FeesPage() {
   };
 
   return <main id="main-content" className="experience-page">
-    <div className="category-hero"><div className="container">
+    <div className={`category-hero ${styles.feesHero}`}><div className="container">
       <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "School Fees Checker" }]} />
       <span className="eyebrow">Plan before you pay</span>
       <h1>NOUN school fees checker</h1>
       <p>Select your faculty, programme, level, and semester to view the available fee breakdown and semester course list inside the NounCompass checker.</p>
       <div className={styles.points}><span>9 faculties</span><span>99 programmes</span><span>488 fee breakdowns listed</span></div>
+      <div className={styles.heroActions}>
+        {user ? <a className="button" href="#fee-checker">Open fee checker</a> : <Link className="button" href="/account/sign-in?next=/fees">Sign in to check fees</Link>}
+        {!user && <Link href="/account/sign-up">Create a free account <span aria-hidden="true">→</span></Link>}
+      </div>
+      <p className={styles.heroUpdated}>Fee data last refreshed {formatDate(pureduFeeSnapshotRetrievedAt)}. Confirm the final amount on your current NOUN portal before paying.</p>
     </div></div>
     <div className={`container ${styles.content}`}>
-      <section className={styles.toolIntro}>
-        <span className="eyebrow">Before using the checker</span>
-        <h2>Use the estimate to plan, then confirm officially</h2>
-        <p>The checker gives you one place to review semester fees, course registration, and exam registration. Use it to compare totals, review course rows, and prepare before you enter the portal.</p>
-        <div className={styles.accuracyNote}><strong>Before you pay</strong><p>This checker was last refreshed on {formatDate(pureduFeeSnapshotRetrievedAt)} with fallback updates on {formatDate(nounUpdateFeeSnapshotRetrievedAt)}. Always use the final amount shown on your NOUN portal before you make payment.</p></div>
-      </section>
-      {user ? <FeeChecker /> : <section className="platform-panel"><span className="eyebrow">Account required</span><h2>Sign in to use the fee checker</h2><p>Create a free NounCompass account or sign in to generate your semester fee estimate. This keeps your latest fee-check result available in your student workspace.</p><div className="platform-auth-links"><Link className="button" href="/account/sign-in?next=/fees">Sign in</Link><Link href="/account/sign-up">Create free account</Link></div></section>}
+      <div id="fee-checker" className={styles.checkerShell}>
+        {user ? <FeeChecker /> : <section className={`platform-panel ${styles.accountGate}`}><div><span className="eyebrow">Account required</span><h2>Sign in to build your fee estimate</h2><p>Create a free NounCompass account or sign in to review the breakdown, semester courses, and downloadable report. Your latest result will also remain available in your student workspace.</p></div><div className="platform-auth-links"><Link className="button" href="/account/sign-in?next=/fees">Sign in</Link><Link href="/account/sign-up">Create free account</Link></div></section>}
+      </div>
+      <aside className={styles.planningNote}>
+        <span aria-hidden="true">i</span>
+        <div><strong>Use this as a planning estimate.</strong><p>Primary fee data was refreshed on {formatDate(pureduFeeSnapshotRetrievedAt)}, with fallback updates from {formatDate(nounUpdateFeeSnapshotRetrievedAt)}. Your current portal bill remains the final amount.</p></div>
+      </aside>
       <section className={styles.workflowLinks}>
-        <span className="eyebrow">Next steps</span>
-        <h2>Understand each step before paying</h2>
-        <div><Link href="/articles/noun-school-fees-new-students"><strong>School fees guide</strong><span>Plan new-student charges</span></Link><Link href="/articles/how-to-pay-noun-school-fees#understanding-the-noun-e-wallet-system"><strong>E-wallet guidance</strong><span>Check balances and records</span></Link><Link href="/articles/how-to-pay-noun-school-fees"><strong>Remita payment guide</strong><span>Keep your references and proof</span></Link><Link href="/articles/is-noun-eligible-for-nelfund"><strong>NELFUND guide</strong><span>See what applies to NOUN students</span></Link><Link href="/articles/how-to-register-noun-courses"><strong>Course registration</strong><span>Review courses before you submit</span></Link><Link href="/articles/noun-exam-registration-guide"><strong>Exam registration</strong><span>Confirm examinable courses</span></Link></div>
+        <span className="eyebrow">Your payment journey</span>
+        <h2>Move from estimate to verified payment</h2>
+        <div><Link href="/articles/noun-school-fees-new-students"><em>01</em><strong>Understand the charges</strong><span>Review the likely compulsory and semester costs.</span></Link><Link href="/articles/how-to-pay-noun-school-fees#understanding-the-noun-e-wallet-system"><em>02</em><strong>Check your e-wallet</strong><span>Compare balances, charges, and existing records.</span></Link><Link href="/articles/how-to-pay-noun-school-fees"><em>03</em><strong>Pay through the right route</strong><span>Follow the Remita process and keep every reference.</span></Link><Link href="/articles/how-to-register-noun-courses"><em>04</em><strong>Verify before registration</strong><span>Confirm the payment reflected before selecting courses.</span></Link></div>
       </section>
       <DisclaimerBox />
       <section className={styles.guides}>
-        <div className="section-heading"><div><span className="eyebrow">Understand your payment</span><h2>School fee guides</h2></div></div>
-        <div className="archive-grid">{articles.map((article) => <ArticleCard key={article.slug} article={article} />)}</div>
+        <div className="section-heading"><div><span className="eyebrow">Understand your payment</span><h2>Essential school fee guides</h2></div><Link href="/student-guides?q=school+fees">View all fee guides</Link></div>
+        <div className="archive-grid">{prioritizedArticles.map((article) => <ArticleCard key={article.slug} article={article} ctaLabel="Read guide" />)}</div>
       </section>
       <section className={styles.explainer}>
-        <h2>How the school fees checker is built</h2>
-        <p>NounCompass organizes fee breakdowns, programme selections, and semester course lists into one planning tool so students can review the likely structure before they pay.</p>
-        <h3>What is available now</h3>
-        <p>All 99 listed programmes are included. The checker currently shows 473 complete fee breakdowns, plus 15 more cases where we could still show the course list even though the fee amount was missing.</p>
-        <h3>How fee accuracy is handled</h3>
-        <p>Use the checker as a planning tool, not as your final bill. Compare the result with your current portal amount before payment, especially if your programme, level, or semester has changed.</p>
-        <h3>What to do after checking</h3>
-        <p>Compare the estimate with your current portal bill, review every course code, and save the final invoice and payment receipt. If a payment does not reflect, avoid paying again immediately. Keep the transaction reference and use the <Link href="/articles/noun-support-ticket-guide">support-ticket guide</Link>.</p>
-        <p>If you are planning around student finance support rather than direct self-funding, read the <Link href="/articles/is-noun-eligible-for-nelfund">NOUN NELFUND eligibility guide</Link> before you rely on any claim about funding.</p>
+        <header><span className="eyebrow">Know what the estimate means</span><h2>Plan confidently without treating an estimate as a bill</h2><p>NounCompass combines available fee breakdowns and semester course lists so you can understand the likely structure before opening the portal.</p></header>
+        <div className={styles.explainerGrid}><article><span>01</span><h3>Coverage</h3><p>All 99 listed programmes are included: 473 complete fee breakdowns and 15 additional cases where a course list is available without a confirmed amount.</p></article><article><span>02</span><h3>Final verification</h3><p>Compare the estimate with your current portal bill, especially when your programme, level, semester, or registered courses have changed.</p></article><article><span>03</span><h3>Keep proof</h3><p>Save the invoice, transaction reference, receipt, and course-registration record. If payment does not reflect, avoid paying twice and use the <Link href="/articles/noun-support-ticket-guide">support guide</Link>.</p></article></div>
+        <p className={styles.fundingNote}>Planning around student finance support? Read the <Link href="/articles/is-noun-eligible-for-nelfund">NOUN NELFUND eligibility guide</Link> before relying on a funding claim.</p>
       </section>
       <SocialLinks
         className="priority-social-links"
@@ -70,4 +70,15 @@ export default async function FeesPage() {
     </div>
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSchema) }} />
   </main>;
+}
+
+function feeGuidePriority(article: { title: string; slug: string }) {
+  const text = `${article.title} ${article.slug}`.toLowerCase();
+  if (text.includes("school fees")) return 0;
+  if (text.includes("e-wallet")) return 1;
+  if (text.includes("remita")) return 2;
+  if (text.includes("refund")) return 3;
+  if (text.includes("course registration")) return 4;
+  if (text.includes("nelfund")) return 6;
+  return 5;
 }

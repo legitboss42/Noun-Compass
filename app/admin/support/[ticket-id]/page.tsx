@@ -17,6 +17,7 @@ import {
   updateSupportPriority,
   updateSupportStatus,
 } from "../actions";
+import { AdminAiAssistant } from "@/components/admin/admin-ai-assistant";
 
 export const dynamic = "force-dynamic";
 
@@ -107,6 +108,7 @@ export default async function SupportTicketPage({
         }
       />
       <AdminFeedback error={feedback.error} notice={feedback.notice} />
+      <AdminAiAssistant feature="support-draft" ticketId={ticketId} />
       <div className="admin-grid-two">
         <section className="admin-panel">
           <h2>Ticket and student</h2>

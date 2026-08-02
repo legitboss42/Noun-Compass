@@ -22,6 +22,7 @@ const drawerLinks = [
   ["Profile", "/dashboard/profile"],
   ["Practice history", "/dashboard/practice"],
   ["Practice Exam", "/dashboard/ai-practice"],
+  ["Study assistant", "/dashboard/ai-assistant"],
   ["Study planner", "/tools/study-planner"],
   ["Course materials", "/course-materials"],
   ["Membership", "/membership"],

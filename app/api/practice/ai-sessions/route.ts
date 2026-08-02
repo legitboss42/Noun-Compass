@@ -4,6 +4,7 @@ import {
   AiPracticeError,
   startAiPracticeSession,
   type AiPracticeMode,
+  type AiPracticeFocus,
 } from "@/lib/platform/ai-practice";
 import { enforceRateLimit, rateLimitHeaders } from "@/lib/platform/rate-limit";
 
@@ -37,6 +38,7 @@ export async function POST(request: Request) {
     mode?: AiPracticeMode;
     difficulty?: number;
     questionCount?: number;
+    focus?: AiPracticeFocus;
   } | null;
 
   try {
@@ -45,6 +47,7 @@ export async function POST(request: Request) {
       mode: body?.mode,
       difficulty: body?.difficulty,
       questionCount: body?.questionCount,
+      focus: body?.focus,
     });
     return NextResponse.json(result);
   } catch (error) {

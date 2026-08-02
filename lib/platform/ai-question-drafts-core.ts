@@ -1,4 +1,5 @@
 import { parseQuestionCsv } from "./question-import";
+import { getAiProviderConfig } from "./ai-provider";
 
 export const QUESTION_DRAFT_CSV_HEADERS = [
   "course_code",
@@ -25,9 +26,7 @@ export function aiQuestionDraftsConfigured(
 ) {
   return (
     env.AI_QUESTION_DRAFTS_ENABLED === "true" &&
-    env.AI_PROVIDER?.trim() === "openrouter" &&
-    Boolean(env.OPENROUTER_API_KEY?.replace(/\s+/g, "")) &&
-    Boolean(env.OPENROUTER_MODEL?.trim())
+    Boolean(getAiProviderConfig(env))
   );
 }
 

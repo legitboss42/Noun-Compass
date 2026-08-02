@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { Breadcrumbs, DisclaimerBox } from "@/components/article-elements";
 import { CourseMaterialSummaryTool } from "@/components/course-material-summary-tool";
+import { SectionScrollButton } from "@/components/section-scroll-button";
 import {
   courseMaterialDownloadUrl,
   courseMaterials,
@@ -152,8 +153,8 @@ export default async function CourseMaterialsPage({
   };
 
   return (
-    <main id="main-content">
-      <div className="category-hero">
+    <main id="main-content" className="course-materials-page">
+      <div className="category-hero category-hero-enhanced course-materials-hero">
         <div className="container">
           <Breadcrumbs
             items={[
@@ -164,9 +165,9 @@ export default async function CourseMaterialsPage({
           <span className="eyebrow">Study library</span>
           <h1>NOUN Course Materials Library</h1>
           <p>
-            Search by course code or title, review the course details, open a
-            guide, and download the PDF from the NounCompass library. If you
-            want to compare versions, you can also open the linked NOUN page.
+            Search with the course code on your registration slip, verify the
+            title and faculty, then open the matching PDF or compare it with
+            the linked NOUN source page.
           </p>
           <div className="material-stats">
             <span>
@@ -176,6 +177,11 @@ export default async function CourseMaterialsPage({
             <span>{courseMaterialStats.sourcePages} linked NOUN course pages</span>
             <span>Last checked {checked}</span>
           </div>
+          <div className="category-hero-actions">
+            <SectionScrollButton className="button" targetId="material-browser">Search the library</SectionScrollButton>
+            <Link className="category-hero-secondary" href="/dashboard/profile">Check registered courses <span aria-hidden="true">&rarr;</span></Link>
+          </div>
+          <aside className="category-hero-note"><strong>Match the exact code.</strong><span>Course titles and placements can vary by programme and session. Your current registration record comes first.</span></aside>
         </div>
       </div>
 
@@ -238,7 +244,7 @@ export default async function CourseMaterialsPage({
           </div>
         </section>
 
-        <section className="material-browser" aria-labelledby="material-results">
+        <section id="material-browser" className="material-browser" aria-labelledby="material-results">
           <form className="material-filters" action="/course-materials">
             <label>
               <span>Search course code or title</span>
