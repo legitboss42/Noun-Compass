@@ -33,6 +33,12 @@ type AiSessionRow = {
   created_at: string;
 };
 
+type MembershipRow = {
+  status: string | null;
+  starts_at: string | null;
+  ends_at: string | null;
+};
+
 const formatNaira = (value: unknown) =>
   typeof value === "number" && Number.isFinite(value)
     ? `₦${value.toLocaleString("en-NG")}`
@@ -65,15 +71,7 @@ export default async function DashboardPage({
           }
         : null;
   const supabase = await createClient();
-  const [
-    { data: profile },
-    { data: membership },
-    { data: notices },
-    { data: revisions },
-    { data: toolActivity },
-    { data: nextStudySession },
-    { data: latestAiSession },
-  ] = supabase
+  const dashboardResults = supabase
     ? await Promise.all([
         supabase.from("profiles").select("*").eq("id", user.id).maybeSingle(),
         supabase
@@ -116,7 +114,35 @@ export default async function DashboardPage({
           .limit(1)
           .maybeSingle(),
       ])
-    : [{ data: null }, { data: null }, { data: [] }, { data: [] }, { data: [] }, { data: null }, { data: null }];
+    : [
+        { data: null, error: new Error("Platform database is not configured") },
+        { data: null, error: null },
+        { data: [], error: null },
+        { data: [], error: null },
+        { data: [], error: null },
+        { data: null, error: null },
+        { data: null, error: null },
+      ];
+
+  const [
+    profileResult,
+    membershipResult,
+    noticesResult,
+    revisionsResult,
+    toolActivityResult,
+    nextStudySessionResult,
+    latestAiSessionResult,
+  ] = dashboardResults;
+  const profile = profileResult.data;
+  const membership = membershipResult.data as MembershipRow | null;
+  const notices = noticesResult.data;
+  const revisions = revisionsResult.data;
+  const toolActivity = toolActivityResult.data;
+  const nextStudySession = nextStudySessionResult.data;
+  const latestAiSession = latestAiSessionResult.data;
+  const accountDataUnavailable = Boolean(
+    profileResult.error || membershipResult.error,
+  );
 
   const selectedCodes = (profile?.selected_course_codes ?? []) as string[];
   const { data: scheduleEntries } =
@@ -180,6 +206,12 @@ export default async function DashboardPage({
           {feedback.message}
         </p>
       )}
+      {accountDataUnavailable ? (
+        <p className="form-message form-message-error" role="alert">
+          We couldn&apos;t load your saved account details. Your data has not been
+          reset. Refresh once, then contact support if this message remains.
+        </p>
+      ) : null}
       <LocalProfileImport />
       <section className="platform-stat-grid" aria-label="Dashboard summary">
         <article>
@@ -197,9 +229,13 @@ export default async function DashboardPage({
         </article>
         <article>
           <span>Membership</span>
-          <strong>{premium ? "Premium" : "Free"}</strong>
+          <strong>
+            {membershipResult.error ? "Unavailable" : premium ? "Premium" : "Free"}
+          </strong>
           <small>
-            {premium && membership?.ends_at
+            {membershipResult.error
+              ? "Membership status could not be loaded"
+              : premium && membership?.ends_at
               ? `Ends ${new Intl.DateTimeFormat("en-NG", { dateStyle: "medium", timeZone: "Africa/Lagos" }).format(new Date(membership.ends_at))}`
               : "Core planning tools remain free"}
           </small>
