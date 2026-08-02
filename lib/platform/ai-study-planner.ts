@@ -1,6 +1,6 @@
 import "server-only";
 
-import { getAiProviderConfig } from "./ai-provider";
+import { getStructuredAiProviderConfigs } from "./ai-provider";
 import { membershipIsActive } from "./membership";
 import {
   buildDeterministicStudyPlan,
@@ -35,6 +35,7 @@ Rules:
 - Give challenging and higher-unit courses proportionately more time.
 - Avoid repeating the same course in consecutive sessions when possible.
 - Do not invent deadlines, examination dates, course facts, or portal data.
+- Respect the supplied time preference. Morning-only sessions must end by noon; night-only sessions must start at 19:00 or later. For AI-random, use the varied safe windows already supplied for each day.
 - Return JSON only, without markdown.
 
 JSON shape:
@@ -55,6 +56,7 @@ JSON shape:
 
 Student type: ${input.studentType}
 Preferred rhythm: ${input.rhythm}
+Time preference: ${input.timePreference ?? "custom"}
 Preferred session length: ${input.sessionLengthMinutes} minutes
 Registered courses:
 ${input.courses.map((course) => `- ${course.code} | ${course.title} | ${course.units ?? 2} units | ${course.difficulty}`).join("\n")}
@@ -64,6 +66,44 @@ ${input.days.map((day) => `- ${day.day} | starts ${day.startTime} | ${day.hours}
 
 Verified planning context from this student's saved NounCompass activity:
 ${adjustmentContext.length ? adjustmentContext.map((item) => `- ${item}`).join("\n") : "- No reliable prior activity is available. Build a balanced plan and do not invent performance data."}`;
+}
+
+function timetableResponseFormat(provider: { provider: string; model: string }) {
+  if (provider.provider === "groq" && provider.model.startsWith("qwen/")) {
+    return { type: "json_object" };
+  }
+  return {
+    type: "json_schema",
+    json_schema: {
+      name: "student_timetable",
+      strict: true,
+      schema: {
+        type: "object",
+        properties: {
+          weeklyGoal: { type: "string" },
+          sessions: {
+            type: "array",
+            items: {
+              type: "object",
+              properties: {
+                day: { type: "string" },
+                start: { type: "string" },
+                durationMinutes: { type: "integer" },
+                courseCode: { type: "string" },
+                focus: { type: "string" },
+                reason: { type: "string" },
+              },
+              required: ["day", "start", "durationMinutes", "courseCode", "focus", "reason"],
+              additionalProperties: false,
+            },
+          },
+          recommendations: { type: "array", items: { type: "string" } },
+        },
+        required: ["weeklyGoal", "sessions", "recommendations"],
+        additionalProperties: false,
+      },
+    },
+  };
 }
 
 async function loadPlannerContext(userId: string, rawInput: StudyPlannerGenerationInput) {
@@ -187,8 +227,8 @@ export async function generateAiStudyPlan(
 ) {
   const context = await loadPlannerContext(userId, rawInput);
   const weeklyLimit = context.premium ? PREMIUM_WEEKLY_GENERATIONS : FREE_WEEKLY_GENERATIONS;
-  const provider = getAiProviderConfig();
-  if (!provider) {
+  const providers = getStructuredAiProviderConfigs();
+  if (!providers.length) {
     const plan = buildDeterministicStudyPlan(context.input);
     await savePlan({ ...context, plan, userId });
     return {
@@ -211,32 +251,58 @@ export async function generateAiStudyPlan(
     };
   }
 
-  let plan: StudyPlanResult;
+  let plan: StudyPlanResult | null = null;
   let notice: string | undefined;
-  try {
-    const response = await fetch(provider.endpoint, {
-      method: "POST",
-      headers: provider.headers,
-      signal: AbortSignal.timeout(45_000),
-      body: JSON.stringify({
-        model: provider.model,
-        messages: [
-          {
-            role: "system",
-            content: "You create safe, realistic student timetables from structured registered-course and availability data. Return JSON only.",
-          },
-          { role: "user", content: buildPrompt(context.input, context.adjustmentContext) },
-        ],
-        temperature: 0.2,
-        max_tokens: 3500,
-      }),
-    });
-    if (!response.ok) throw new Error(`Provider status ${response.status}`);
-    const payload = await response.json() as { choices?: Array<{ message?: { content?: string } }> };
-    const content = payload.choices?.[0]?.message?.content;
-    if (!content) throw new Error("Provider returned no timetable.");
-    plan = parseAiStudyPlan(content, context.input, provider.model);
-  } catch {
+  const prompt = buildPrompt(context.input, context.adjustmentContext);
+  for (const provider of providers) {
+    let correction = "";
+    for (let attempt = 0; attempt < 2; attempt += 1) {
+      try {
+        const response = await fetch(provider.endpoint, {
+          method: "POST",
+          headers: provider.headers,
+          signal: AbortSignal.timeout(55_000),
+          body: JSON.stringify({
+            model: provider.model,
+            messages: [
+              {
+                role: "system",
+                content: "You create safe, realistic student timetables from structured registered-course and availability data. Return JSON only.",
+              },
+              { role: "user", content: `${prompt}${correction}` },
+            ],
+            response_format: timetableResponseFormat(provider),
+            ...(provider.provider === "groq" && provider.model.startsWith("qwen/")
+              ? { reasoning_format: "hidden" }
+              : {}),
+            temperature: 0.2,
+            max_tokens: 3500,
+          }),
+        });
+        if (!response.ok) {
+          const failure = await response.json().catch(() => null) as { error?: { message?: string } } | null;
+          const detail = failure?.error?.message?.replace(/\s+/g, " ").trim().slice(0, 240);
+          throw new Error(`Provider status ${response.status}${detail ? `: ${detail}` : ""}`);
+        }
+        const payload = await response.json() as { choices?: Array<{ message?: { content?: string } }> };
+        const content = payload.choices?.[0]?.message?.content;
+        if (!content) throw new Error("Provider returned no timetable.");
+        plan = parseAiStudyPlan(content, context.input, provider.model);
+        break;
+      } catch (error) {
+        const reason = error instanceof Error ? error.message.slice(0, 220) : "unknown validation error";
+        console.warn("[ai-study-planner] provider attempt failed", {
+          provider: provider.provider,
+          model: provider.model,
+          attempt: attempt + 1,
+          reason,
+        });
+        correction = `\n\nYour previous response failed validation: ${reason}. Return a corrected complete JSON object that covers every registered course and stays exactly inside the supplied availability.`;
+      }
+    }
+    if (plan) break;
+  }
+  if (!plan) {
     plan = buildDeterministicStudyPlan(context.input);
     notice = "The AI response did not pass timetable safety checks, so the reliable planner produced this schedule instead.";
   }

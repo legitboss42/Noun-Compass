@@ -78,6 +78,15 @@
 .availabilitySummary { display: grid; gap: 6px; margin-top: 16px; }
 .availabilitySummary strong { color: #12243B; }
 .availabilitySummary span { color: #586879; font-size: .84rem; }
+.availabilityHint {
+  margin: 14px 0 0;
+  padding: 12px 14px;
+  border-left: 3px solid #0e7a3e;
+  background: rgba(14, 122, 62, 0.07);
+  color: #315444;
+  font-size: .84rem;
+  line-height: 1.55;
+}
 .actionRow { display: flex; flex-wrap: wrap; gap: 12px; }
 .actionRow .spinner {
   width: 1em;

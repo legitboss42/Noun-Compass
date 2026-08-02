@@ -3,6 +3,7 @@ import type { StudyPlannerCourse } from "@/lib/study-planner-catalog";
 export type StudyCourseDifficulty = "unsure" | "standard" | "challenging";
 export type StudyStudentType = "new" | "returning";
 export type StudyRhythm = "balanced" | "weekend-heavy" | "short-daily";
+export type StudyTimePreference = "custom" | "morning" | "night" | "ai-random";
 
 export type StudyPlannerSelectedCourse = Pick<
   StudyPlannerCourse,
@@ -21,6 +22,7 @@ export type StudyPlannerGenerationInput = {
   days: StudyDayAvailability[];
   studentType: StudyStudentType;
   rhythm: StudyRhythm;
+  timePreference?: StudyTimePreference;
   sessionLengthMinutes: number;
 };
 
@@ -96,17 +98,36 @@ export function normalizeStudyPlannerGenerationInput(
   });
   if (!courses.length) throw new Error("Add at least one registered course before generating a timetable.");
 
+  const timePreference: StudyTimePreference = (["custom", "morning", "night", "ai-random"] as const).includes(input?.timePreference as StudyTimePreference)
+    ? input.timePreference as StudyTimePreference
+    : "custom";
   const sourceDays = Array.isArray(input?.days) ? input.days : [];
+  const randomStarts = ["06:30", "09:00", "13:00", "16:00", "19:00"];
   const days = WEEKDAYS.map((day) => {
     const source = sourceDays.find((item) => item?.day === day);
-    const startTime = typeof source?.startTime === "string" ? source.startTime : "18:00";
+    const suppliedStart = typeof source?.startTime === "string" ? source.startTime : "18:00";
+    const startTime = timePreference === "morning"
+      ? "06:00"
+      : timePreference === "night"
+        ? "19:00"
+        : timePreference === "ai-random"
+          ? randomStarts[Math.floor(Math.random() * randomStarts.length)]
+          : suppliedStart;
     if (!Number.isFinite(timeToMinutes(startTime))) throw new Error(`Choose a valid start time for ${day}.`);
-    const hours = Number(source?.hours ?? 0);
+    const requestedHours = Number(source?.hours ?? 0);
+    const periodLimit = timePreference === "morning"
+      ? 6
+      : timePreference === "night"
+        ? 5
+        : (24 * 60 - timeToMinutes(startTime)) / 60;
+    const hours = Number.isFinite(requestedHours)
+      ? Math.min(periodLimit, Math.max(0, Math.min(12, Math.round(requestedHours * 2) / 2)))
+      : 0;
     return {
       day,
       workday: Boolean(source?.workday),
       startTime,
-      hours: Number.isFinite(hours) ? Math.max(0, Math.min(12, Math.round(hours * 2) / 2)) : 0,
+      hours,
     };
   });
   if (!days.some((day) => day.hours > 0)) throw new Error("Add study availability for at least one day.");
@@ -125,7 +146,7 @@ export function normalizeStudyPlannerGenerationInput(
   const rhythm: StudyRhythm = (["balanced", "weekend-heavy", "short-daily"] as const).includes(input?.rhythm)
     ? input.rhythm
     : "balanced";
-  return { courses, days, studentType, rhythm, sessionLengthMinutes };
+  return { courses, days, studentType, rhythm, timePreference, sessionLengthMinutes };
 }
 
 function difficultyWeight(value: StudyCourseDifficulty) {

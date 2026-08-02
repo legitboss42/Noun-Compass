@@ -110,3 +110,13 @@ test("AI output is rejected when it overlaps, uses unknown courses, or ignores s
     ],
   }), input, "test-model"), /selected session length/i);
 });
+
+test("time preferences constrain morning and night plans and randomize safe windows", () => {
+  const morning = normalizeStudyPlannerGenerationInput({ ...rawInput, timePreference: "morning" }, registeredCourses);
+  assert.ok(morning.days.every((day) => day.startTime === "06:00" && day.hours <= 6));
+  const night = normalizeStudyPlannerGenerationInput({ ...rawInput, timePreference: "night" }, registeredCourses);
+  assert.ok(night.days.every((day) => day.startTime === "19:00" && day.hours <= 5));
+  const random = normalizeStudyPlannerGenerationInput({ ...rawInput, timePreference: "ai-random" }, registeredCourses);
+  assert.ok(random.days.every((day) => ["06:30", "09:00", "13:00", "16:00", "19:00"].includes(day.startTime)));
+  assert.ok(random.days.every((day) => timeToMinutes(day.startTime) + day.hours * 60 <= 24 * 60));
+});

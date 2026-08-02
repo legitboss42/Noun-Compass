@@ -377,6 +377,17 @@ export function StudyPlanner({
       return 90;
     }
   });
+  const [timePreference, setTimePreference] = useState<"custom" | "morning" | "night" | "ai-random">(() => {
+    if (typeof window === "undefined") return "custom";
+    try {
+      const saved = window.localStorage.getItem(plannerStorageKey);
+      if (!saved) return "custom";
+      const parsed = JSON.parse(saved) as { timePreference?: "custom" | "morning" | "night" | "ai-random" };
+      return parsed.timePreference ?? "custom";
+    } catch {
+      return "custom";
+    }
+  });
   const [courseQuery, setCourseQuery] = useState("");
   const [courseSuggestions, setCourseSuggestions] = useState<StudyPlannerCourse[]>([]);
   const [selectedCourses, setSelectedCourses] = useState<SelectedCourse[]>(() => {
@@ -412,11 +423,12 @@ export function StudyPlanner({
     window.localStorage.setItem(plannerStorageKey, JSON.stringify({
       studentType,
       rhythm,
+      timePreference,
       sessionLengthMinutes,
       selectedCourses,
       days,
     }));
-  }, [studentType, rhythm, sessionLengthMinutes, selectedCourses, days]);
+  }, [studentType, rhythm, timePreference, sessionLengthMinutes, selectedCourses, days]);
 
   useEffect(() => {
     const trimmed = courseQuery.trim();
@@ -512,6 +524,15 @@ export function StudyPlanner({
     setResult(null);
   };
 
+  const updateTimePreference = (value: "custom" | "morning" | "night" | "ai-random") => {
+    setTimePreference(value);
+    if (value === "morning" || value === "night") {
+      const startTime = value === "morning" ? "06:00" : "19:00";
+      setDays((current) => current.map((day) => ({ ...day, startTime })));
+    }
+    setResult(null);
+  };
+
   const registeredCodeSet = useMemo(
     () => new Set(registeredCourses.map((course) => normalizeCode(course.code))),
     [registeredCourses],
@@ -537,6 +558,7 @@ export function StudyPlanner({
           days,
           studentType,
           rhythm,
+          timePreference,
           sessionLengthMinutes,
         }),
       });
@@ -650,6 +672,15 @@ export function StudyPlanner({
               <option value={120}>120 minutes</option>
             </select>
           </label>
+          <label>
+            <span>Timetable timing</span>
+            <select value={timePreference} onChange={(event) => updateTimePreference(event.target.value as "custom" | "morning" | "night" | "ai-random")}>
+              <option value="custom">Use my entered start times</option>
+              <option value="morning">Morning sessions only</option>
+              <option value="night">Night sessions only</option>
+              <option value="ai-random">Let AI vary the times</option>
+            </select>
+          </label>
         </div>
       </section>
 
@@ -738,11 +769,20 @@ export function StudyPlanner({
             <div key={day.day} className={styles.availabilityRow}>
               <strong>{day.day}</strong>
               <label><input type="checkbox" checked={day.workday} onChange={(event) => updateDay(day.day, "workday", event.target.checked)} /><span>{day.workday ? "Yes" : "No"}</span></label>
-              <input type="time" value={day.startTime} onChange={(event) => updateDay(day.day, "startTime", event.target.value)} />
+              <input type="time" value={day.startTime} disabled={timePreference !== "custom"} aria-label={`${day.day} start time${timePreference === "custom" ? "" : " controlled by timetable timing"}`} onChange={(event) => updateDay(day.day, "startTime", event.target.value)} />
               <input type="number" min="0" max="12" step="0.5" value={day.hours} onChange={(event) => updateDay(day.day, "hours", Number(event.target.value) || 0)} />
             </div>
           ))}
         </div>
+        {timePreference !== "custom" ? (
+          <p className={styles.availabilityHint}>
+            {timePreference === "morning"
+              ? "Morning-only plans begin from 6:00 AM and finish by noon."
+              : timePreference === "night"
+                ? "Night-only plans begin from 7:00 PM and finish before midnight."
+                : "AI will vary safe start times across morning, afternoon and evening while keeping your selected days and hours."}
+          </p>
+        ) : null}
         <div className={styles.availabilitySummary}>
           <strong>{totalAvailableHours.toFixed(1)} study hours currently available each week</strong>
           <span>Adjust the numbers until they reflect real life, not an ideal week.</span>

@@ -1575,8 +1575,6 @@ h6,
   }
 }
 
-body:has(.platform-shell[data-auth-shell="student"]) [data-public-header],
-body:has(.platform-shell[data-auth-shell="student"]) [data-public-footer],
 body:has(.platform-shell[data-auth-shell="student"]) [data-public-mobile-bottom] {
   display: none;
 }
@@ -1589,6 +1587,14 @@ body:has(.platform-shell[data-auth-shell="student"]) [data-public-mobile-bottom]
 @media (max-width: 900px) {
   :root {
     --student-mobile-nav-height: 78px;
+  }
+
+  body:has(.platform-shell[data-auth-shell="student"]) [data-public-header] {
+    display: none;
+  }
+
+  body:has(.platform-shell[data-auth-shell="student"]) [data-public-footer] {
+    margin-bottom: calc(var(--student-mobile-nav-height) + env(safe-area-inset-bottom));
   }
 
   .platform-shell[data-auth-shell="student"] {

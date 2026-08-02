@@ -38,8 +38,8 @@ export type GroundedQuestionDraft = {
 
 const MAX_CHUNK_CHARACTERS = 6_000;
 const FALLBACK_PAGE_WINDOW = 6;
-const MAX_QUESTIONS_PER_BATCH = 15;
-const MAX_SOURCE_CHARACTERS_PER_BATCH = 72_000;
+export const MAX_QUESTIONS_PER_BATCH = 3;
+const MAX_SOURCE_CHARACTERS_PER_BATCH = 8_000;
 
 function cleanText(value: unknown, max = 10_000) {
   return String(value ?? "").replace(/\r/g, "").replace(/[ \t]+/g, " ").replace(/\n{3,}/g, "\n\n").trim().slice(0, max);
@@ -124,7 +124,15 @@ export function buildCoverageBatches(
   const requested = Math.max(1, Math.min(100, Math.floor(totalQuestions)));
   const source = chunks.filter((chunk) => chunk.text.trim().length >= 100);
   if (!source.length) throw new Error("No readable material chunks are available.");
-  const selected = evenlySelectChunks(source, Math.min(requested, source.length));
+  // Spread coverage across the material without sending one full source chunk
+  // per question. Two questions per selected chunk keeps requests small enough
+  // for free-tier providers while still sampling the beginning, middle and end.
+  const coverageChunkCount = Math.min(
+    source.length,
+    requested,
+    Math.max(requested > 1 ? 2 : 1, Math.ceil(requested / 2)),
+  );
+  const selected = evenlySelectChunks(source, coverageChunkCount);
   const allocations = new Map(selected.map((chunk) => [chunk.chunkIndex, 1]));
   let remaining = requested - selected.length;
   while (remaining > 0) {
@@ -197,7 +205,12 @@ export function parseGroundedQuestionBatch(input: {
   const unfenced = input.content.replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/i, "").trim();
   const arrayStart = unfenced.indexOf("[");
   const arrayEnd = unfenced.lastIndexOf("]");
-  const parsed = JSON.parse(arrayStart >= 0 && arrayEnd > arrayStart ? unfenced.slice(arrayStart, arrayEnd + 1) : unfenced) as unknown;
+  const decoded = JSON.parse(arrayStart >= 0 && arrayEnd > arrayStart ? unfenced.slice(arrayStart, arrayEnd + 1) : unfenced) as unknown;
+  const parsed = Array.isArray(decoded)
+    ? decoded
+    : decoded && typeof decoded === "object" && Array.isArray((decoded as { questions?: unknown }).questions)
+      ? (decoded as { questions: unknown[] }).questions
+      : decoded;
   if (!Array.isArray(parsed) || parsed.length !== input.expectedCount) {
     throw new Error(`AI response must contain exactly ${input.expectedCount} questions.`);
   }
