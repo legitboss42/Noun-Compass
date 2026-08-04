@@ -9,7 +9,7 @@ import { getCurrentUser } from "@/lib/platform/auth";
 import styles from "./fees.module.css";
 import { nounUpdateFeeSnapshotRetrievedAt, pureduFeeSnapshotRetrievedAt } from "@/data/curricula";
 
-export const metadata = createMetadata("NOUN School Fees Checker & Cost Breakdown", "Check estimated NOUN school fees by programme, level, and semester, then review course, exam, and compulsory charges before paying.", "/fees");
+export const metadata = createMetadata("NOUN Fees Checker (2026): Cost by Programme", "Free NOUN fees checker: see estimated school fees by programme, level, and semester, plus course, exam, and compulsory charges before you pay.", "/fees");
 
 export default async function FeesPage() {
   const user = await getCurrentUser();

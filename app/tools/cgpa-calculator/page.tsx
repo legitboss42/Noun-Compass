@@ -6,8 +6,8 @@ import { getCurrentUser } from "@/lib/platform/auth";
 import Link from "next/link";
 
 export const metadata = createMetadata(
-  "NOUN CGPA Calculator and Grade Point Estimator",
-  "Calculate your NOUN CGPA from course units and final scores using the current grade-point bands.",
+  "NOUN CGPA Calculator (Free)",
+  "Free NOUN CGPA calculator: enter your course units and scores to estimate your CGPA and degree class using the current NOUN grade-point bands.",
   "/tools/cgpa-calculator",
 );
 
