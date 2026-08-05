@@ -34,7 +34,7 @@ This design structures a **Heavy ongoing program** (multi-week, weekly micro-shi
 
 **Effort budget:** Heavy — ongoing multi-week program with repeatable measurement loops, not a one-off round
 
-**Operating principle:** Delegated execution — Claude pulls GSC data, drafts changes, applies them, verifies, commits, and reports back. User stays in review/approval seat.
+**Operating principle:** Delegated execution — Claude pulls GSC data, drafts changes, applies them, verifies, commits, and reports back. User stays in review/approval seat. This applies to all phases (C, D, A, B) unless the user requests otherwise for a specific task.
 
 ## Architecture
 
