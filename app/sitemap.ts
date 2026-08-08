@@ -32,12 +32,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/tools/cgpa-calculator",
     "/tools/study-planner",
   ]);
+  const lastModified = new Date();
   const staticEntries = [...new Set(staticPaths)].map((path) => ({
     url: `${site.url}${path}`,
-    changeFrequency:
-      path === ""
-        ? ("weekly" as const)
-        : ("weekly" as const),
+    lastModified,
+    changeFrequency: "weekly" as const,
     priority: path === "" ? 1 : highPriorityPaths.has(path) ? 0.9 : 0.7,
   }));
   const articleEntries = articles.map((article) => ({

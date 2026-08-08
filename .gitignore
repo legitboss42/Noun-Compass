@@ -53,6 +53,11 @@ reports/seo-audit-debug.json
 reports/final-seo-audit.md
 reports/client-summary.md
 reports/action-checklist.md
+reports/index-coverage.md
+reports/index-coverage-debug.json
+
+# local editor/agent tooling
+.claude/
 
 # local marketing/browser captures
 marketing-agent/*.png

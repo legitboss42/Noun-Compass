@@ -14,6 +14,7 @@
     "seo:validate:launch": "node scripts/seo-audit/launch-validation.mjs https://nouncompass.me",
     "seo:validate:crawl": "node scripts/seo-audit/launch-validation.mjs https://nouncompass.me --crawl-only",
     "seo:audit:webgrowth": "node scripts/seo-audit/index.mjs https://nouncompass.me",
+    "seo:index-coverage": "node scripts/seo-audit/url-inspection.mjs https://nouncompass.me",
     "test:platform": "tsx --test tests/platform/*.test.ts"
   },
   "dependencies": {
