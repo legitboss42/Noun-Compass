@@ -45,7 +45,7 @@ export const quickAccessItems: {
   href: string;
   cta: string;
   icon: HomeIconName;
-  tone: "green" | "gold" | "blue" | "violet";
+  tone: "green" | "gold" | "navy";
 }[] = [
   {
     title: "Mock Exams",
@@ -69,7 +69,7 @@ export const quickAccessItems: {
     href: "/tools",
     cta: "Explore tools",
     icon: "tools",
-    tone: "blue",
+    tone: "navy",
   },
   {
     title: "Updates & Guides",
@@ -77,7 +77,7 @@ export const quickAccessItems: {
     href: "/student-guides",
     cta: "Read student guides",
     icon: "megaphone",
-    tone: "violet",
+    tone: "green",
   },
 ];
 
@@ -86,7 +86,7 @@ export const studentTools: {
   description: string;
   href: string;
   icon: HomeIconName;
-  tone: "green" | "gold" | "blue" | "violet" | "rose";
+  tone: "green" | "gold" | "navy";
 }[] = [
   {
     title: "Result Checker",
@@ -107,21 +107,21 @@ export const studentTools: {
     description: "Build a weekly plan around your courses and available time.",
     href: "/tools/study-planner",
     icon: "calendar",
-    tone: "blue",
+    tone: "navy",
   },
   {
     title: "CGPA Calculator",
     description: "Estimate semester GPA and running CGPA from your scores.",
     href: "/tools/cgpa-calculator",
     icon: "chart",
-    tone: "violet",
+    tone: "green",
   },
   {
     title: "Free Exam Diagnostic",
     description: "Open your practice dashboard and check available course activity.",
     href: "/dashboard/practice",
     icon: "clipboard",
-    tone: "rose",
+    tone: "gold",
   },
 ];
 

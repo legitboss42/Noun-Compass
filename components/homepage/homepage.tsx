@@ -116,8 +116,31 @@ function HeroSection() {
             </aside>
           </div>
           <div className={styles.heroVisual}>
-            <span aria-hidden="true" className={styles.heroHalo} />
-            <span aria-hidden="true" className={styles.heroDots} />
+            <span aria-hidden="true" className={styles.heroCompass}>
+              <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <radialGradient id="ncCompassDisc" cx="50%" cy="42%" r="62%">
+                    <stop offset="0%" stopColor="#f0fbf6" />
+                    <stop offset="100%" stopColor="#ddf1e7" />
+                  </radialGradient>
+                </defs>
+                <circle cx="100" cy="100" r="97" fill="url(#ncCompassDisc)" />
+                <circle cx="100" cy="100" r="86" stroke="#bfe6d1" strokeWidth="1.4" />
+                <circle cx="100" cy="100" r="79" stroke="#cdecda" strokeWidth="6" strokeDasharray="1.4 10.8" strokeLinecap="round" />
+                <g className={styles.compassCard}>
+                  <path d="M100 24 112.7 87.3 100 100Z" fill="#e6c66a" />
+                  <path d="M100 24 87.3 87.3 100 100Z" fill="#d7ad36" />
+                  <path d="M176 100 112.7 87.3 100 100Z" fill="#17a95c" />
+                  <path d="M176 100 112.7 112.7 100 100Z" fill="#079447" />
+                  <path d="M100 176 112.7 112.7 100 100Z" fill="#17a95c" />
+                  <path d="M100 176 87.3 112.7 100 100Z" fill="#079447" />
+                  <path d="M24 100 87.3 112.7 100 100Z" fill="#17a95c" />
+                  <path d="M24 100 87.3 87.3 100 100Z" fill="#079447" />
+                </g>
+                <circle cx="100" cy="100" r="6.5" fill="#045b35" />
+                <circle cx="100" cy="100" r="2.4" fill="#eafaf1" />
+              </svg>
+            </span>
             <picture>
               <source
                 media="(max-width: 700px)"
