@@ -6,7 +6,7 @@ import {
   normalizeQuestionCount,
   validateAiQuestionDraftCsv,
 } from "./ai-question-drafts-core";
-import { getAiProviderConfig } from "./ai-provider";
+import { getAiProviderConfig, reasoningControlFor } from "./ai-provider";
 
 const MAX_EXCERPT_LENGTH = 24_000;
 
@@ -152,7 +152,9 @@ export async function generateQuestionDraftCsv(
         },
         { role: "user", content: buildPrompt(input, count) },
       ],
+      ...reasoningControlFor(provider),
       temperature: 0.35,
+      max_tokens: 3_000,
     }),
   });
 

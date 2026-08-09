@@ -1,7 +1,7 @@
 import "server-only";
 
 import { createAdminClient } from "@/lib/supabase/admin";
-import { getAiProviderConfig } from "./ai-provider";
+import { getAiProviderConfig, reasoningControlFor } from "./ai-provider";
 import { membershipIsActive } from "./membership";
 
 export type GovernedAiFeature =
@@ -126,6 +126,7 @@ export async function runGovernedAi(input: {
           { role: "system", content: input.system },
           { role: "user", content: input.prompt },
         ],
+        ...reasoningControlFor(provider),
         temperature: 0.15,
         max_tokens: Math.max(300, Math.min(1800, input.maxTokens ?? 900)),
       }),

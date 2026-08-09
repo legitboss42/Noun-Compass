@@ -3,7 +3,7 @@ import "server-only";
 import type { CourseMaterial } from "@/lib/course-materials";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { aiQuestionDraftsConfigured } from "./ai-question-drafts-core";
-import { getAiProviderConfig } from "./ai-provider";
+import { getAiProviderConfig, reasoningControlFor } from "./ai-provider";
 import { membershipIsActive } from "./membership";
 import { resolveAiPracticeMaterial } from "./ai-practice-materials";
 import { normalizeCourseCode } from "./course-codes";
@@ -278,7 +278,9 @@ export async function generateCourseMaterialSummary(userId: string, materialKey:
         },
         { role: "user", content: buildPrompt(material, excerpt) },
       ],
+      ...reasoningControlFor(provider),
       temperature: 0.25,
+      max_tokens: 2_000,
     }),
   });
   if (!response.ok) throw new AiSummaryError(`AI provider request failed with status ${response.status}.`, 502);
