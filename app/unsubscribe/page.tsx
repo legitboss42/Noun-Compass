@@ -31,9 +31,7 @@ export default async function UnsubscribePage({ searchParams }: { searchParams: 
     return (
       <AccountFormShell
         title="You are unsubscribed"
-        intro={scope === "all"
-          ? "We have stopped study updates and optional reminders for this address. Account and payment emails still go out, because they are not marketing."
-          : "We have stopped NounCompass study updates for this address."}
+        intro={doneIntro(scope)}
       >
         <FormMessage notice="Your email settings have been saved." />
         <p>Changed your mind? Send us a message and we will turn updates back on for this address.</p>
@@ -66,7 +64,7 @@ export default async function UnsubscribePage({ searchParams }: { searchParams: 
   return (
     <AccountFormShell
       title="Stop NounCompass emails?"
-      intro={`This will stop study updates sent to ${email}.`}
+      intro={confirmIntro(scope, email)}
     >
       <FormMessage error={params.error ? "We could not update your email settings. Please try again." : undefined} />
       <form action={confirm} className="platform-form">
@@ -82,8 +80,22 @@ export default async function UnsubscribePage({ searchParams }: { searchParams: 
   );
 }
 
-function InvalidLink() {
-  return (
+function confirmIntro(scope: "updates" | "reengagement" | "all", email: string) {
+  if (scope === "all") return `This will stop every optional email sent to ${email}, including study reminders.`;
+  if (scope === "reengagement") return `This will stop the getting-started reminders sent to ${email}.`;
+  return `This will stop study updates sent to ${email}.`;
+}
+
+function doneIntro(scope: "updates" | "reengagement" | "all") {  if (scope === "all") {
+    return "We have stopped study updates and optional reminders for this address. Account and payment emails still go out, because they are not marketing.";
+  }
+  if (scope === "reengagement") {
+    return "We have stopped the getting-started reminders for this address. Your account is untouched and you can still use every tool.";
+  }
+  return "We have stopped NounCompass study updates for this address.";
+}
+
+function InvalidLink() {  return (
     <AccountFormShell
       title="That unsubscribe link is not valid"
       intro="The link may have been broken by your email app, or it may have been changed."

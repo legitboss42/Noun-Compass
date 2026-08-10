@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { sendStudyReminderEmail } from "@/lib/contact-mail";
+import { sendReengagementEmail, sendStudyReminderEmail } from "@/lib/contact-mail";
 import { syncSubscriberToBrevo } from "@/lib/newsletter";
 import { shouldSendStudyReminder } from "@/lib/platform/study-planner-premium";
 import { createAdminClient } from "@/lib/supabase/admin";
@@ -94,11 +94,89 @@ export async function GET(request: Request) {
         // Leave unsynced contacts queued for the next daily run.
       }
     }
-    const details = { expiredCount, reminderCount, checkedMemberships: expiring?.length ?? 0, studyReminderCount, studyEmailCount, checkedStudySessions: studySessions?.length ?? 0, subscriberSyncCount, checkedSubscribers: pendingSubscribers?.length ?? 0 };
+    const details = { expiredCount, reminderCount, checkedMemberships: expiring?.length ?? 0, studyReminderCount, studyEmailCount, checkedStudySessions: studySessions?.length ?? 0, subscriberSyncCount, checkedSubscribers: pendingSubscribers?.length ?? 0, ...(await runReengagement(admin, runDate)) };
     await admin.from("cron_runs").update({ status: "success", details, completed_at: new Date().toISOString() }).eq("id", run.id);
     return NextResponse.json({ ok: true, ...details });
   } catch (error) {
     await admin.from("cron_runs").update({ status: "failed", details: { error: error instanceof Error ? error.message.slice(0, 500) : "Unknown error" }, completed_at: new Date().toISOString() }).eq("id", run.id);
     return NextResponse.json({ message: "Daily job failed." }, { status: 500 });
   }
+}
+
+type ReengagementCandidate = { user_id: string; email: string | null; display_name: string | null };
+
+/**
+ * Nudges students who signed up and never opened a tool.
+ *
+ * Off unless REENGAGEMENT_ENABLED is explicitly "true". This is the one block
+ * in the daily job that emails people who did not ask for anything, so it does
+ * not start the moment it deploys — someone turns it on after reading what it
+ * sends. A failure here never fails the run: the memberships and reminders
+ * above matter more than a marketing nudge.
+ */
+async function runReengagement(
+  admin: NonNullable<ReturnType<typeof createAdminClient>>,
+  runDate: string,
+) {
+  if (process.env.REENGAGEMENT_ENABLED !== "true") {
+    return { reengagementEnabled: false as const };
+  }
+
+  const graceDays = Number(process.env.REENGAGEMENT_GRACE_DAYS ?? "3");
+  const cooldownDays = Number(process.env.REENGAGEMENT_COOLDOWN_DAYS ?? "14");
+  const batchLimit = Number(process.env.REENGAGEMENT_BATCH_LIMIT ?? "50");
+
+  const { data, error } = await admin.rpc("select_reengagement_candidates", {
+    p_grace_days: Number.isFinite(graceDays) ? graceDays : 3,
+    p_cooldown_days: Number.isFinite(cooldownDays) ? cooldownDays : 14,
+    p_limit: Number.isFinite(batchLimit) ? batchLimit : 50,
+  });
+
+  if (error) {
+    console.error("[cron] could not select re-engagement candidates", error.message);
+    return { reengagementEnabled: true as const, reengagementError: true as const };
+  }
+
+  const candidates = (data ?? []) as ReengagementCandidate[];
+  let emailed = 0;
+  let failed = 0;
+
+  for (const candidate of candidates) {
+    if (!candidate.email) continue;
+    const dedupeKey = `reengagement:${runDate}`;
+    // The notification row is written first and its unique (user_id,
+    // dedupe_key) is what stops a retried run from emailing twice. A row
+    // without emailed_at means the send failed, not that it was delivered.
+    const { error: insertError } = await admin.from("notifications").insert({
+      user_id: candidate.user_id,
+      kind: "reengagement",
+      title: "Start with a Practice Exam",
+      body: "You have not used the study tools yet. A Practice Exam built from your course material is the quickest first step.",
+      action_url: "/dashboard/ai-practice",
+      dedupe_key: dedupeKey,
+    });
+    if (insertError) continue;
+
+    try {
+      await sendReengagementEmail({ to: candidate.email, displayName: candidate.display_name });
+      await admin
+        .from("notifications")
+        .update({ emailed_at: new Date().toISOString() })
+        .eq("user_id", candidate.user_id)
+        .eq("dedupe_key", dedupeKey);
+      emailed += 1;
+    } catch {
+      // One bad address must not stop the rest of the batch. Without
+      // emailed_at the cooldown does not start, so this student is picked up
+      // again on the next run.
+      failed += 1;
+    }
+  }
+
+  return {
+    reengagementEnabled: true as const,
+    reengagementCandidates: candidates.length,
+    reengagementEmailed: emailed,
+    reengagementFailed: failed,
+  };
 }

@@ -69,19 +69,23 @@ export async function applyUnsubscribe(rawEmail: string, scope: UnsubscribeScope
 
   const userId = await findUserIdByEmail(admin, email);
   if (userId) {
-    // "updates" stops marketing only. "all" also stops the optional study and
-    // deadline reminders, which a student may reasonably read as "stop
-    // emailing me" — account and payment mail stays, since it is not marketing.
+    // Each scope stops what the email that carried the link was, and no more.
+    // "all" is the only one that reaches the optional study and deadline
+    // reminders, which a student may reasonably read as "stop emailing me".
+    // Account and payment mail always stays, since it is not marketing.
     const preferences = scope === "all"
       ? {
           product_updates: false,
+          reengagement_reminders: false,
           study_reminders: false,
           deadline_reminders: false,
           revision_reminders: false,
           membership_reminders: false,
           updated_at: now,
         }
-      : { product_updates: false, updated_at: now };
+      : scope === "reengagement"
+        ? { reengagement_reminders: false, updated_at: now }
+        : { product_updates: false, updated_at: now };
     const { error } = await admin
       .from("email_preferences")
       .upsert({ user_id: userId, ...preferences }, { onConflict: "user_id" });

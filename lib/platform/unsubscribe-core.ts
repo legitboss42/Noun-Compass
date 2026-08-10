@@ -10,9 +10,9 @@ import { createHmac, timingSafeEqual } from "node:crypto";
  * The scope is signed alongside the address so a link issued for one kind of
  * email cannot be replayed to silence another.
  */
-export type UnsubscribeScope = "updates" | "all";
+export type UnsubscribeScope = "updates" | "reengagement" | "all";
 
-export const UNSUBSCRIBE_SCOPES: UnsubscribeScope[] = ["updates", "all"];
+export const UNSUBSCRIBE_SCOPES: UnsubscribeScope[] = ["updates", "reengagement", "all"];
 
 export class UnsubscribeTokenError extends Error {}
 

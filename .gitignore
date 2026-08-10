@@ -63,3 +63,6 @@ reports/index-coverage-debug.json
 marketing-agent/*.png
 
 .vercel
+
+# Local email/render previews
+tmp/

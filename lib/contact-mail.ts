@@ -1,6 +1,7 @@
 import crypto from "node:crypto";
 import nodemailer from "nodemailer";
-import { unsubscribeHeadersFor, unsubscribeLinkFor } from "@/lib/platform/unsubscribe";
+import { buildReengagementEmail } from "@/lib/platform/reengagement-email-core";
+import { siteBaseUrl, unsubscribeHeadersFor, unsubscribeLinkFor } from "@/lib/platform/unsubscribe";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MAX_NAME_LENGTH = 80;
@@ -290,4 +291,35 @@ function optOutFallback() {
   // screen yet, and a dead link in an opt-out footer is worse than none.
   const base = process.env.NEXT_PUBLIC_SITE_URL || "https://nouncompass.me";
   return `${base.replace(/\/+$/, "")}/contact`;
+}
+
+/**
+ * The getting-started nudge for a student who signed up and never used a tool.
+ *
+ * Unlike the study reminder, this one refuses to send without a working
+ * unsubscribe link. A reminder is something the student switched on; this is
+ * something we decided to send, so it does not go out unless the way to stop it
+ * goes with it.
+ */
+export async function sendReengagementEmail({
+  displayName,
+  to,
+}: {
+  displayName?: string | null;
+  to: string;
+}) {
+  const transporter = createTransporter();
+  const fromAddress = process.env.CONTACT_FORM_AUTOREPLY_FROM ?? process.env.CONTACT_FORM_FROM ?? "NounCompass Support <support@nouncompass.me>";
+  const siteUrl = siteBaseUrl();
+  const unsubscribeUrl = unsubscribeLinkFor(to, "reengagement");
+  const headers = unsubscribeHeadersFor(to, "reengagement");
+
+  const { subject, html, text } = buildReengagementEmail({
+    displayName,
+    siteUrl,
+    ctaUrl: `${siteUrl.replace(/\/+$/, "")}/dashboard/ai-practice`,
+    unsubscribeUrl,
+  });
+
+  await transporter.sendMail({ from: fromAddress, to, headers, subject, text, html });
 }
