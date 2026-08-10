@@ -1,5 +1,6 @@
 import crypto from "node:crypto";
 import nodemailer from "nodemailer";
+import { unsubscribeHeadersFor, unsubscribeLinkFor } from "@/lib/platform/unsubscribe";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MAX_NAME_LENGTH = 80;
@@ -239,9 +240,22 @@ export async function sendStudyReminderEmail({
     timeZone: timezone || "Africa/Lagos",
   }).format(new Date(startsAt));
 
+  // A reminder is opt-in, so "stop emailing me" here means the reminders too,
+  // not just marketing. If link signing is not configured we still send, and
+  // point at account settings instead of dropping the reminder on the floor.
+  let optOut = optOutFallback();
+  let headers: Record<string, string> = {};
+  try {
+    optOut = unsubscribeLinkFor(to, "all");
+    headers = unsubscribeHeadersFor(to, "all");
+  } catch (error) {
+    console.error("[contact-mail] could not sign an unsubscribe link", error);
+  }
+
   await transporter.sendMail({
     from: fromAddress,
     to,
+    headers,
     subject: `Study reminder: ${title}`,
     text: [
       "Your saved NounCompass study session is coming up.",
@@ -251,6 +265,8 @@ export async function sendStudyReminderEmail({
       "",
       `Open your planner: ${actionUrl}`,
       "",
+      `Stop these reminders: ${optOut}`,
+      "",
       "NounCompass Support",
     ].join("\n"),
     html: `
@@ -259,7 +275,19 @@ export async function sendStudyReminderEmail({
         <p><strong>Session:</strong> ${escapeHtml(title)}</p>
         <p><strong>Time:</strong> ${escapeHtml(formattedStart)}</p>
         <p><a href="${escapeHtml(actionUrl)}">Open your Study Planner</a></p>
+        <hr style="border: 0; border-top: 1px solid #d6dde6; margin: 24px 0 12px;" />
+        <p style="font-size: 13px; color: #5b6b7d;">
+          You are getting this because you turned on study reminders.
+          <a href="${escapeHtml(optOut)}">Stop these reminders</a>.
+        </p>
       </div>
     `,
   });
+}
+
+function optOutFallback() {
+  // Deliberately /contact, not a settings page: there is no email-preferences
+  // screen yet, and a dead link in an opt-out footer is worse than none.
+  const base = process.env.NEXT_PUBLIC_SITE_URL || "https://nouncompass.me";
+  return `${base.replace(/\/+$/, "")}/contact`;
 }

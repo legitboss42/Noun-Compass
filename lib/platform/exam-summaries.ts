@@ -1,4 +1,4 @@
-export const examSummariesAvailable = false;
+export const examSummariesAvailable = true;
 
 export const examSummariesMaintenanceMessage =
-  "Exam summaries are under maintenance while we rebuild the output format and review standard.";
+  "Exam summaries are temporarily unavailable while we complete maintenance.";

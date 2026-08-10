@@ -1,6 +1,6 @@
 import "server-only";
 
-import { getStructuredAiProviderConfigs } from "./ai-provider";
+import { getStructuredAiProviderConfigs, reasoningControlFor } from "./ai-provider";
 import { membershipIsActive } from "./membership";
 import {
   buildDeterministicStudyPlan,
@@ -159,6 +159,32 @@ async function claimGenerationSlot(
   };
 }
 
+/**
+ * A free account holds one AI generation per week. If every provider fails the
+ * student gets the deterministic timetable, which costs no quota, so the slot
+ * has to go back — otherwise a single outage takes their AI planning away until
+ * the following Monday. Returns the generation count now standing.
+ */
+async function releaseGenerationSlot(
+  admin: NonNullable<ReturnType<typeof createAdminClient>>,
+  userId: string,
+  windowStartedAt: string | undefined,
+  claimedCount: number,
+) {
+  if (!windowStartedAt) return claimedCount;
+  const { data, error } = await admin.rpc("release_ai_study_planner_weekly_generation", {
+    p_user_id: userId,
+    p_window_started_at: windowStartedAt,
+  });
+  if (error) {
+    console.error("[ai-study-planner] could not release an unused generation slot", {
+      reason: error.message,
+    });
+    return claimedCount;
+  }
+  return Number(data ?? Math.max(0, claimedCount - 1));
+}
+
 async function savePlan({
   admin,
   generationCount,
@@ -272,9 +298,7 @@ export async function generateAiStudyPlan(
               { role: "user", content: `${prompt}${correction}` },
             ],
             response_format: timetableResponseFormat(provider),
-            ...(provider.provider === "groq" && provider.model.startsWith("qwen/")
-              ? { reasoning_format: "hidden" }
-              : {}),
+            ...reasoningControlFor(provider),
             temperature: 0.2,
             max_tokens: 3500,
           }),
@@ -302,14 +326,16 @@ export async function generateAiStudyPlan(
     }
     if (plan) break;
   }
+  let generationCount = claim.generationCount;
   if (!plan) {
     plan = buildDeterministicStudyPlan(context.input);
-    notice = "The AI response did not pass timetable safety checks, so the reliable planner produced this schedule instead.";
+    notice = "The AI response did not pass timetable safety checks, so the reliable planner produced this schedule instead. Your AI generation for this week is still available.";
+    generationCount = await releaseGenerationSlot(context.admin, userId, claim.windowStartedAt, claim.generationCount);
   }
 
   await savePlan({
     ...context,
-    generationCount: claim.generationCount,
+    generationCount,
     plan,
     userId,
     windowStartedAt: claim.windowStartedAt,
@@ -317,7 +343,7 @@ export async function generateAiStudyPlan(
   return {
     plan,
     weeklyLimit,
-    remaining: Math.max(0, weeklyLimit - claim.generationCount),
+    remaining: Math.max(0, weeklyLimit - generationCount),
     notice,
   };
 }

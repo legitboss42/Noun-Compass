@@ -2,15 +2,20 @@ import "server-only";
 
 import type { CourseMaterial } from "@/lib/course-materials";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { aiQuestionDraftsConfigured } from "./ai-question-drafts-core";
-import { getAiProviderConfig, reasoningControlFor } from "./ai-provider";
+import {
+  aiStudentFeaturesConfigured,
+  getAiProviderConfig,
+  reasoningControlFor,
+} from "./ai-provider";
 import { membershipIsActive } from "./membership";
 import { resolveAiPracticeMaterial } from "./ai-practice-materials";
+import {
+  ensureMaterialManifest,
+  MaterialExtractionError,
+} from "./ai-practice-material-cache";
+import { MAX_EXCERPT_LENGTH, selectSummaryExcerpt } from "./ai-material-summary-core";
 import { normalizeCourseCode } from "./course-codes";
 
-const MAX_PDF_BYTES = 16 * 1024 * 1024;
-const MAX_EXCERPT_LENGTH = 32_000;
-const MIN_EXTRACTED_CHARS = 900;
 const SUMMARY_CACHE_DAYS = 30;
 
 export type CourseSummaryResult = {
@@ -181,20 +186,18 @@ export async function listSavedCourseMaterialSummaries(userId: string): Promise<
   });
 }
 
-async function extractMaterialText(material: CourseMaterial) {
-  const response = await fetch(material.url, {
-    headers: { "User-Agent": "NounCompass/1.0 premium course summary extraction" },
-  });
-  if (!response.ok) throw new AiSummaryError("The selected material could not be downloaded.", 502);
-  const length = Number(response.headers.get("content-length") ?? 0);
-  if (length > MAX_PDF_BYTES) throw new AiSummaryError("This material is too large for instant summary generation.", 413);
-  const arrayBuffer = await response.arrayBuffer();
-  if (arrayBuffer.byteLength > MAX_PDF_BYTES) throw new AiSummaryError("This material is too large for instant summary generation.", 413);
-  const { default: pdfParse } = await import("pdf-parse/lib/pdf-parse");
-  const parsed = await pdfParse(Buffer.from(arrayBuffer));
-  const text = parsed.text.replace(/\s+/g, " ").trim();
-  if (text.length < MIN_EXTRACTED_CHARS) throw new AiSummaryError("Could not extract enough readable text from this PDF.", 422);
-  return text.slice(0, MAX_EXCERPT_LENGTH);
+async function extractMaterialText(materialKey: string, material: CourseMaterial) {
+  try {
+    const manifest = await ensureMaterialManifest(materialKey, material);
+    if (!manifest.chunks.length) {
+      throw new AiSummaryError("Could not extract enough readable text from this material.", 422);
+    }
+    return selectSummaryExcerpt(manifest.chunks, MAX_EXCERPT_LENGTH);
+  } catch (error) {
+    if (error instanceof AiSummaryError) throw error;
+    if (error instanceof MaterialExtractionError) throw new AiSummaryError(error.message, error.status);
+    throw new AiSummaryError("The selected material could not be prepared for summarising.", 502);
+  }
 }
 
 function stripJsonFences(value: string) {
@@ -235,6 +238,11 @@ function parseSummary(content: string): CourseSummaryResult["summary"] {
 function buildPrompt(material: CourseMaterial, excerpt: string) {
   return `Create an exam-focused study summary from the official course-material excerpt.
 
+The excerpt is sampled from several places across the material. Sections are
+separated by [...] and are not continuous. Each section opens with its unit
+heading and page range. Do not treat a sentence cut off at a separator as
+finished, and do not assume the sections are next to each other in the original.
+
 Strict rules:
 - Use only the provided material excerpt.
 - Do not claim certainty about future exam questions.
@@ -242,8 +250,11 @@ Strict rules:
 - Focus on examinable concepts, definitions, formulas, processes, comparisons, and likely question angles.
 - Return JSON only. No markdown, comments, or code fences.
 - JSON keys: title, examFocus, keyAreas, definitions, formulasOrProcesses, likelyQuestionAngles, revisionChecklist, caution.
-- keyAreas must be an array of 5 to 8 items. Each item must have heading, whyItMatters, points.
-- points must be short student-friendly bullets.
+- keyAreas must be an array of 5 to 6 items. Each item must have heading, whyItMatters, points.
+- points must be 3 to 4 short student-friendly bullets of at most 20 words each.
+- whyItMatters must be a single sentence.
+- definitions, formulasOrProcesses, likelyQuestionAngles and revisionChecklist must each hold at most 5 short entries.
+- Keep the whole response under 700 words so the JSON is always complete.
 
 Course code: ${material.code}
 Course title: ${material.title}
@@ -261,8 +272,8 @@ export async function generateCourseMaterialSummary(userId: string, materialKey:
   const cached = await getCachedCourseMaterialSummary(userId, materialKey);
   if (cached) return cached;
 
-  if (!aiQuestionDraftsConfigured()) throw new AiSummaryError("Exam summaries are not configured yet.", 503);
-  const excerpt = await extractMaterialText(material);
+  if (!aiStudentFeaturesConfigured()) throw new AiSummaryError("Exam summaries are not configured yet.", 503);
+  const excerpt = await extractMaterialText(materialKey, material);
   const provider = getAiProviderConfig();
   if (!provider) throw new AiSummaryError("Exam summaries are not configured yet.", 503);
   const { model } = provider;
@@ -280,7 +291,10 @@ export async function generateCourseMaterialSummary(userId: string, materialKey:
       ],
       ...reasoningControlFor(provider),
       temperature: 0.25,
-      max_tokens: 2_000,
+      // Prompt tokens plus max_tokens must stay under the 8,000-token minute
+      // ceiling. A 10,000-character excerpt costs about 3,100, so this leaves
+      // roughly 900 tokens of headroom while giving the reply room to finish.
+      max_tokens: 4_000,
     }),
   });
   if (!response.ok) throw new AiSummaryError(`AI provider request failed with status ${response.status}.`, 502);

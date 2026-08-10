@@ -1,7 +1,6 @@
 import Link from "next/link";
 
 import { requireUser } from "@/lib/platform/auth";
-import { createQuestionStore } from "@/lib/platform/question-store";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 type AiPracticeHistoryRow = {
@@ -16,9 +15,16 @@ type AiPracticeHistoryRow = {
   completed_at: string | null;
 };
 
+function formatWhen(value: string) {
+  return new Intl.DateTimeFormat("en-NG", {
+    dateStyle: "medium",
+    timeStyle: "short",
+    timeZone: "Africa/Lagos",
+  }).format(new Date(value));
+}
+
 export default async function DashboardPracticePage() {
   const user = await requireUser("/dashboard/practice");
-  const { dueCount, sessions } = await createQuestionStore().dashboard(user.id);
   const admin = createAdminClient();
   const { data: aiSessions } = admin
     ? await admin
@@ -28,8 +34,18 @@ export default async function DashboardPracticePage() {
         .order("created_at", { ascending: false })
         .limit(10)
     : { data: [] };
-  const completed = sessions.find((session) => session.status === "completed");
-  const aiHistory = (aiSessions ?? []) as AiPracticeHistoryRow[];
+
+  const history = (aiSessions ?? []) as AiPracticeHistoryRow[];
+  const completed = history.filter((session) => session.status === "completed");
+  const unfinished = history.filter(
+    (session) => session.status === "active" || session.status === "generating",
+  );
+  const latestScore = completed.find((session) => session.score !== null);
+  const averageScore = completed.length
+    ? Math.round(
+        completed.reduce((total, session) => total + (session.score ?? 0), 0) / completed.length,
+      )
+    : null;
 
   return (
     <>
@@ -38,8 +54,8 @@ export default async function DashboardPracticePage() {
           <span className="eyebrow">Practice history</span>
           <h1>Your exam practice record</h1>
           <p>
-            Review your generated practice exams, completed attempts, scores,
-            unfinished tests, and revision activity in one place.
+            Every Practice Exam you generate from your registered course
+            materials is saved here with its score and answer review.
           </p>
         </div>
         <div className="platform-form-actions">
@@ -49,44 +65,11 @@ export default async function DashboardPracticePage() {
       </header>
 
       <section className="platform-stat-grid" aria-label="Practice progress">
-        <article><span>Revision due</span><strong>{dueCount}</strong><small>Questions scheduled for review now</small></article>
-        <article><span>Sessions</span><strong>{sessions.length}</strong><small>Your ten most recent sessions</small></article>
-        <article><span>Practice Exam</span><strong>{aiHistory.length}</strong><small>Your ten most recent generated sessions</small></article>
-        <article><span>Latest score</span><strong>{completed ? `${String(completed.score)}%` : "-"}</strong><small>From your most recent completed session</small></article>
+        <article><span>Completed</span><strong>{completed.length}</strong><small>Attempts you finished and scored</small></article>
+        <article><span>Unfinished</span><strong>{unfinished.length}</strong><small>Tests you can still continue</small></article>
+        <article><span>Latest score</span><strong>{latestScore ? `${latestScore.score}%` : "-"}</strong><small>From your most recent completed test</small></article>
+        <article><span>Average score</span><strong>{averageScore === null ? "-" : `${averageScore}%`}</strong><small>Across your completed tests</small></article>
       </section>
-
-      {sessions.length ? (
-        <section className="platform-panel">
-          <h2>Checked-bank attempt history</h2>
-          <div className="platform-ticket-list">
-            {sessions.map((session) => {
-              const bank = session.question_banks as { course_code?: string } | null;
-              return (
-                <article key={String(session.id)}>
-                  <div>
-                    <strong>{bank?.course_code ?? "Course"} - {String(session.mode)}</strong>
-                    <span>{String(session.status)}</span>
-                  </div>
-                  <small>
-                    {session.score === null ? "No score yet" : `${String(session.score)}%`} - {String(session.question_count)} questions - {new Intl.DateTimeFormat("en-NG", { dateStyle: "medium", timeStyle: "short", timeZone: "Africa/Lagos" }).format(new Date(String(session.started_at)))}
-                  </small>
-                  {session.status === "completed" ? <Link href={`/attempts/${String(session.id)}/results`}>View results</Link> : null}
-                </article>
-              );
-            })}
-          </div>
-        </section>
-      ) : (
-        <section className="platform-panel empty-state">
-          <span className="eyebrow">No checked-bank attempts yet</span>
-          <h2>Your checked-bank history will appear here</h2>
-          <p>
-            NounCompass is now prioritising generated Practice Exams from your
-            registered course materials. Older checked-bank attempts will still
-            remain visible here if you have any.
-          </p>
-        </section>
-      )}
 
       <section className="platform-panel">
         <div className="platform-panel-heading">
@@ -96,9 +79,9 @@ export default async function DashboardPracticePage() {
           </div>
           <Link href="/dashboard/ai-practice">Generate new practice exam</Link>
         </div>
-        {aiHistory.length ? (
+        {history.length ? (
           <div className="platform-ticket-list">
-            {aiHistory.map((session) => (
+            {history.map((session) => (
               <article key={session.id}>
                 <div>
                   <strong>
@@ -107,7 +90,7 @@ export default async function DashboardPracticePage() {
                   <span>{session.status ?? "started"}</span>
                 </div>
                 <small>
-                  {session.score === null ? "No score yet" : `${session.score}%`} - {String(session.question_count ?? 0)} questions - {String(session.mode ?? "practice")} - {new Intl.DateTimeFormat("en-NG", { dateStyle: "medium", timeStyle: "short", timeZone: "Africa/Lagos" }).format(new Date(session.created_at))}
+                  {session.score === null ? "No score yet" : `${session.score}%`} - {String(session.question_count ?? 0)} questions - {String(session.mode ?? "practice")} - {formatWhen(session.created_at)}
                 </small>
                 {session.status === "active" || session.status === "generating" || session.status === "failed" ? (
                   <Link href={`/dashboard/ai-practice?session=${session.id}`}>
@@ -118,7 +101,16 @@ export default async function DashboardPracticePage() {
             ))}
           </div>
         ) : (
-          <p>No generated practice exams yet.</p>
+          <div className="empty-state">
+            <span className="eyebrow">No practice exams yet</span>
+            <h3>Generate your first Practice Exam</h3>
+            <p>
+              Pick a course you have registered, and NounCompass builds a test
+              from its official course material. Your score and answer review
+              are saved here afterwards.
+            </p>
+            <Link className="button" href="/dashboard/ai-practice">Start your first test</Link>
+          </div>
         )}
       </section>
     </>

@@ -8,15 +8,31 @@ export type AiProviderConfig = {
 };
 
 /**
- * Reasoning models (Groq qwen/*, OpenRouter nvidia/nemotron-*, deepseek-r1 and
- * friends) emit a hidden chain-of-thought before the answer. Left unchecked it
- * consumes the whole max_tokens budget, so the reply arrives truncated or as a
- * bare `<think>` block and every JSON.parse downstream fails. These flags keep
- * the thinking out of the response body.
+ * Reasoning models emit a chain-of-thought before the answer. Left unchecked it
+ * consumes the whole max_tokens budget, so the reply arrives truncated and every
+ * JSON.parse downstream fails.
+ *
+ * `reasoning_format: "hidden"` does NOT prevent this. Measured against Groq:
+ * qwen3.6-27b spent all 600 completion tokens on reasoning and returned empty
+ * content, because "hidden" only strips the thinking from the response after it
+ * has been generated and billed. Disabling reasoning outright is what actually
+ * frees the budget: the same request then cost 6 tokens.
+ *
+ * Groq validates these parameters per model family and rejects the whole request
+ * when one does not apply, so only send what the family accepts:
+ *   qwen/*          -> reasoning_effort must be "none" or "default"
+ *   openai/gpt-oss* -> reasoning_effort must be "low", "medium" or "high"
+ *   llama-3.3-70b   -> rejects both parameters outright
+ * Anything unrecognised therefore gets no reasoning parameters at all, so a
+ * changed GROQ_MODEL cannot take every AI feature down with 400s.
  */
 export function reasoningControlFor(provider: AiProviderConfig): Record<string, unknown> {
   if (provider.provider === "groq") {
-    return { reasoning_format: "hidden" };
+    if (provider.model.startsWith("openai/gpt-oss")) {
+      return { reasoning_effort: "low", reasoning_format: "hidden" };
+    }
+    if (provider.model.startsWith("qwen/")) return { reasoning_effort: "none" };
+    return {};
   }
   return { reasoning: { exclude: true } };
 }
@@ -64,6 +80,22 @@ export function getAiProviderConfig(
   }
 
   return null;
+}
+
+/**
+ * Gate for student-facing AI features (Practice Exam, exam summaries).
+ *
+ * These previously gated on AI_QUESTION_DRAFTS_ENABLED, an admin
+ * content-authoring switch. That coupled the paid product to an internal tool:
+ * turning the admin tool off silently removed Practice Exams for every paying
+ * student. The student gate now depends only on a configured provider, with its
+ * own kill switch for incidents.
+ */
+export function aiStudentFeaturesConfigured(
+  env: Record<string, string | undefined> = process.env,
+) {
+  if (env.AI_STUDENT_FEATURES_ENABLED?.trim().toLowerCase() === "false") return false;
+  return Boolean(getAiProviderConfig(env));
 }
 
 export function getAiProviderConfigs(

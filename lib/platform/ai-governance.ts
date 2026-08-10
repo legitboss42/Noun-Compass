@@ -3,6 +3,7 @@ import "server-only";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getAiProviderConfig, reasoningControlFor } from "./ai-provider";
 import { membershipIsActive } from "./membership";
+import { quotaRejectionMessage } from "./ai-quota-core";
 
 export type GovernedAiFeature =
   | "performance-coach"
@@ -102,6 +103,10 @@ export async function runGovernedAi(input: {
   const userLimit = input.staff ? (featureLimit.staff ?? 0) : premium ? featureLimit.premium : featureLimit.free;
   if (userLimit < 1) throw new AiGovernanceError("This AI feature is not available for this account.", 403);
   const globalLimit = Math.max(10, Math.min(10_000, Number(process.env.AI_GLOBAL_DAILY_LIMIT ?? 250)));
+  // The attempt-grace arguments are deliberately not sent. They carry SQL
+  // defaults, so this call resolves against both the old and the new function
+  // and the deploy is safe in either order: before the migration runs the
+  // student simply gets the previous no-refund behaviour rather than an error.
   const { data, error } = await admin.rpc("claim_ai_feature_request", {
     p_user_id: input.userId,
     p_feature: input.feature,
@@ -110,10 +115,22 @@ export async function runGovernedAi(input: {
     p_user_limit: userLimit,
     p_global_limit: globalLimit,
   });
-  const claim = (Array.isArray(data) ? data[0] : data) as { allowed?: boolean; usage_id?: string; user_count?: number } | null;
+  const claim = (Array.isArray(data) ? data[0] : data) as {
+    allowed?: boolean;
+    usage_id?: string;
+    user_count?: number;
+    global_count?: number;
+  } | null;
   if (error || !claim) throw new AiGovernanceError("AI usage could not be checked safely.", 503);
   if (!claim.allowed || !claim.usage_id) {
-    throw new AiGovernanceError("Your AI allowance for this feature has been reached. It resets at midnight Lagos time.", 429);
+    // The counts come back even on refusal, so the student can be told which
+    // ceiling they actually hit instead of being blamed for a provider outage.
+    throw new AiGovernanceError(quotaRejectionMessage({
+      userCount: Number(claim.user_count ?? userLimit),
+      userLimit,
+      globalCount: Number(claim.global_count ?? 0),
+      globalLimit,
+    }), 429);
   }
   try {
     const response = await fetch(provider.endpoint, {
@@ -145,11 +162,22 @@ export async function runGovernedAi(input: {
     }).eq("id", claim.usage_id);
     return { content, premium, remaining: Math.max(0, userLimit - Number(claim.user_count ?? 1)) };
   } catch (error) {
-    await admin.from("ai_feature_usage").update({
+    // This write is what refunds the allowance: claim_ai_feature_request counts
+    // only 'completed' and in-flight 'pending' rows. If it silently failed the
+    // student would keep paying for a provider outage, so a failure to record
+    // the failure is worth surfacing in logs.
+    const { error: releaseError } = await admin.from("ai_feature_usage").update({
       status: "failed",
       error_code: error instanceof AiGovernanceError ? String(error.status) : "provider_error",
       completed_at: new Date().toISOString(),
     }).eq("id", claim.usage_id);
+    if (releaseError) {
+      console.error("[ai-governance] could not release quota for a failed request", {
+        feature: input.feature,
+        usageId: claim.usage_id,
+        reason: releaseError.message,
+      });
+    }
     throw error instanceof AiGovernanceError ? error : new AiGovernanceError("AI assistance could not complete this request.", 502);
   }
 }

@@ -16,6 +16,8 @@
 - No AI request runs automatically on page load.
 - Every feature has an independent daily quota.
 - A global daily request ceiling defaults to `250` and is controlled by `AI_GLOBAL_DAILY_LIMIT`.
+- Quota is charged on delivery, not on attempt. A request that fails does not spend a student's allowance, so a provider outage cannot take a free account's whole day.
+- Refunds are bounded: each window also carries a small number of extra attempts (3 per account, 10% of the global cap), because a failed generation has still cost provider tokens. Once those are gone the window closes whatever the outcomes were.
 - Requests are recorded in `ai_feature_usage`.
 - Identical eligible requests use `ai_feature_cache` before claiming quota.
 - Provider calls have a 45-second timeout and no automatic retry.
@@ -42,10 +44,11 @@
 ## Operational requirements
 
 1. Apply `supabase/migrations/202608020003_ai_feature_governance.sql`.
-2. Keep the configured Groq or OpenRouter key server-only.
-3. Set `AI_GLOBAL_DAILY_LIMIT` in production; `250` is the conservative default.
-4. Review `ai_feature_usage` before increasing any quota.
-5. Do not expose `ai_feature_cache` or `ai_feature_usage` to authenticated browser clients.
+2. Apply `supabase/migrations/202608100001_ai_quota_refund_on_failure.sql`. Its new arguments carry SQL defaults, so it is safe to apply before or after the matching deploy.
+3. Keep the configured Groq or OpenRouter key server-only.
+4. Set `AI_GLOBAL_DAILY_LIMIT` in production; `250` is the conservative default.
+5. Review `ai_feature_usage` before increasing any quota.
+6. Do not expose `ai_feature_cache` or `ai_feature_usage` to authenticated browser clients.
 
 ## Known limitations
 

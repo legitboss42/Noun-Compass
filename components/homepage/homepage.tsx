@@ -285,11 +285,11 @@ function PlatformMetrics({ metrics }: { metrics: HomepageMetric[] }) {
 
 function MembershipSection({ membership }: { membership: MembershipSummary }) {
   const benefits = [
-    "Access to published question banks",
-    "Untimed practice and timed mocks",
-    "Detailed explanations",
-    "Weak-topic and revision tracking",
-    "Progress exports and reminders",
+    "Practice Exams built from your course materials",
+    "Quick practice, revision quiz, and mock-style tests",
+    "Answer explanations for every question",
+    "Exam-focused summaries of your course materials",
+    "Weak-topic tracking and study reminders",
   ];
 
   return (

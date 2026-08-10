@@ -4,8 +4,13 @@ import { randomUUID } from "crypto";
 import type { CourseMaterial } from "@/lib/course-materials";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { membershipIsActive } from "./membership";
-import { aiQuestionDraftsConfigured } from "./ai-question-drafts-core";
-import { getStructuredAiProviderConfigs, type AiProviderConfig } from "./ai-provider";
+import {
+  aiStudentFeaturesConfigured,
+  getStructuredAiProviderConfigs,
+  reasoningControlFor,
+  type AiProviderConfig,
+} from "./ai-provider";
+import { blockedByFailures, withinQuota } from "./ai-quota-core";
 import {
   buildCoverageBatches,
   parseGroundedQuestionBatch,
@@ -223,21 +228,39 @@ async function getPremiumState(userId: string) {
 async function assertQuota(userId: string, premium: boolean) {
   const admin = createAdminClient();
   if (!admin) throw new AiPracticeError("Practice database is not configured.", 503);
-  const { count, error } = await admin
-    .from("ai_practice_sessions")
-    .select("id", { count: "exact", head: true })
-    .eq("user_id", userId)
-    .gte("created_at", lagosDayStart());
-  if (error) throw new AiPracticeError("Could not check your Practice Exam quota.", 500);
+  const windowStart = lagosDayStart();
+  // A session that never produced questions must not spend the day's allowance,
+  // but it still counts as an attempt so a failing provider cannot be retried
+  // without end. Generation has already cost tokens by the time it fails.
+  const [{ count: chargeable, error }, { count: attempts, error: attemptsError }] = await Promise.all([
+    admin
+      .from("ai_practice_sessions")
+      .select("id", { count: "exact", head: true })
+      .eq("user_id", userId)
+      .neq("status", "failed")
+      .gte("created_at", windowStart),
+    admin
+      .from("ai_practice_sessions")
+      .select("id", { count: "exact", head: true })
+      .eq("user_id", userId)
+      .gte("created_at", windowStart),
+  ]);
+  if (error || attemptsError) throw new AiPracticeError("Could not check your Practice Exam quota.", 500);
   const limit = premium ? MAX_PREMIUM_DAILY_SESSIONS : MAX_FREE_DAILY_SESSIONS;
-  if ((count ?? 0) >= limit) {
+  const counts = { chargeable: chargeable ?? 0, attempts: attempts ?? 0 };
+  if (withinQuota(counts, limit)) return;
+  if (blockedByFailures(counts, limit)) {
     throw new AiPracticeError(
-      premium
-        ? "You have reached today's Practice Exam limit. Try again tomorrow."
-        : "Free Practice Exam access is limited to one generation per day.",
+      "Too many Practice Exams failed to generate on this account today. Your daily limit was not spent on them, so please try again after midnight Lagos time.",
       403,
     );
   }
+  throw new AiPracticeError(
+    premium
+      ? "You have reached today's Practice Exam limit. Try again tomorrow."
+      : "Free Practice Exam access is limited to one generation per day.",
+    403,
+  );
 }
 
 async function assertRegisteredMaterial(userId: string, courseCode: string) {
@@ -376,7 +399,7 @@ async function generateBatchQuestions(input: {
   existingPrompts: string[];
   adaptiveInstruction: string;
 }) {
-  if (!aiQuestionDraftsConfigured()) throw new AiPracticeError("Practice Exam generation is not configured yet.", 503);
+  if (!aiStudentFeaturesConfigured()) throw new AiPracticeError("Practice Exam generation is not configured yet.", 503);
   const providers = getStructuredAiProviderConfigs();
   if (!providers.length) throw new AiPracticeError("Practice Exam generation is not configured yet.", 503);
   const prompt = buildBatchPrompt({
@@ -411,9 +434,7 @@ async function generateBatchQuestions(input: {
               { role: "user", content: `${prompt}${correction}` },
             ],
             response_format: questionBatchResponseFormat(provider, input.targetCount),
-            ...(provider.provider === "groq" && provider.model.startsWith("qwen/")
-              ? { reasoning_format: "hidden" }
-              : {}),
+            ...reasoningControlFor(provider),
             temperature: 0.2,
             max_tokens: 2_000,
           }),

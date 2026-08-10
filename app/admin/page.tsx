@@ -80,11 +80,6 @@ export default async function AdminPage() {
                 Open support
               </Link>
             ) : null}
-            {canReadQuestions ? (
-              <Link className="admin-button" href="/admin/questions">
-                Review questions
-              </Link>
-            ) : null}
           </>
         }
       />
@@ -140,20 +135,11 @@ export default async function AdminPage() {
               />
             ) : null}
             {canReadQuestions ? (
-              <>
-                <AdminStatCard
-                  label="Unresolved question reports"
-                  value={metrics.unresolved_question_reports}
-                  detail="Open or currently under review"
-                  href="/admin/questions"
-                />
-                <AdminStatCard
-                  label="Question banks"
-                  value={metrics.total_question_banks}
-                  detail={`${metrics.published_questions} published questions`}
-                  href="/admin/questions"
-                />
-              </>
+              <AdminStatCard
+                label="Unresolved question reports"
+                value={metrics.unresolved_question_reports}
+                detail="Open or currently under review"
+              />
             ) : null}
             <AdminStatCard
               label="Data source"

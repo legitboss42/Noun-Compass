@@ -56,10 +56,10 @@ export default async function MembershipPage() {
             <h2>Make each study session count</h2>
             <ul>
               <li>Generate Practice Exams from registered course materials.</li>
-              <li>Use timed practice and saved explanations where available.</li>
+              <li>Choose quick practice, a revision quiz, or a mock-style test.</li>
               <li>Save study sessions to your calendar and enable reminders.</li>
               <li>Continue unfinished tests and review Practice history.</li>
-              <li>Exam summaries are temporarily under maintenance.</li>
+              <li>Generate exam-focused summaries of your course materials.</li>
             </ul>
             <Link className="button" href="/dashboard/ai-practice">Open Practice Exam</Link>
             <Link href="/course-materials">Open course materials</Link>
@@ -95,7 +95,7 @@ export default async function MembershipPage() {
           <span className="eyebrow">Semester Pass</span>
           <div className="membership-price"><strong>NGN 2,500</strong><span>one payment</span></div>
           <p>180 days of premium access. No automatic renewal and no recurring charge.</p>
-          <ul><li>Practice Exams from registered course materials</li><li>Detailed explanations</li><li>Weak-topic and revision tracking</li><li>Progress history and calendar reminders</li><li>Exam summaries are temporarily under maintenance.</li></ul>
+          <ul><li>Practice Exams from registered course materials</li><li>Answer explanations for every question</li><li>Exam-focused course material summaries</li><li>Weak-topic and revision tracking</li><li>Progress history and calendar reminders</li></ul>
           <CheckoutButton available={isCheckoutAvailable()} />
           <small>Secure payment through Flutterwave. Transaction charges are covered by NounCompass.</small>
         </article>
