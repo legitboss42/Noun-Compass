@@ -2,21 +2,20 @@
  * Shared shell for NounCompass emails.
  *
  * Email clients drop <style> blocks, flexbox, and grid, so everything here is
- * tables and inline styles. The palette is the real sitewide one from
- * app/sitewide.css rather than an approximation, so the email and the page it
- * links to are recognisably the same product.
+ * tables and inline styles.
  *
- * Deliberately dark: the confirmation mail a student got at signup is the only
- * NounCompass email most of them have ever seen, and matching it is what makes
+ * Deliberately dark: the palette matches the Supabase auth email (signup
+ * confirmation and password reset) exactly, because that is the only
+ * NounCompass email most students have ever seen — matching it is what makes
  * this one recognisable in a crowded inbox.
  */
 
 const INK = "#0b1d32";
-const SHELL = "#07131f";
-const CARD = "#0d1f30";
-const GREEN = "#079447";
+const SHELL = "#07111f";
+const CARD = "#0d1b2a";
+const GREEN = "#18a558";
 const GREEN_DEEP = "#003f2d";
-const YELLOW = "#d7ad36";
+const YELLOW = "#f0b429";
 const BODY_TEXT = "#c6d3dd";
 const MUTED_TEXT = "#8fa3b3";
 const HAIRLINE = "#1b3348";
