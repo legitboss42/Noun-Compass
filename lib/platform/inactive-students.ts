@@ -34,6 +34,15 @@ export function inactiveParamsFromEnv(): InactiveParams {
   };
 }
 
+/** Clamp a user-supplied quiet-days value to the 1–90 range the panel allows.
+ * Shared by the admin page (preview) and the send actions so the previewed
+ * audience and the emailed audience use the same threshold. */
+export function clampQuietDays(raw: string | undefined, fallback: number): number {
+  const value = Number(raw);
+  if (!Number.isFinite(value)) return fallback;
+  return Math.max(1, Math.min(90, Math.round(value)));
+}
+
 /** Shared with the reengagement dedupe key so a cron send and an admin send on
  * the same day collide on notifications(user_id, dedupe_key) instead of
  * double-emailing. */

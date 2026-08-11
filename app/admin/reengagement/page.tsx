@@ -10,6 +10,7 @@ import {
 import { requirePermission } from "@/lib/platform/admin-auth";
 import { formatAdminDate } from "@/lib/platform/admin-format";
 import {
+  clampQuietDays,
   countInactiveByStage,
   inactiveParamsFromEnv,
   selectInactiveStudents,
@@ -22,12 +23,6 @@ import { sendStageCampaign, sendToOneStudent } from "./actions";
 export const dynamic = "force-dynamic";
 
 const STAGE_ORDER: InactiveStage[] = ["s1", "s2", "s3", "s4"];
-
-function clampQuiet(raw: string | undefined, fallback: number) {
-  const value = Number(raw);
-  if (!Number.isFinite(value)) return fallback;
-  return Math.max(1, Math.min(90, Math.round(value)));
-}
 
 function whereStopped(student: InactiveStudent) {
   const label = STAGE_META[student.stage].label;
@@ -44,7 +39,7 @@ export default async function AdminReengagementPage({
   await requirePermission("settings.manage", "/admin/reengagement");
   const admin = createAdminClient();
   const base = inactiveParamsFromEnv();
-  const quietDays = clampQuiet(params.quiet, base.quietDays);
+  const quietDays = clampQuietDays(params.quiet, base.quietDays);
   const knobs = { ...base, quietDays };
 
   let counts: Record<InactiveStage, number> | null = null;
@@ -68,7 +63,7 @@ export default async function AdminReengagementPage({
 
   const cronEnabled = process.env.REENGAGEMENT_ENABLED === "true";
 
-  const columns = (stage: InactiveStage): AdminColumn<InactiveStudent>[] => [
+  const columns = (stage: InactiveStage, quietDays: number): AdminColumn<InactiveStudent>[] => [
     {
       key: "student",
       header: "Student",
@@ -94,6 +89,7 @@ export default async function AdminReengagementPage({
             <input type="hidden" name="stage" value={stage} />
             <input type="hidden" name="user_id" value={s.user_id} />
             <input type="hidden" name="reason" value={`Individual ${stage.toUpperCase()} re-engagement`} />
+            <input type="hidden" name="quiet" value={quietDays} />
             <button className="admin-button admin-button-small" type="submit">Send</button>
           </form>
         ) : (
@@ -156,6 +152,7 @@ export default async function AdminReengagementPage({
 
             <form action={sendStageCampaign} className="admin-form">
               <input type="hidden" name="stage" value={stage} />
+              <input type="hidden" name="quiet" value={quietDays} />
               <p>
                 This emails the <strong>{rows.length}</strong> eligible student
                 {rows.length === 1 ? "" : "s"} shown below
@@ -168,7 +165,7 @@ export default async function AdminReengagementPage({
 
             <AdminDataTable
               caption={`${STAGE_META[stage].label} — inactive students`}
-              columns={columns(stage)}
+              columns={columns(stage, quietDays)}
               rows={rows}
               rowKey={(s) => s.user_id}
               emptyTitle="No one to email"

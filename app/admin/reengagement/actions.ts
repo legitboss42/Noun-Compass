@@ -9,6 +9,7 @@ import {
 } from "@/lib/platform/admin-workflows";
 import { writeAuditLog } from "@/lib/platform/audit";
 import {
+  clampQuietDays,
   inactiveParamsFromEnv,
   inactiveRunDate,
   selectInactiveStudents,
@@ -48,7 +49,8 @@ export async function sendStageCampaign(formData: FormData) {
     const admin = createAdminClient();
     if (!admin) throw new Error("Platform database is not configured.");
 
-    const params = inactiveParamsFromEnv();
+    const base = inactiveParamsFromEnv();
+    const params = { ...base, quietDays: clampQuietDays(value(formData, "quiet"), base.quietDays) };
     const runDate = inactiveRunDate();
     const students = await selectInactiveStudents(admin, params, stage);
     if (!students.length) throw new Error("No students are eligible in that stage right now.");
@@ -103,7 +105,8 @@ export async function sendToOneStudent(formData: FormData) {
     const admin = createAdminClient();
     if (!admin) throw new Error("Platform database is not configured.");
 
-    const params = inactiveParamsFromEnv();
+    const base = inactiveParamsFromEnv();
+    const params = { ...base, quietDays: clampQuietDays(value(formData, "quiet"), base.quietDays) };
     const runDate = inactiveRunDate();
     const student = (await selectInactiveStudents(admin, params, stage)).find((s) => s.user_id === userId);
     if (!student) throw new Error("That student is no longer eligible (already emailed, opted out, or now active).");
