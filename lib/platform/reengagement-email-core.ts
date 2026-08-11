@@ -43,7 +43,7 @@ export function buildReengagementEmail(input: ReengagementEmailInput) {
   };
 }
 
-function firstName(displayName?: string | null) {
+export function firstName(displayName?: string | null) {
   const cleaned = (displayName ?? "").replace(/\s+/g, " ").trim();
   if (!cleaned) return "";
   const first = cleaned.split(" ")[0];
