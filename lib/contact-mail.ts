@@ -1,6 +1,7 @@
 import crypto from "node:crypto";
 import nodemailer from "nodemailer";
 import { buildReengagementEmail } from "@/lib/platform/reengagement-email-core";
+import { buildStageEmail, type InactiveStage, type StageContext } from "@/lib/platform/stage-email-core";
 import { siteBaseUrl, unsubscribeHeadersFor, unsubscribeLinkFor } from "@/lib/platform/unsubscribe";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -320,6 +321,34 @@ export async function sendReengagementEmail({
     ctaUrl: `${siteUrl.replace(/\/+$/, "")}/dashboard/ai-practice`,
     unsubscribeUrl,
   });
+
+  await transporter.sendMail({ from: fromAddress, to, headers, subject, text, html });
+}
+
+/**
+ * A stage-specific re-engagement nudge for an inactive student. Like
+ * sendReengagementEmail it will not send without a working unsubscribe: the
+ * link is signed here, and a signing failure throws rather than sending
+ * marketing with no way out.
+ */
+export async function sendInactiveStageEmail({
+  displayName,
+  to,
+  stage,
+  context,
+}: {
+  displayName?: string | null;
+  to: string;
+  stage: InactiveStage;
+  context?: StageContext;
+}) {
+  const transporter = createTransporter();
+  const fromAddress = process.env.CONTACT_FORM_AUTOREPLY_FROM ?? process.env.CONTACT_FORM_FROM ?? "NounCompass Support <support@nouncompass.me>";
+  const siteUrl = siteBaseUrl();
+  const unsubscribeUrl = unsubscribeLinkFor(to, "reengagement");
+  const headers = unsubscribeHeadersFor(to, "reengagement");
+
+  const { subject, html, text } = buildStageEmail({ stage, displayName, siteUrl, unsubscribeUrl, context });
 
   await transporter.sendMail({ from: fromAddress, to, headers, subject, text, html });
 }
