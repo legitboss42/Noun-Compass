@@ -1,6 +1,11 @@
 import { NextResponse } from "next/server";
-import { sendReengagementEmail, sendStudyReminderEmail } from "@/lib/contact-mail";
+import { sendStudyReminderEmail } from "@/lib/contact-mail";
 import { syncSubscriberToBrevo } from "@/lib/newsletter";
+import {
+  reengagementParamsFromEnv,
+  selectReengagementCandidates,
+  sendReengagementBatch,
+} from "@/lib/platform/reengagement";
 import { shouldSendStudyReminder } from "@/lib/platform/study-planner-premium";
 import { createAdminClient } from "@/lib/supabase/admin";
 
@@ -103,8 +108,6 @@ export async function GET(request: Request) {
   }
 }
 
-type ReengagementCandidate = { user_id: string; email: string | null; display_name: string | null };
-
 /**
  * Nudges students who signed up and never opened a tool.
  *
@@ -112,7 +115,8 @@ type ReengagementCandidate = { user_id: string; email: string | null; display_na
  * in the daily job that emails people who did not ask for anything, so it does
  * not start the moment it deploys — someone turns it on after reading what it
  * sends. A failure here never fails the run: the memberships and reminders
- * above matter more than a marketing nudge.
+ * above matter more than a marketing nudge. The selection and send loop are
+ * shared with the admin trigger in @/lib/platform/reengagement.
  */
 async function runReengagement(
   admin: NonNullable<ReturnType<typeof createAdminClient>>,
@@ -122,60 +126,18 @@ async function runReengagement(
     return { reengagementEnabled: false as const };
   }
 
-  const graceDays = Number(process.env.REENGAGEMENT_GRACE_DAYS ?? "3");
-  const cooldownDays = Number(process.env.REENGAGEMENT_COOLDOWN_DAYS ?? "14");
-  const batchLimit = Number(process.env.REENGAGEMENT_BATCH_LIMIT ?? "50");
-
-  const { data, error } = await admin.rpc("select_reengagement_candidates", {
-    p_grace_days: Number.isFinite(graceDays) ? graceDays : 3,
-    p_cooldown_days: Number.isFinite(cooldownDays) ? cooldownDays : 14,
-    p_limit: Number.isFinite(batchLimit) ? batchLimit : 50,
-  });
-
-  if (error) {
-    console.error("[cron] could not select re-engagement candidates", error.message);
+  let candidates;
+  try {
+    candidates = await selectReengagementCandidates(admin, reengagementParamsFromEnv());
+  } catch (error) {
+    console.error("[cron] could not select re-engagement candidates", error instanceof Error ? error.message : error);
     return { reengagementEnabled: true as const, reengagementError: true as const };
   }
 
-  const candidates = (data ?? []) as ReengagementCandidate[];
-  let emailed = 0;
-  let failed = 0;
-
-  for (const candidate of candidates) {
-    if (!candidate.email) continue;
-    const dedupeKey = `reengagement:${runDate}`;
-    // The notification row is written first and its unique (user_id,
-    // dedupe_key) is what stops a retried run from emailing twice. A row
-    // without emailed_at means the send failed, not that it was delivered.
-    const { error: insertError } = await admin.from("notifications").insert({
-      user_id: candidate.user_id,
-      kind: "reengagement",
-      title: "Start with a Practice Exam",
-      body: "You have not used the study tools yet. A Practice Exam built from your course material is the quickest first step.",
-      action_url: "/dashboard/ai-practice",
-      dedupe_key: dedupeKey,
-    });
-    if (insertError) continue;
-
-    try {
-      await sendReengagementEmail({ to: candidate.email, displayName: candidate.display_name });
-      await admin
-        .from("notifications")
-        .update({ emailed_at: new Date().toISOString() })
-        .eq("user_id", candidate.user_id)
-        .eq("dedupe_key", dedupeKey);
-      emailed += 1;
-    } catch {
-      // One bad address must not stop the rest of the batch. Without
-      // emailed_at the cooldown does not start, so this student is picked up
-      // again on the next run.
-      failed += 1;
-    }
-  }
-
+  const { candidates: total, emailed, failed } = await sendReengagementBatch(admin, runDate, candidates);
   return {
     reengagementEnabled: true as const,
-    reengagementCandidates: candidates.length,
+    reengagementCandidates: total,
     reengagementEmailed: emailed,
     reengagementFailed: failed,
   };

@@ -51,8 +51,9 @@ test("invalid addresses and scopes are rejected before anything is signed", () =
   assert.equal(isUnsubscribeScope("everything"), false);
 });
 
-test("the link and the one-click header agree with each other", () => {
+test("the body link opens the page but the one-click header hits the API handler", () => {
   const url = new URL(unsubscribeUrl("https://nouncompass.me", "student@example.com", "updates", SECRET));
+  // The link a person clicks lands on the confirmation page.
   assert.equal(url.pathname, "/unsubscribe");
   assert.equal(url.searchParams.get("email"), "student@example.com");
   assert.equal(url.searchParams.get("scope"), "updates");
@@ -62,8 +63,14 @@ test("the link and the one-click header agree with each other", () => {
   );
 
   const headers = unsubscribeHeaders("https://nouncompass.me", "student@example.com", "updates", SECRET);
-  // RFC 8058: the header must be bracketed and paired with the one-click POST.
-  assert.match(headers["List-Unsubscribe"], /^<https:\/\/nouncompass\.me\/unsubscribe\?/);
+  // RFC 8058: the mail client POSTs this URL with no page load, so it must be
+  // the route handler at /api/unsubscribe, not the /unsubscribe page above.
+  assert.match(headers["List-Unsubscribe"], /^<https:\/\/nouncompass\.me\/api\/unsubscribe\?/);
   assert.match(headers["List-Unsubscribe"], />$/);
   assert.equal(headers["List-Unsubscribe-Post"], "List-Unsubscribe=One-Click");
+
+  // Same signed token on both, so either path stops the same email.
+  const headerUrl = new URL(headers["List-Unsubscribe"].slice(1, -1));
+  assert.equal(headerUrl.searchParams.get("token"), url.searchParams.get("token"));
+  assert.equal(headerUrl.searchParams.get("scope"), "updates");
 });

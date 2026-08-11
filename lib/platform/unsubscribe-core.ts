@@ -61,21 +61,35 @@ export function verifyUnsubscribeToken(
   return supplied.length === control.length && timingSafeEqual(supplied, control);
 }
 
-/**
- * The one-click header from RFC 8058. Mail clients POST to the URL without ever
- * loading the page, which is what keeps a link out of the "mark as spam" path.
- */
-export function unsubscribeUrl(baseUrl: string, email: string, scope: UnsubscribeScope, secret: string) {
-  const url = new URL("/unsubscribe", baseUrl);
+function buildUnsubscribeUrl(path: string, baseUrl: string, email: string, scope: UnsubscribeScope, secret: string) {
+  const url = new URL(path, baseUrl);
   url.searchParams.set("email", normalizeUnsubscribeEmail(email));
   url.searchParams.set("scope", scope);
   url.searchParams.set("token", signUnsubscribeToken(email, scope, secret));
   return url.toString();
 }
 
+/**
+ * The human-visible unsubscribe link, carried in the email body. It opens the
+ * /unsubscribe confirmation page, which a signed-out recipient can use directly.
+ */
+export function unsubscribeUrl(baseUrl: string, email: string, scope: UnsubscribeScope, secret: string) {
+  return buildUnsubscribeUrl("/unsubscribe", baseUrl, email, scope, secret);
+}
+
+/**
+ * The one-click endpoint from RFC 8058. Mail clients POST to this URL without
+ * ever loading a page, so it must resolve to the API route that accepts that
+ * POST — not the /unsubscribe page, whose form only answers a signed-in submit.
+ * Both URLs carry the same signed token, so either path stops the same email.
+ */
+export function unsubscribeOneClickUrl(baseUrl: string, email: string, scope: UnsubscribeScope, secret: string) {
+  return buildUnsubscribeUrl("/api/unsubscribe", baseUrl, email, scope, secret);
+}
+
 export function unsubscribeHeaders(baseUrl: string, email: string, scope: UnsubscribeScope, secret: string) {
   return {
-    "List-Unsubscribe": `<${unsubscribeUrl(baseUrl, email, scope, secret)}>`,
+    "List-Unsubscribe": `<${unsubscribeOneClickUrl(baseUrl, email, scope, secret)}>`,
     "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
   };
 }

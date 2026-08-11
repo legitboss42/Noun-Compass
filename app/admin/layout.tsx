@@ -24,6 +24,7 @@ const links: readonly (readonly [string, string, AdminPermission])[] = [
   ["Support", "/admin/support", "support.read"],
   ["Analytics", "/admin/analytics", "analytics.read"],
   ["Schedules", "/admin/schedules", "schedules.write"],
+  ["Re-engagement", "/admin/reengagement", "settings.manage"],
   ["Settings", "/admin/settings", "settings.read"],
   ["Audit log", "/admin/audit-log", "audit.read"],
 ] as const;
