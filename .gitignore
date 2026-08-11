@@ -58,6 +58,7 @@ reports/index-coverage-debug.json
 
 # local editor/agent tooling
 .claude/
+.superpowers/
 
 # local marketing/browser captures
 marketing-agent/*.png
