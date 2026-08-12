@@ -1,6 +1,12 @@
 import "server-only";
 
 import { sendReengagementEmail } from "@/lib/contact-mail";
+import {
+  deliverNotificationBatch,
+  operationalDatabaseError,
+  type DeliveryError,
+  type NotificationDeliveryResult,
+} from "@/lib/platform/notification-delivery-core";
 import type { createAdminClient } from "@/lib/supabase/admin";
 
 type AdminClient = NonNullable<ReturnType<typeof createAdminClient>>;
@@ -16,6 +22,13 @@ export type ReengagementParams = {
   cooldownDays: number;
   limit: number;
 };
+
+export class OperationalDatabaseFailure extends Error {
+  constructor(readonly detail: DeliveryError) {
+    super("A platform database operation failed.");
+    this.name = "OperationalDatabaseFailure";
+  }
+}
 
 const DEFAULTS: ReengagementParams = { graceDays: 3, cooldownDays: 14, limit: 50 };
 
@@ -59,15 +72,11 @@ export async function selectReengagementCandidates(
     p_cooldown_days: params.cooldownDays,
     p_limit: params.limit,
   });
-  if (error) throw new Error(error.message);
+  if (error) throw new OperationalDatabaseFailure(operationalDatabaseError("candidateSelection", error));
   return (data ?? []) as ReengagementCandidate[];
 }
 
-export type ReengagementBatchResult = {
-  candidates: number;
-  emailed: number;
-  failed: number;
-};
+export type ReengagementBatchResult = NotificationDeliveryResult;
 
 /**
  * Emails each candidate once. The notification row is written first, and its
@@ -82,33 +91,36 @@ export async function sendReengagementBatch(
   candidates: ReengagementCandidate[],
 ): Promise<ReengagementBatchResult> {
   const dedupeKey = `reengagement:${runDate}`;
-  let emailed = 0;
-  let failed = 0;
-
-  for (const candidate of candidates) {
-    if (!candidate.email) continue;
-    const { error: insertError } = await admin.from("notifications").insert({
-      user_id: candidate.user_id,
+  const deliveries = candidates.map((candidate) => ({ ...candidate, userId: candidate.user_id }));
+  return deliverNotificationBatch({
+    candidates: deliveries,
+    database: {
+      async insertNotification(candidate, notification) {
+        const { error } = await admin.from("notifications").insert({
+          user_id: candidate.user_id,
+          kind: notification.kind,
+          title: notification.title,
+          body: notification.body,
+          action_url: notification.actionUrl,
+          dedupe_key: dedupeKey,
+        });
+        return { error };
+      },
+      async markEmailed(candidate) {
+        const { error } = await admin
+          .from("notifications")
+          .update({ emailed_at: new Date().toISOString() })
+          .eq("user_id", candidate.user_id)
+          .eq("dedupe_key", dedupeKey);
+        return { error };
+      },
+    },
+    makeNotification: () => ({
       kind: "reengagement",
       title: "Start with a Practice Exam",
       body: "You have not used the study tools yet. A Practice Exam built from your course material is the quickest first step.",
-      action_url: "/dashboard/ai-practice",
-      dedupe_key: dedupeKey,
-    });
-    if (insertError) continue;
-
-    try {
-      await sendReengagementEmail({ to: candidate.email, displayName: candidate.display_name });
-      await admin
-        .from("notifications")
-        .update({ emailed_at: new Date().toISOString() })
-        .eq("user_id", candidate.user_id)
-        .eq("dedupe_key", dedupeKey);
-      emailed += 1;
-    } catch {
-      failed += 1;
-    }
-  }
-
-  return { candidates: candidates.length, emailed, failed };
+      actionUrl: "/dashboard/ai-practice",
+    }),
+    sendEmail: (candidate) => sendReengagementEmail({ to: candidate.email!, displayName: candidate.display_name }),
+  });
 }

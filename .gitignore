@@ -67,3 +67,6 @@ marketing-agent/*.png
 
 # Local email/render previews
 tmp/
+
+.vercel
+.env*

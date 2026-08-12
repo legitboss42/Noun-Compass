@@ -7,7 +7,7 @@
     "dev:turbo": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint",
+    "lint": "eslint --cache --cache-location node_modules/.cache/nouncompass-eslint/ app components lib scripts tests types eslint.config.mjs next.config.ts proxy.ts postcss.config.mjs",
     "marketing:daily": "node scripts/marketing/run-daily-agent.mjs",
     "seo:audit": "node scripts/seo-audit/index.mjs",
     "seo:audit:nouncompass": "node scripts/seo-audit/index.mjs https://nouncompass.me",

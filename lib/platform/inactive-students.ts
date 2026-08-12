@@ -1,6 +1,12 @@
 import "server-only";
 
 import { sendInactiveStageEmail } from "@/lib/contact-mail";
+import {
+  deliverNotificationBatch,
+  operationalDatabaseError,
+  type NotificationDeliveryResult,
+} from "@/lib/platform/notification-delivery-core";
+import { OperationalDatabaseFailure } from "@/lib/platform/reengagement";
 import { stageNotification, type InactiveStage, type StageContext } from "@/lib/platform/stage-email-core";
 import type { createAdminClient } from "@/lib/supabase/admin";
 
@@ -60,7 +66,7 @@ export async function countInactiveByStage(
     p_quiet_days: params.quietDays,
     p_cooldown_days: params.cooldownDays,
   });
-  if (error) throw new Error(error.message);
+  if (error) throw new OperationalDatabaseFailure(operationalDatabaseError("candidateSelection", error));
   const counts: Record<InactiveStage, number> = { s1: 0, s2: 0, s3: 0, s4: 0 };
   for (const row of (data ?? []) as { stage: string; count: number | string }[]) {
     if ((STAGES as string[]).includes(row.stage)) {
@@ -81,11 +87,11 @@ export async function selectInactiveStudents(
     p_limit: params.limit,
     p_stage: stage ?? null,
   });
-  if (error) throw new Error(error.message);
+  if (error) throw new OperationalDatabaseFailure(operationalDatabaseError("candidateSelection", error));
   return (data ?? []) as InactiveStudent[];
 }
 
-export type StageBatchResult = { candidates: number; emailed: number; failed: number };
+export type StageBatchResult = NotificationDeliveryResult;
 
 /**
  * Emails each student once with their stage's template. Identical control flow
@@ -101,39 +107,39 @@ export async function sendStageBatch(
   students: InactiveStudent[],
 ): Promise<StageBatchResult> {
   const dedupeKey = `reengagement:${runDate}`;
-  let emailed = 0;
-  let failed = 0;
-
-  for (const student of students) {
-    if (!student.email) continue;
-    const note = stageNotification(student.stage, student.context);
-    const { error: insertError } = await admin.from("notifications").insert({
-      user_id: student.user_id,
-      kind: "reengagement",
-      title: note.title,
-      body: note.body,
-      action_url: note.actionUrl,
-      dedupe_key: dedupeKey,
-    });
-    if (insertError) continue;
-
-    try {
-      await sendInactiveStageEmail({
-        to: student.email,
-        displayName: student.display_name,
-        stage: student.stage,
-        context: student.context,
-      });
-      await admin
-        .from("notifications")
-        .update({ emailed_at: new Date().toISOString() })
-        .eq("user_id", student.user_id)
-        .eq("dedupe_key", dedupeKey);
-      emailed += 1;
-    } catch {
-      failed += 1;
-    }
-  }
-
-  return { candidates: students.length, emailed, failed };
+  const deliveries = students.map((student) => ({ ...student, userId: student.user_id }));
+  return deliverNotificationBatch({
+    candidates: deliveries,
+    database: {
+      async insertNotification(student, notification) {
+        const { error } = await admin.from("notifications").insert({
+          user_id: student.user_id,
+          kind: notification.kind,
+          title: notification.title,
+          body: notification.body,
+          action_url: notification.actionUrl,
+          dedupe_key: dedupeKey,
+        });
+        return { error };
+      },
+      async markEmailed(student) {
+        const { error } = await admin
+          .from("notifications")
+          .update({ emailed_at: new Date().toISOString() })
+          .eq("user_id", student.user_id)
+          .eq("dedupe_key", dedupeKey);
+        return { error };
+      },
+    },
+    makeNotification: (student) => {
+      const note = stageNotification(student.stage, student.context);
+      return { kind: "reengagement", title: note.title, body: note.body, actionUrl: note.actionUrl };
+    },
+    sendEmail: (student) => sendInactiveStageEmail({
+      to: student.email!,
+      displayName: student.display_name,
+      stage: student.stage,
+      context: student.context,
+    }),
+  });
 }

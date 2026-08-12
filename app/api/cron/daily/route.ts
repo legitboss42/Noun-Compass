@@ -3,6 +3,7 @@ import { sendStudyReminderEmail } from "@/lib/contact-mail";
 import { syncSubscriberToBrevo } from "@/lib/newsletter";
 import {
   reengagementParamsFromEnv,
+  OperationalDatabaseFailure,
   selectReengagementCandidates,
   sendReengagementBatch,
 } from "@/lib/platform/reengagement";
@@ -130,15 +131,29 @@ async function runReengagement(
   try {
     candidates = await selectReengagementCandidates(admin, reengagementParamsFromEnv());
   } catch (error) {
-    console.error("[cron] could not select re-engagement candidates", error instanceof Error ? error.message : error);
-    return { reengagementEnabled: true as const, reengagementError: true as const };
+    const detail = error instanceof OperationalDatabaseFailure
+      ? error.detail
+      : { operation: "candidateSelection" as const, code: "database_error", category: "databaseFailed" as const };
+    console.error("[cron] could not select re-engagement candidates", detail);
+    return {
+      reengagementEnabled: true as const,
+      reengagementCandidates: 0,
+      reengagementEmailed: 0,
+      reengagementFailed: 0,
+      reengagementDeduped: 0,
+      reengagementDatabaseFailed: 1,
+      reengagementErrors: [detail],
+    };
   }
 
-  const { candidates: total, emailed, failed } = await sendReengagementBatch(admin, runDate, candidates);
+  const result = await sendReengagementBatch(admin, runDate, candidates);
   return {
     reengagementEnabled: true as const,
-    reengagementCandidates: total,
-    reengagementEmailed: emailed,
-    reengagementFailed: failed,
+    reengagementCandidates: result.candidates,
+    reengagementEmailed: result.emailed,
+    reengagementFailed: result.failed,
+    reengagementDeduped: result.deduped,
+    reengagementDatabaseFailed: result.databaseFailed,
+    reengagementErrors: result.errors,
   };
 }

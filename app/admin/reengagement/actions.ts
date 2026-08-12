@@ -68,6 +68,9 @@ export async function sendStageCampaign(formData: FormData) {
         candidates: result.candidates,
         emailed: result.emailed,
         failed: result.failed,
+        deduped: result.deduped,
+        database_failed: result.databaseFailed,
+        errors: result.errors,
         quiet_days: params.quietDays,
         cooldown_days: params.cooldownDays,
         batch_limit: params.limit,
@@ -78,7 +81,9 @@ export async function sendStageCampaign(formData: FormData) {
       ? `${stage.toUpperCase()}: ${result.emailed} emailed, ${result.failed} failed`
       : `${stage.toUpperCase()}: ${result.emailed} emailed`;
     redirectTo =
-      result.emailed === 0
+      result.databaseFailed > 0
+        ? `/admin/reengagement?error=${encodeURIComponent("Email processing had a database failure. The audit log has the operational details; cooldown confirmation may be incomplete.")}`
+        : result.emailed === 0
         ? `/admin/reengagement?error=${encodeURIComponent(`No emails were sent — ${result.failed} attempt(s) failed. Check the SMTP configuration.`)}`
         : `/admin/reengagement?notice=${encodeURIComponent(summary)}`;
   } catch (error) {
@@ -118,11 +123,23 @@ export async function sendToOneStudent(formData: FormData) {
       targetType: "email_campaign",
       targetId: runDate,
       reason,
-      metadata: { stage, mode: "single", user_id: userId, emailed: result.emailed, failed: result.failed },
+      metadata: {
+        stage,
+        mode: "single",
+        user_id: userId,
+        candidates: result.candidates,
+        emailed: result.emailed,
+        failed: result.failed,
+        deduped: result.deduped,
+        database_failed: result.databaseFailed,
+        errors: result.errors,
+      },
     });
 
     redirectTo =
-      result.emailed === 1
+      result.databaseFailed > 0
+        ? `/admin/reengagement?error=${encodeURIComponent("Email processing had a database failure. The audit log has the operational details; cooldown confirmation may be incomplete.")}`
+        : result.emailed === 1
         ? `/admin/reengagement?notice=${encodeURIComponent("Sent 1 email.")}`
         : `/admin/reengagement?error=${encodeURIComponent("The email could not be sent (already nudged today, or SMTP failed).")}`;
   } catch (error) {
