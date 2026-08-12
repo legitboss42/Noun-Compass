@@ -82,8 +82,10 @@ export type ReengagementBatchResult = NotificationDeliveryResult;
  * Emails each candidate once. The notification row is written first, and its
  * unique (user_id, dedupe_key) is what stops a retried run — whether cron or
  * admin — from emailing the same student twice on the same day. A row without
- * emailed_at means the send failed, so the cooldown never starts and the student
- * is picked up again next time. One bad address never stops the batch.
+ * `emailed` means the provider accepted the message. If the subsequent
+ * `emailed_at` persistence cannot be confirmed, `databaseFailed` records that
+ * cooldown failure separately so callers do not claim the cooldown started.
+ * One bad address never stops the batch.
  */
 export async function sendReengagementBatch(
   admin: AdminClient,
@@ -107,12 +109,14 @@ export async function sendReengagementBatch(
         return { error };
       },
       async markEmailed(candidate) {
-        const { error } = await admin
+        const { data, error } = await admin
           .from("notifications")
           .update({ emailed_at: new Date().toISOString() })
           .eq("user_id", candidate.user_id)
-          .eq("dedupe_key", dedupeKey);
-        return { error };
+          .eq("dedupe_key", dedupeKey)
+          .select("user_id")
+          .maybeSingle();
+        return { error, persisted: Boolean(data) };
       },
     },
     makeNotification: () => ({

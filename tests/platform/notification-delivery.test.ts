@@ -3,6 +3,7 @@ import test from "node:test";
 import {
   deliverNotificationBatch,
   operationalDatabaseError,
+  selectionFailureAuditMetadata,
 } from "../../lib/platform/notification-delivery-core";
 
 type Candidate = { userId: string; email: string | null };
@@ -14,7 +15,7 @@ const candidates: Candidate[] = [
 function database(error?: { code?: string; message?: string }) {
   return {
     insertNotification: async () => ({ error: error ?? null }),
-    markEmailed: async () => ({ error: null }),
+    markEmailed: async () => ({ error: null, persisted: true }),
   };
 }
 
@@ -67,7 +68,7 @@ test("delivery turns rejected notification writes into sanitized database failur
     candidates,
     database: {
       insertNotification: async () => { throw { code: "42501", message: "permission denied for student@example.com" }; },
-      markEmailed: async () => ({ error: null }),
+      markEmailed: async () => ({ error: null, persisted: true }),
     },
     makeNotification: () => ({ kind: "reengagement", title: "Start", body: "Open the dashboard", actionUrl: "/dashboard" }),
     sendEmail: async () => assert.fail("database failures must not send email"),
@@ -96,7 +97,7 @@ test("delivery counts a failed emailed_at write without claiming the cooldown", 
     candidates,
     database: {
       insertNotification: async () => ({ error: null }),
-      markEmailed: async () => ({ error: { code: "42501", message: "permission denied for student@example.com" } }),
+      markEmailed: async () => ({ error: { code: "42501", message: "permission denied for student@example.com" }, persisted: false }),
     },
     makeNotification: () => ({ kind: "reengagement", title: "Start", body: "Open the dashboard", actionUrl: "/dashboard" }),
     sendEmail: async () => undefined,
@@ -122,6 +123,40 @@ test("delivery turns rejected emailed_at writes into sanitized database failures
   assert.equal(result.emailed, 1);
   assert.equal(result.databaseFailed, 1);
   assert.deepEqual(result.errors, [{ operation: "emailedAtUpdate", code: "42501", category: "databaseFailed" }]);
+});
+
+test("delivery treats an error-free zero-row emailed_at update as an unconfirmed cooldown", async () => {
+  const result = await deliverNotificationBatch({
+    candidates,
+    database: {
+      insertNotification: async () => ({ error: null }),
+      markEmailed: async () => ({ error: null, persisted: false }),
+    },
+    makeNotification: () => ({ kind: "reengagement", title: "Start", body: "Open the dashboard", actionUrl: "/dashboard" }),
+    sendEmail: async () => undefined,
+  });
+
+  assert.equal(result.emailed, 1);
+  assert.equal(result.databaseFailed, 1);
+  assert.deepEqual(result.errors, [{ operation: "emailedAtUpdate", code: "not_persisted", category: "databaseFailed" }]);
+});
+
+test("selection-failure audit metadata keeps only the safe operational fields", () => {
+  const result = selectionFailureAuditMetadata({
+    operation: "candidateSelection",
+    code: "42501",
+    category: "databaseFailed",
+    message: "permission denied for student@example.com",
+    recipient: "student@example.com",
+  });
+
+  assert.deepEqual(result, {
+    operation: "candidateSelection",
+    code: "42501",
+    category: "databaseFailed",
+    database_failed: 1,
+  });
+  assert.doesNotMatch(JSON.stringify(result), /student@example\.com/);
 });
 
 test("candidate-selection errors are sanitised as operational database failures", () => {

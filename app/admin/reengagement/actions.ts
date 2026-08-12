@@ -8,6 +8,8 @@ import {
   requireAdminReason,
 } from "@/lib/platform/admin-workflows";
 import { writeAuditLog } from "@/lib/platform/audit";
+import { selectionFailureAuditMetadata } from "@/lib/platform/notification-delivery-core";
+import { OperationalDatabaseFailure } from "@/lib/platform/reengagement";
 import {
   clampQuietDays,
   inactiveParamsFromEnv,
@@ -52,7 +54,23 @@ export async function sendStageCampaign(formData: FormData) {
     const base = inactiveParamsFromEnv();
     const params = { ...base, quietDays: clampQuietDays(value(formData, "quiet"), base.quietDays) };
     const runDate = inactiveRunDate();
-    const students = await selectInactiveStudents(admin, params, stage);
+    let students;
+    try {
+      students = await selectInactiveStudents(admin, params, stage);
+    } catch (error) {
+      if (error instanceof OperationalDatabaseFailure) {
+        await writeAuditLog({
+          actorId: session.user.id,
+          action: "reengagement.selection_failed",
+          targetType: "email_campaign",
+          targetId: runDate,
+          reason,
+          metadata: { stage, mode: "bulk", ...selectionFailureAuditMetadata(error.detail) },
+        });
+        throw new Error("Could not select eligible students. The operational failure was recorded.");
+      }
+      throw error;
+    }
     if (!students.length) throw new Error("No students are eligible in that stage right now.");
 
     const result = await sendStageBatch(admin, runDate, students);
@@ -113,7 +131,24 @@ export async function sendToOneStudent(formData: FormData) {
     const base = inactiveParamsFromEnv();
     const params = { ...base, quietDays: clampQuietDays(value(formData, "quiet"), base.quietDays) };
     const runDate = inactiveRunDate();
-    const student = (await selectInactiveStudents(admin, params, stage)).find((s) => s.user_id === userId);
+    let selectedStudents;
+    try {
+      selectedStudents = await selectInactiveStudents(admin, params, stage);
+    } catch (error) {
+      if (error instanceof OperationalDatabaseFailure) {
+        await writeAuditLog({
+          actorId: session.user.id,
+          action: "reengagement.selection_failed",
+          targetType: "email_campaign",
+          targetId: runDate,
+          reason,
+          metadata: { stage, mode: "single", ...selectionFailureAuditMetadata(error.detail) },
+        });
+        throw new Error("Could not select eligible students. The operational failure was recorded.");
+      }
+      throw error;
+    }
+    const student = selectedStudents.find((s) => s.user_id === userId);
     if (!student) throw new Error("That student is no longer eligible (already emailed, opted out, or now active).");
 
     const result = await sendStageBatch(admin, runDate, [student]);

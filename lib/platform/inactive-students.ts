@@ -97,9 +97,10 @@ export type StageBatchResult = NotificationDeliveryResult;
  * Emails each student once with their stage's template. Identical control flow
  * to sendReengagementBatch: the notification row (with stage-specific copy) is
  * written first, and its unique (user_id, dedupe_key) is what stops a retried
- * run — cron or admin — from emailing twice on the same day. emailed_at is set
- * only after SMTP succeeds, so a failure leaves the student eligible next time.
- * One bad address never stops the batch.
+ * run — cron or admin — from emailing twice on the same day. `emailed` means
+ * SMTP/provider acceptance; if `emailed_at` cannot be confirmed, the separate
+ * `databaseFailed` count marks cooldown persistence as unconfirmed. One bad
+ * address never stops the batch.
  */
 export async function sendStageBatch(
   admin: AdminClient,
@@ -123,12 +124,14 @@ export async function sendStageBatch(
         return { error };
       },
       async markEmailed(student) {
-        const { error } = await admin
+        const { data, error } = await admin
           .from("notifications")
           .update({ emailed_at: new Date().toISOString() })
           .eq("user_id", student.user_id)
-          .eq("dedupe_key", dedupeKey);
-        return { error };
+          .eq("dedupe_key", dedupeKey)
+          .select("user_id")
+          .maybeSingle();
+        return { error, persisted: Boolean(data) };
       },
     },
     makeNotification: (student) => {

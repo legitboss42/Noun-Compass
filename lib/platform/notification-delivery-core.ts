@@ -35,7 +35,7 @@ type DatabaseError = unknown;
 
 export type NotificationDeliveryDatabase<T extends DeliveryCandidate> = {
   insertNotification(candidate: T, notification: NotificationPayload): Promise<{ error: DatabaseError }>;
-  markEmailed(candidate: T): Promise<{ error: DatabaseError }>;
+  markEmailed(candidate: T): Promise<{ error: DatabaseError; persisted: boolean }>;
 };
 
 function safeCode(error: DatabaseError) {
@@ -51,6 +51,21 @@ export function operationalDatabaseError(
   return { operation, code: safeCode(error), category: "databaseFailed" };
 }
 
+/**
+ * Safe audit details for a failed candidate-selection operation. This accepts
+ * unknown data because it can be called from an exception boundary, but never
+ * carries provider messages, recipient data, or any unrecognised field onward.
+ */
+export function selectionFailureAuditMetadata(detail: unknown) {
+  const record = typeof detail === "object" && detail !== null ? detail as Record<string, unknown> : null;
+  return {
+    operation: "candidateSelection",
+    code: safeCode({ code: record?.code }),
+    category: "databaseFailed",
+    database_failed: 1 as const,
+  };
+}
+
 function providerError(): DeliveryError {
   return { operation: "emailSend", code: "provider_failed", category: "failed" };
 }
@@ -58,9 +73,9 @@ function providerError(): DeliveryError {
 /**
  * Delivers notification-backed email without exposing recipient data in result
  * details. A notification insert claims the daily send; only its unique
- * violation is a benign dedupe. Provider acceptance counts as emailed, while a
- * failed emailed_at write is surfaced separately so no caller can treat the
- * cooldown as confirmed.
+ * violation is a benign dedupe. `emailed` means provider acceptance, even when
+ * the subsequent emailed_at write cannot be confirmed. That cooldown-persistence
+ * failure increments `databaseFailed` separately and never exposes recipient data.
  */
 export async function deliverNotificationBatch<T extends DeliveryCandidate>(args: {
   candidates: T[];
@@ -111,7 +126,7 @@ export async function deliverNotificationBatch<T extends DeliveryCandidate>(args
       continue;
     }
 
-    let update: { error: DatabaseError };
+    let update: { error: DatabaseError; persisted: boolean };
     try {
       update = await args.database.markEmailed(candidate);
     } catch (error) {
@@ -126,6 +141,9 @@ export async function deliverNotificationBatch<T extends DeliveryCandidate>(args
         result.databaseFailed += 1;
         result.errors.push(operationalDatabaseError("emailedAtUpdate", update.error));
       }
+    } else if (!update.persisted) {
+      result.databaseFailed += 1;
+      result.errors.push(operationalDatabaseError("emailedAtUpdate", { code: "not_persisted" }));
     }
   }
 
