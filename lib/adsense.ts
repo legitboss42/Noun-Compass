@@ -71,3 +71,11 @@ export function shouldLoadAdSenseForLocation(
 ) {
   return config.enabled && !search && !hash && isAdSenseEligiblePath(pathname);
 }
+
+/** Snapshot browser location in the same effect that makes the inject decision. */
+export function currentAdSenseLocation(
+  pathname: string,
+  location: Pick<Location, "search" | "hash">,
+) {
+  return { pathname, search: location.search, hash: location.hash };
+}

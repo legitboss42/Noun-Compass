@@ -25,3 +25,8 @@ No external or production mutation is authorized for this checkpoint: no AdSense
 - Flutterwave configuration now imports the same strict `isFlutterwaveSecretKeyValid` predicate used at the request boundary. Environment values must be exact `test` or `live`; test mode accepts test-key prefixes only, live mode accepts the live-key pattern only, and checkout/emergency flags are exact lowercase `true` checks.
 - Red/green evidence: new location and strict-config tests failed against the previous behavior (missing loader decision helper, `/fees` eligible, and permissive config validation) before the minimal implementation. Final targeted verification is recorded after this change.
 - Final fix-round verification: `npx tsx --test tests/platform/adsense.test.ts tests/platform/config.test.ts tests/platform/flutterwave.test.ts` passed with 20 tests and 0 failures; `npx tsc --noEmit` and `git diff --check` passed.
+
+## Review fix round 2 (2026-08-12)
+
+- Critical initial-hash race closed: `currentAdSenseLocation(pathname, window.location)` snapshots `search` and `hash` inside the injection effect before `shouldLoadAdSenseForLocation` runs. Hash-change state remains only to rerun/remove the script after in-page navigation; it no longer supplies the first decision.
+- TDD evidence: the initial-browser-hash test first failed because `currentAdSenseLocation` did not exist. The final targeted command `npx tsx --test tests/platform/adsense.test.ts tests/platform/config.test.ts tests/platform/flutterwave.test.ts` passed with 21 tests, 0 failures; `npx tsc --noEmit` and `git diff --check` passed.

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
-import { getAdSenseConfig, shouldLoadAdSenseForLocation } from "@/lib/adsense";
+import { currentAdSenseLocation, getAdSenseConfig, shouldLoadAdSenseForLocation } from "@/lib/adsense";
 
 const config = getAdSenseConfig({
   NEXT_PUBLIC_ADSENSE_ENABLED: process.env.NEXT_PUBLIC_ADSENSE_ENABLED,
@@ -24,7 +24,8 @@ export function AdSenseAutoAds() {
   }, [pathname, searchParams]);
 
   useEffect(() => {
-    if (!shouldLoadAdSenseForLocation(config, pathname, searchParams.toString(), hash)) return;
+    const location = currentAdSenseLocation(pathname, window.location);
+    if (!shouldLoadAdSenseForLocation(config, location.pathname, location.search, location.hash)) return;
 
     const existing = document.querySelector<HTMLScriptElement>('script[data-nouncompass-adsense="auto"]');
     if (existing) return;

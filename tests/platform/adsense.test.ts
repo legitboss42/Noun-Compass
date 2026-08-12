@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { getAdSenseConfig, isAdSenseEligiblePath, shouldLoadAdSenseForLocation } from "../../lib/adsense";
+import { currentAdSenseLocation, getAdSenseConfig, isAdSenseEligiblePath, shouldLoadAdSenseForLocation } from "../../lib/adsense";
 
 const enabledConfig = getAdSenseConfig({
   NEXT_PUBLIC_ADSENSE_ENABLED: "true",
@@ -39,4 +39,9 @@ test("AdSense loader rejects query and hash variants before injecting the global
   assert.equal(shouldLoadAdSenseForLocation(enabledConfig, "/articles/noun-registration-guide", "", "#faq"), false);
   assert.equal(shouldLoadAdSenseForLocation(enabledConfig, "/fees", "", ""), false);
   assert.equal(shouldLoadAdSenseForLocation({ enabled: false }, "/articles/noun-registration-guide", "", ""), false);
+});
+
+test("AdSense loader reads the initial browser hash atomically before its first decision", () => {
+  const location = currentAdSenseLocation("/articles/noun-registration-guide", { search: "", hash: "#faq" });
+  assert.equal(shouldLoadAdSenseForLocation(enabledConfig, location.pathname, location.search, location.hash), false);
 });
