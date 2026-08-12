@@ -1,6 +1,7 @@
 import "server-only";
 
 import { sendReengagementEmail } from "@/lib/contact-mail";
+import { hasDedicatedReengagementUnsubscribeSecret } from "@/lib/platform/reengagement-safety";
 import {
   deliverNotificationBatch,
   operationalDatabaseError,
@@ -78,6 +79,8 @@ export async function selectReengagementCandidates(
 
 export type ReengagementBatchResult = NotificationDeliveryResult;
 
+export { hasDedicatedReengagementUnsubscribeSecret } from "@/lib/platform/reengagement-safety";
+
 /**
  * Emails each candidate once. The notification row is written first, and its
  * unique (user_id, dedupe_key) is what stops a retried run — whether cron or
@@ -92,6 +95,9 @@ export async function sendReengagementBatch(
   runDate: string,
   candidates: ReengagementCandidate[],
 ): Promise<ReengagementBatchResult> {
+  if (!hasDedicatedReengagementUnsubscribeSecret(process.env)) {
+    throw new Error("Re-engagement email is disabled until UNSUBSCRIBE_SECRET is configured.");
+  }
   const dedupeKey = `reengagement:${runDate}`;
   const deliveries = candidates.map((candidate) => ({ ...candidate, userId: candidate.user_id }));
   return deliverNotificationBatch({

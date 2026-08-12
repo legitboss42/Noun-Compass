@@ -22,7 +22,7 @@ This register documents variable names, purpose, storage, and rotation without r
 | `INITIAL_SUPER_ADMIN_EMAIL` | Private configuration | Email eligible for the initial super-admin membership grant. | `.env.local`, Vercel | Use a verified, controlled mailbox. Change only through an audited ownership handover. |
 | `FEATURE_ACCOUNTS` | Public configuration | Enables account registration and sign-in surfaces. | `.env.local`, Vercel | Disable during an auth incident. |
 | `FEATURE_DASHBOARD` | Public configuration | Enables authenticated dashboard surfaces. | `.env.local`, Vercel | Enable only with Auth and RLS configured. |
-| `FEATURE_EXAM_PREP` | Public configuration | Enables exam-prep surfaces; it does not publish draft question banks. | `.env.local`, Vercel | Keep banks in draft until editorial gates pass. |
+| `FEATURE_EXAM_PREP` | Public configuration | Enables AI Practice and exam-preparation surfaces. | `.env.local`, Vercel | Disable during a practice-generation incident. |
 | `FEATURE_CHECKOUT` | Public configuration | Enables paid checkout in test/local environments. Live mode is released by `FLUTTERWAVE_ENVIRONMENT=live`. | `.env.local`, Vercel | Keep Preview `false` unless running a controlled sandbox acceptance test. |
 | `CHECKOUT_EMERGENCY_DISABLED` | Public configuration | Fail-closed override for every checkout environment. | `.env.local`, Vercel | Set `true` immediately during a payment incident; redeploy before investigating. |
 | `FEATURE_ADMIN` | Public configuration | Enables protected administration surfaces. | `.env.local`, Vercel | Enable only with an authorized admin membership and RLS tests. |
@@ -51,8 +51,6 @@ This register documents variable names, purpose, storage, and rotation without r
 | `FLUTTERWAVE_ENVIRONMENT` | Configuration | Requires the configured key to match `test` or `live` mode. | `.env.local`, Vercel | Keep Preview in `test`; Production may use `live` only with the matching live key and gated checkout. |
 | `FLUTTERWAVE_SECRET_KEY` | Critical secret | Server-side Flutterwave Standard initialization and transaction verification. | `.env.local`, Vercel | Keep test and live keys separated by environment; rotate either key if exposed. |
 | `FLUTTERWAVE_WEBHOOK_SECRET` | Critical secret | Validates Flutterwave webhook HMAC signatures. | `.env.local`, Vercel, Flutterwave Webhooks | Generate randomly, store the same value in both systems, and rotate if exposed. |
-| `SEMESTER_PASS_AMOUNT_KOBO` | Configuration | Expected transaction amount in kobo. | `.env.local`, Vercel | Match product copy, server verification, refund policy, and acceptance tests. |
-| `SEMESTER_PASS_DURATION_DAYS` | Configuration | Membership duration granted after verified payment. | `.env.local`, Vercel | Change only with product and legal approval. |
 
 The NounCompass Flutterwave integration uses Flutterwave Standard. Its callback is `https://nouncompass.me/account/payment/callback` and its webhook is `https://nouncompass.me/api/webhooks/flutterwave`. Credentials belong only in approved encrypted stores; no values are recorded here.
 
@@ -90,7 +88,7 @@ The NounCompass Flutterwave integration uses Flutterwave Standard. Its callback 
 - The automated restore test does not expose the passphrase. The owner still needs a separate password-manager recovery copy before relying on manual, off-platform decryption.
 - Authenticated sign-in, profile persistence, cross-user RLS isolation, public draft protection, payment-write denial, and admin-route denial passed with temporary users that were deleted after testing.
 - Live validation passed Search Console connectivity, a 30-page crawl with no failed pages, and PageSpeed SEO and best-practices scores of 100 on mobile and desktop. Accessibility scored 100 mobile and 95 desktop; performance scored 75 mobile and 77 desktop and remains an improvement opportunity.
-- Question banks remain draft; human review of all 500 questions is still required before publication.
+- AI Practice is the active preparation path; it generates private source-grounded sessions rather than publishing question banks.
 - Legal owner approval remains required before checkout activation or policy-dependent launch decisions.
 
 ## Rotation checklist

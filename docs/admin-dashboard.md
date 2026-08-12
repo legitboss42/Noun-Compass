@@ -5,7 +5,7 @@ Last updated: 24 July 2026
 ## Purpose
 
 The protected `/admin` area is the operations centre for accounts, roles,
-memberships, Flutterwave payment review, question banks, filesystem MDX
+memberships, Flutterwave payment review, legacy question-bank records, filesystem MDX
 articles, support, analytics, platform settings, schedules, and audit history.
 It builds on the existing Next.js App Router and Supabase domains.
 
@@ -23,7 +23,7 @@ server-only Supabase service-role client.
 | `/admin/memberships` | Search, filter, grant, extend, revoke, and restore access |
 | `/admin/payments` | Paginated payment review and verification queue |
 | `/admin/payments/[reference]` | Attempt, provider summary, event, activation, and audit detail |
-| `/admin/questions` | Question-bank readiness, import, drafting, filters, and review queue |
+| `/admin/questions` | Legacy question-bank record review; it is not a student-facing preparation product |
 | `/admin/questions/[question-id]` | Version editor, publication workflow, reports, and history |
 | `/admin/question-coverage` | Staff-only sanitised course coverage, readiness, and priority reporting |
 | `/admin/articles` | Repository MDX inventory and validation |

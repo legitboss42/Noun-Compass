@@ -2,15 +2,17 @@ import Link from "next/link";
 import { CheckoutButton } from "@/components/checkout-button";
 import { Breadcrumbs } from "@/components/article-elements";
 import { SectionScrollButton } from "@/components/section-scroll-button";
-import { isCheckoutAvailable, platformConfig } from "@/lib/platform/config";
+import { isCheckoutAvailable } from "@/lib/platform/config";
 import { createMetadata } from "@/lib/metadata";
 import { getCurrentUser } from "@/lib/platform/auth";
 import { membershipIsActive } from "@/lib/platform/membership";
+import { semesterPass } from "@/lib/platform/product";
 import { createClient } from "@/lib/supabase/server";
+import { RevenueEvent } from "@/components/revenue-event";
 
 export const metadata = createMetadata(
   "NOUN Compass Semester Pass",
-  "See what is free and what the optional 180-day NounCompass exam-preparation pass includes.",
+  `See what is free and what the optional ${semesterPass.durationDays}-day NounCompass exam-preparation pass includes.`,
   "/membership",
 );
 
@@ -76,6 +78,7 @@ export default async function MembershipPage() {
 
   return (
     <main id="main-content" className="experience-page membership-page">
+      <RevenueEvent event="membership_viewed" input={{ authState: user ? "signed-in" : "signed-out", plan: semesterPass.key }} />
       <div className="category-hero category-hero-enhanced membership-hero">
         <div className="container">
           <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Membership" }]} />
@@ -93,10 +96,10 @@ export default async function MembershipPage() {
         <article className="membership-card">
           <span className="membership-pill">One-time payment</span>
           <span className="eyebrow">Semester Pass</span>
-          <div className="membership-price"><strong>NGN 2,500</strong><span>one payment</span></div>
-          <p>180 days of premium access. No automatic renewal and no recurring charge.</p>
+          <div className="membership-price"><strong>NGN {semesterPass.price.ngn.toLocaleString("en-NG")}</strong><span>one payment</span></div>
+          <p>{semesterPass.durationDays} days of premium access. No automatic renewal and no recurring charge.</p>
           <ul><li>Practice Exams from registered course materials</li><li>Answer explanations for every question</li><li>Exam-focused course material summaries</li><li>Weak-topic and revision tracking</li><li>Progress history and calendar reminders</li></ul>
-          <CheckoutButton available={isCheckoutAvailable()} />
+          <CheckoutButton available={isCheckoutAvailable()} signedIn={Boolean(user)} returnTo="/membership" />
           <small>Secure payment through Flutterwave. Transaction charges are covered by NounCompass.</small>
         </article>
         <div className="membership-comparison">
@@ -105,7 +108,7 @@ export default async function MembershipPage() {
           <aside className="trust-note"><strong>Built for honest preparation</strong><p>The pass does not buy active TMA answers, leaked examinations, guaranteed grades, or access to NOUN systems.</p><Link href="/terms">Read the membership terms</Link></aside>
         </div>
       </section>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({ "@context": "https://schema.org", "@type": "Offer", name: "NOUN Compass Semester Pass", price: platformConfig.semesterPass.amountKobo / 100, priceCurrency: "NGN", description: "180 days of optional premium exam-preparation access", url: "https://nouncompass.me/membership" }) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({ "@context": "https://schema.org", "@type": "Offer", name: semesterPass.name, price: semesterPass.price.ngn, priceCurrency: semesterPass.price.currency, description: `${semesterPass.durationDays} days of optional premium exam-preparation access`, url: "https://nouncompass.me/membership" }) }} />
     </main>
   );
 }

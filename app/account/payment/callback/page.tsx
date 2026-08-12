@@ -3,6 +3,7 @@ import { requireUser } from "@/lib/platform/auth";
 import { isPaymentReference, shouldVerifyPaymentCallback } from "@/lib/platform/payment-callback";
 import { verifyAndActivatePayment } from "@/lib/platform/payments";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { RevenueEvent } from "@/components/revenue-event";
 
 export default async function PaymentCallbackPage({ searchParams }: { searchParams: Promise<{ status?: string; tx_ref?: string; transaction_id?: string }> }) {
   const params = await searchParams;
@@ -54,7 +55,7 @@ export default async function PaymentCallbackPage({ searchParams }: { searchPara
       }
     }
   }
-  return <main id="main-content" className="platform-auth"><section className={`platform-auth-card payment-success-card ${success ? "payment-thank-you-card" : ""}`}>
+  return <main id="main-content" className="platform-auth">{success && <RevenueEvent event="payment_verified" input={{ plan: "semester-pass" }} dedupeKey={reference} />}{accessReady && <RevenueEvent event="membership_activated" input={{ plan: "semester-pass" }} dedupeKey={reference} />}<section className={`platform-auth-card payment-success-card ${success ? "payment-thank-you-card" : ""}`}>
     {success && <span className="payment-success-mark" aria-hidden="true">✓</span>}
     <span className="eyebrow">{success ? "Payment successful" : "Payment verification"}</span>
     <h1>{success ? "Thank you for your payment" : "Verification needs attention"}</h1>

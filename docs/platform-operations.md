@@ -48,7 +48,7 @@ Never point `RESTORE_DATABASE_URL` at production. Never commit database URLs, pa
 
 ## Release gates
 
-- A question bank cannot be released until it has at least 100 individually approved questions, including 15 approved sample questions, and every current question version has four options, exactly one correct answer, a source reference, and an explanation.
+- AI Practice must use an indexed official course material, retain source-grounding safeguards, and never claim to provide past questions, leaked examinations, or guaranteed outcomes.
 - A schedule cannot be published without at least one validated row, an official source URL, checksum, and reviewer action.
 - Payment activation requires a locally created reference plus Flutterwave verification of provider transaction ID, status, amount, currency, email, and transaction timestamp.
 - A successful verified callback shows the thank-you page and links to an authenticated receipt. The receipt is generated only from the account-owned successful payment and membership records and can be printed or saved as PDF by the browser.
@@ -56,19 +56,9 @@ Never point `RESTORE_DATABASE_URL` at production. Never commit database URLs, pa
 
 ## Exam-preparation content workflow
 
-The student experience is now wired for randomized multiple-choice practice, a 40-minute timed mock, answer review with explanations, recent-score history, and five-box due revision. Course pages and the dashboard use only released banks and published timetable versions.
+The active student experience is AI Practice: a private practice set is generated from a selected indexed official course material, with answer explanations, saved results, and revision follow-up. It does not publish a past-question repository, promise mock-exam banks, or make outcome guarantees.
 
-Editors can create a single question or bulk-import draft questions from [`/templates/question-import-template.csv`](/templates/question-import-template.csv). The CSV headers are:
-
-```text
-course_code,topic,learning_objective,difficulty,sample,source_unit,source_page,prompt,option_a,option_b,option_c,option_d,correct_label,explanation
-```
-
-Imports are validated as one batch and always remain drafts. The academic workflow is `draft -> review -> published -> retired`; each approval remains a deliberate reviewer action. Importing a CSV or satisfying a numeric threshold never approves academic content automatically.
-
-Timetable imports likewise remain drafts until reviewed. Their source must use HTTPS and be hosted on `nou.edu.ng` or one of its subdomains. Invalid calendar dates, duplicate rows, empty schedules, missing checksums, and non-official source URLs are rejected.
-
-Human academic review of every question remains required before any question-bank publication. Releasing checkout does not publish, approve, or weaken the gates on academic content.
+Course materials and timetable data remain subject to source checks. Timetable imports must use HTTPS and an approved NOUN domain; invalid dates, duplicate rows, empty schedules, missing checksums, and non-official source URLs are rejected.
 
 ## Email subscriber collection
 

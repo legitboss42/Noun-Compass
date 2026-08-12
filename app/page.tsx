@@ -4,7 +4,7 @@ import { examPrepCourses } from "@/data/exam-prep";
 import { site } from "@/data/site";
 import { getAllArticles } from "@/lib/articles";
 import { createMetadata } from "@/lib/metadata";
-import { platformConfig } from "@/lib/platform/config";
+import { semesterPass } from "@/lib/platform/product";
 
 export const metadata = createMetadata(
   "NOUN Student Guides for Admission, Fees, Portal, and Results",
@@ -16,7 +16,7 @@ export default function Home() {
   const articles = getAllArticles();
   const latestArticles = articles.slice(0, 3);
   const passPrice = `₦${(
-    platformConfig.semesterPass.amountKobo / 100
+    semesterPass.price.ngn
   ).toLocaleString("en-NG")}`;
   const metrics = [
     {
@@ -28,11 +28,11 @@ export default function Home() {
     {
       value: examPrepCourses.length.toLocaleString("en-NG"),
       label: "Initial practice courses",
-      note: "Reviewed banks are being prepared",
+      note: "Source-grounded AI practice is available for matching course materials",
       icon: "graduation" as const,
     },
     {
-      value: `${platformConfig.semesterPass.durationDays} days`,
+      value: `${semesterPass.durationDays} days`,
       label: "Semester Pass access",
       note: "One payment with no automatic renewal",
       icon: "calendar" as const,
@@ -78,7 +78,7 @@ export default function Home() {
         articles={latestArticles}
         membership={{
           price: passPrice,
-          durationDays: platformConfig.semesterPass.durationDays,
+          durationDays: semesterPass.durationDays,
         }}
         metrics={metrics}
       />

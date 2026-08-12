@@ -4,13 +4,10 @@ import { redirect } from "next/navigation";
 import { normalizeNewsletterEmail, syncSubscriberToBrevo } from "@/lib/newsletter";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { safeInternalReturnPath } from "@/lib/platform/return-path";
 
 function text(formData: FormData, name: string) {
   return String(formData.get(name) ?? "").trim();
-}
-
-function safeNext(value: string) {
-  return value.startsWith("/") && !value.startsWith("//") ? value : "/dashboard";
 }
 
 async function subscribeSignupEmail(email: string) {
@@ -49,7 +46,7 @@ async function subscribeSignupEmail(email: string) {
 export async function signIn(formData: FormData) {
   const email = text(formData, "email").toLowerCase();
   const password = text(formData, "password");
-  const next = safeNext(text(formData, "next"));
+  const next = safeInternalReturnPath(text(formData, "next"), "/dashboard");
   const supabase = await createClient();
   if (!supabase) redirect("/account/sign-in?error=Accounts+are+not+configured+yet");
   const { error } = await supabase.auth.signInWithPassword({ email, password });
@@ -62,6 +59,7 @@ export async function signUp(formData: FormData) {
   const email = text(formData, "email").toLowerCase();
   const password = text(formData, "password");
   const newsletterConsent = formData.get("newsletterConsent") === "yes";
+  const next = safeInternalReturnPath(text(formData, "next"), "/dashboard/profile");
   if (password.length < 10) redirect("/account/sign-up?error=Use+a+password+with+at+least+10+characters");
   const supabase = await createClient();
   if (!supabase) redirect("/account/sign-up?error=Accounts+are+not+configured+yet");
@@ -70,12 +68,12 @@ export async function signUp(formData: FormData) {
     password,
     options: {
       data: { display_name: displayName },
-      emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL ?? "https://nouncompass.me"}/account/auth/callback?next=/dashboard/profile`,
+      emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL ?? "https://nouncompass.me"}/account/auth/callback?next=${encodeURIComponent(next)}`,
     },
   });
   if (error) redirect(`/account/sign-up?error=${encodeURIComponent("We could not create the account. Check the details and try again.")}`);
   if (newsletterConsent) await subscribeSignupEmail(email);
-  redirect("/account/sign-in?notice=Check+your+email+to+verify+the+account&next=/dashboard/profile");
+  redirect(`/account/sign-in?notice=Check+your+email+to+verify+the+account&next=${encodeURIComponent(next)}`);
 }
 
 export async function requestPasswordReset(formData: FormData) {

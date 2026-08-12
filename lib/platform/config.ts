@@ -1,3 +1,5 @@
+import { semesterPass } from "./product";
+
 const enabled = (value: string | undefined, fallback: boolean) => {
   if (value === undefined) return fallback;
   return value.toLowerCase() === "true";
@@ -48,10 +50,10 @@ export const platformConfig = {
     admin: enabled(process.env.FEATURE_ADMIN, true),
   },
   semesterPass: {
-    key: "semester-pass" as const,
-    amountKobo: Number(process.env.SEMESTER_PASS_AMOUNT_KOBO ?? "250000"),
-    currency: "NGN" as const,
-    durationDays: Number(process.env.SEMESTER_PASS_DURATION_DAYS ?? "180"),
+    key: semesterPass.key,
+    amountKobo: semesterPass.price.kobo,
+    currency: semesterPass.price.currency,
+    durationDays: semesterPass.durationDays,
   },
 };
 

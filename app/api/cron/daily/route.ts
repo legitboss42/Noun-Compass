@@ -3,6 +3,7 @@ import { sendStudyReminderEmail } from "@/lib/contact-mail";
 import { syncSubscriberToBrevo } from "@/lib/newsletter";
 import {
   reengagementParamsFromEnv,
+  hasDedicatedReengagementUnsubscribeSecret,
   OperationalDatabaseFailure,
   selectReengagementCandidates,
   sendReengagementBatch,
@@ -125,6 +126,19 @@ async function runReengagement(
 ) {
   if (process.env.REENGAGEMENT_ENABLED !== "true") {
     return { reengagementEnabled: false as const };
+  }
+  if (!hasDedicatedReengagementUnsubscribeSecret(process.env)) {
+    console.error("[cron] re-engagement blocked: UNSUBSCRIBE_SECRET is required");
+    return {
+      reengagementEnabled: true as const,
+      reengagementBlocked: "missing_unsubscribe_secret",
+      reengagementCandidates: 0,
+      reengagementEmailed: 0,
+      reengagementFailed: 0,
+      reengagementDeduped: 0,
+      reengagementDatabaseFailed: 0,
+      reengagementErrors: [],
+    };
   }
 
   let candidates;

@@ -417,7 +417,7 @@ export default async function DashboardPage({
                 : `Continue ${String(aiSession.course_code ?? "Practice Exam")} · ${String(aiSession.question_count ?? 0)} questions`}
             </span>
           ) : (
-            <span>Use practice questions as more checked banks are released.</span>
+            <span>Generate a source-grounded Practice Exam from your registered course materials.</span>
           )}
         </Link>
       </section>

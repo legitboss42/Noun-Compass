@@ -48,8 +48,8 @@ export const quickAccessItems: {
   tone: "green" | "gold" | "navy";
 }[] = [
   {
-    title: "Mock Exams",
-    description: "Explore the first GST practice courses and see what each reviewed bank will cover.",
+    title: "Practice Exams",
+    description: "Generate a private, source-grounded practice set from a matching course material.",
     href: "/exam-prep",
     cta: "View exam preparation",
     icon: "graduation",

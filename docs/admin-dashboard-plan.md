@@ -9,7 +9,7 @@ Last audited: 24 July 2026
 - `requireUser()`, `getUserRoles()`, and `requireRole()` in `lib/platform/auth.ts`.
 - The actual role enum: `student`, `support_agent`, `content_editor`, `academic_reviewer`, and `super_admin`.
 - `INITIAL_SUPER_ADMIN_EMAIL` as the bootstrap-only super-admin fallback.
-- Existing tables for profiles, roles, plans, memberships, payment attempts/events, entitlement adjustments, question banks, questions, versions, options, reports, practice sessions, support tickets/messages, content reviews, notifications, and audit logs.
+- Existing tables include profiles, roles, plans, memberships, payment attempts/events, entitlement adjustments, legacy question-bank records, AI practice sessions, support tickets/messages, content reviews, notifications, and audit logs.
 - Existing question creation, CSV import, review, publication, and schedule-import workflows.
 - Existing Flutterwave verification and `activate_semester_pass` database function.
 - Existing filesystem MDX loader in `lib/articles.ts`.
@@ -40,7 +40,7 @@ Last audited: 24 July 2026
 | `/admin/users/[user-id]` | User, access, payments, practice, support, and audit detail | users read |
 | `/admin/memberships` | Membership listing and manual access adjustments | memberships read/write |
 | `/admin/payments` | Payment review and safe verification | payments read/verify |
-| `/admin/questions` | Question banks, workflow, reports, and publishing | questions read/write/publish |
+| `/admin/questions` | Legacy question records retained for operational history | questions read/write |
 | `/admin/articles` | MDX inventory and validation | articles read |
 | `/admin/support` | Paginated support queue | support read/write |
 | `/admin/support/[ticket-id]` | Conversation, internal notes, assignment, and status | support read/write |

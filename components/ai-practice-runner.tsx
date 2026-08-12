@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { maxAiPracticeQuestionsForMaterial } from "@/lib/platform/ai-practice-materials";
+import { trackRevenueEvent } from "@/lib/platform/revenue-analytics";
 
 type MaterialOption = {
   key: string;
@@ -136,10 +137,7 @@ export function AiPracticeRunner({
           setIndex(0);
           setStatus("");
           setBusy(false);
-          window.gtag?.("event", "ai_practice_started", {
-            course_code: payload.session.courseCode,
-            mode: payload.session.mode,
-          });
+          trackRevenueEvent("ai_practice_started", { authState: "signed-in", plan: premium ? "semester-pass" : undefined });
           return;
         }
       } catch {
@@ -235,6 +233,7 @@ export function AiPracticeRunner({
       setSessionLabel(`${payload.session.courseCode} — ${payload.session.courseTitle}`);
       setQuestionCount(String(payload.session.questionCount));
       setGeneration(payload.generation);
+      trackRevenueEvent("ai_practice_started", { authState: "signed-in", plan: payload.session.premium ? "semester-pass" : undefined });
       await runGeneration(payload.session.id);
     } catch {
       setStatus("Practice Exam could not start. Try again in a moment.");
@@ -265,7 +264,7 @@ export function AiPracticeRunner({
       setResult(payload);
       setQuestions([]);
       setStatus("");
-      window.gtag?.("event", "ai_practice_completed", { score: payload.score, total: payload.total });
+      trackRevenueEvent("ai_practice_completed", { score: payload.score, total: payload.total, correct: payload.correct });
     } catch {
       setStatus("Could not score this session. Try again.");
     } finally {

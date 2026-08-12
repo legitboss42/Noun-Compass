@@ -59,7 +59,7 @@ export function HomepageHeader() {
 
 function HeroSection() {
   const featurePoints = [
-    { icon: "document" as const, label: "Past questions", detail: "& mock exams" },
+    { icon: "document" as const, label: "Practice exams", detail: "from course materials" },
     { icon: "book" as const, label: "Course materials", detail: "& downloads" },
     { icon: "tools" as const, label: "Smart study", detail: "tools" },
     { icon: "shield" as const, label: "Clear guidance", detail: "with source checks" },

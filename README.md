@@ -29,10 +29,10 @@ npm run build
 ## Administration dashboard
 
 The production operations dashboard is available under `/admin` for authorised
-Supabase roles. It covers users, roles, memberships, payments, question banks,
-filesystem article validation, support, analytics, settings, schedules, and
-audit history. `/admin/question-coverage` shows sanitised private-engine
-course readiness and question-bank gaps without exposing crawler payloads or
+Supabase roles. It covers users, roles, memberships, payments, AI-practice
+operations, filesystem article validation, support, analytics, settings,
+schedules, and audit history. `/admin/question-coverage` shows sanitised
+private-engine course readiness without exposing crawler payloads or
 third-party content. Privileged operations remain server-only and
 permission-checked.
 
