@@ -123,6 +123,7 @@ test("every disposition has truthful evidence, ownership, status, and target sem
     assert.ok(item.cluster.trim(), `${item.slug}: missing cluster`);
     assert.equal(item.url, `/articles/${item.slug}`);
     assert.equal(item.gscEvidence.status, "unavailable-unverified");
+    assert.equal(item.reviewVerification, "pending");
     assert.equal(item.currentSourceReview.reviewedAt, null);
     assert.deepEqual(item.currentSourceReview.officialSourcesChecked, []);
     assert.equal(item.author, article.author);
@@ -230,4 +231,35 @@ test("active product surfaces contain no stale author typo or removed-bank avail
 test("course-material coverage is valid UTF-8 without mojibake markers", () => {
   const source = fs.readFileSync(path.join(root, "docs", "course-material-coverage.md"), "utf8");
   assert.doesNotMatch(source, /(?:\uFFFD|â€|Ã.|Â\s)/, "course-material coverage still contains malformed UTF-8 text");
+});
+
+test("articles with pending reviews describe dated checks only as previous editorial records", () => {
+  const dispositions = new Map(getEditorialDispositionManifest().map((item) => [item.slug, item]));
+  const currentVerificationClaims = [
+    /^##\s+Last Reviewed\s*$/gim,
+    /\blast reviewed(?:\s+on)?\b/gi,
+    /\breviewed on\s+\d{1,2}\s+[A-Z][a-z]+\s+20\d{2}\b/gi,
+    /\b(?:official[- ]source checks|official sources|sources?)\s+(?:were\s+)?reviewed\s+on\b/gi,
+    /\b(?:official\s+)?sources?\s+(?:were\s+)?reviewed\b/gi,
+    /\breviewed sources?\b/gi,
+    /\bverified(?:\s+only)?\s+on\b/gi,
+    /\b\d{1,2}\s+[A-Z][a-z]+\s+20\d{2}\s+source review\b/gi,
+  ];
+  const violations: string[] = [];
+
+  for (const { file, data, content } of readArticles()) {
+    const disposition = dispositions.get(data.slug);
+    assert.ok(disposition, `${file}: missing disposition`);
+    if (disposition.currentSourceReview.reviewedAt !== null) continue;
+
+    for (const pattern of currentVerificationClaims) {
+      for (const match of content.matchAll(pattern)) {
+        const line = content.slice(0, match.index).split("\n").length;
+        violations.push(`${file}:${line}: ${match[0]}`);
+      }
+      pattern.lastIndex = 0;
+    }
+  }
+
+  assert.deepEqual(violations, []);
 });

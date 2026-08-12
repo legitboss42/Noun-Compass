@@ -145,3 +145,36 @@ TypeScript check.
 - [ ] URL-level GSC evidence reviewed.
 - [ ] Production behavior verified after deployment.
 - [ ] AdSense readiness established.
+
+## Fix Round 1 — Reader-Visible Review Language
+
+Review identified 65 dated or verification-oriented assertions in public MDX
+bodies that could be read as current even though every manifest disposition had
+a pending current review. A failing regression scan was added first. The scan
+covers `Last Reviewed`, `last reviewed on`, dated `reviewed on` phrases,
+`sources were reviewed`, `reviewed sources`, and equivalent dated source-review
+or `verified on` language whenever `reviewedAt` is null.
+
+The affected wording across 40 articles now describes the June observations as
+an **earlier editorial pass** or **previous editorial record**. Every affected
+article states once that a current source recheck is pending. Source URLs,
+historical observations, and frontmatter dates were preserved; no article was
+marked currently verified.
+
+The manifest review state is now a discriminated union:
+
+- `reviewVerification: "pending"` requires `reviewedAt: null` and unverified
+  date metadata.
+- `reviewVerification: "verified"` requires a string `reviewedAt`, checked
+  official sources, and verified publication/update metadata.
+
+Article metadata, schema, and visible review dates consume the verified branch's
+dates when that branch is eventually used. All 59 current records remain on the
+pending branch.
+
+Fresh fix-round verification:
+
+- `npx tsx --test tests/platform/editorial-content.test.ts` — **8 passed, 0 failed**.
+- `npx tsc --noEmit` — **exit 0, no diagnostics**.
+- Full platform suite was intentionally not rerun in this bounded fix round;
+  the earlier 149-test result remains historical evidence, not a fresh claim.

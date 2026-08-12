@@ -70,7 +70,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const seoTitle = article.seoTitle ?? article.title;
   const seoDescription = article.seoDescription ?? article.description;
   const disposition = getEditorialDisposition(slug);
-  const verifiedDates = disposition?.dateMetadata.status === "verified";
+  const verifiedReview = disposition?.reviewVerification === "verified" ? disposition : null;
 
   return {
     title: seoTitle,
@@ -91,7 +91,10 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       description: seoDescription,
       url,
       type: "article",
-      ...(verifiedDates ? { publishedTime: article.publishedAt, modifiedTime: article.updatedAt } : {}),
+      ...(verifiedReview ? {
+        publishedTime: verifiedReview.dateMetadata.publishedAt,
+        modifiedTime: verifiedReview.dateMetadata.updatedAt,
+      } : {}),
       authors: [article.author],
       tags: [article.primaryKeyword, ...article.secondaryKeywords],
       images: [{ url: image, width: 1200, height: 630, alt: article.title }],
@@ -131,7 +134,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
   const authorProfile = getEditorialProfile(article.author);
   const reviewerProfile = getEditorialProfile(article.reviewer);
   const disposition = getEditorialDisposition(article.slug);
-  const verifiedDates = disposition?.dateMetadata.status === "verified";
+  const verifiedReview = disposition?.reviewVerification === "verified" ? disposition : null;
 
   const articleSchema = {
     "@context": "https://schema.org",
@@ -139,7 +142,10 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
     headline: article.title,
     description: article.description,
     image: `${articleUrl}/opengraph-image`,
-    ...(verifiedDates ? { datePublished: article.publishedAt, dateModified: article.updatedAt } : {}),
+    ...(verifiedReview ? {
+      datePublished: verifiedReview.dateMetadata.publishedAt,
+      dateModified: verifiedReview.dateMetadata.updatedAt,
+    } : {}),
     inLanguage: "en-NG",
     isAccessibleForFree: true,
     keywords: [article.primaryKeyword, ...article.secondaryKeywords].join(", "),
@@ -250,7 +256,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
               <span>
                 Reviewed by <Link href={reviewerProfile.href}><strong>{article.reviewer}</strong></Link>
               </span>
-              {verifiedDates ? <span>Updated {formatDate(article.updatedAt)}</span> : <span>Current source recheck pending</span>}
+              {verifiedReview ? <span>Updated {formatDate(verifiedReview.dateMetadata.updatedAt)}</span> : <span>Current source recheck pending</span>}
               <span>{article.readingTime}</span>
             </div>
           </div>
@@ -277,12 +283,12 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
               </figcaption>
             </figure>
 
-            {verifiedDates ? <LastCheckedBox date={article.updatedAt} /> : null}
+            {verifiedReview ? <LastCheckedBox date={verifiedReview.currentSourceReview.reviewedAt} /> : null}
             <SourceReviewBox
               summary={article.sourceReviewSummary}
               reviewedSources={article.reviewedSources}
               reviewHighlights={article.reviewHighlights}
-              reviewedAt={verifiedDates ? article.updatedAt : undefined}
+              reviewedAt={verifiedReview?.currentSourceReview.reviewedAt}
             />
 
             <div className="summary-box">

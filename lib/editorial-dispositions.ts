@@ -13,6 +13,34 @@ type DispositionSeed = {
   decision: EditorialDecision;
 };
 
+type EditorialSource = { label: string; url: string };
+
+type PendingEditorialReview = {
+  reviewVerification: "pending";
+  currentSourceReview: {
+    reviewedAt: null;
+    officialSourcesChecked: [];
+  };
+  dateMetadata: {
+    status: "unverified";
+    publishedAt: null;
+    updatedAt: null;
+  };
+};
+
+type VerifiedEditorialReview = {
+  reviewVerification: "verified";
+  currentSourceReview: {
+    reviewedAt: string;
+    officialSourcesChecked: EditorialSource[];
+  };
+  dateMetadata: {
+    status: "verified";
+    publishedAt: string;
+    updatedAt: string;
+  };
+};
+
 export type EditorialDisposition = DispositionSeed & {
   url: `/articles/${string}`;
   canonicalTarget: `/articles/${string}` | null;
@@ -29,24 +57,9 @@ export type EditorialDisposition = DispositionSeed & {
   existingSourceReview: {
     status: "repository-recorded-not-rechecked" | "not-recorded";
     summary: string | null;
-    reviewedSources: Array<{ label: string; url: string }>;
+    reviewedSources: EditorialSource[];
   };
-  currentSourceReview: {
-    reviewedAt: null;
-    officialSourcesChecked: [];
-  };
-  dateMetadata:
-    | {
-        status: "unverified";
-        publishedAt: null;
-        updatedAt: null;
-      }
-    | {
-        status: "verified";
-        publishedAt: string;
-        updatedAt: string;
-      };
-};
+} & (PendingEditorialReview | VerifiedEditorialReview);
 
 const dispositionSeeds: DispositionSeed[] = [
   { slug: "common-nelfund-problems-noun-students-face", intent: "Troubleshoot common NELFUND application problems affecting NOUN students", cluster: "NELFUND and student finance", decision: "rewrite" },
@@ -131,6 +144,7 @@ function toDisposition(seed: DispositionSeed, article: Article): EditorialDispos
       summary: article.sourceReviewSummary ?? null,
       reviewedSources: article.reviewedSources ?? [],
     },
+    reviewVerification: "pending",
     currentSourceReview: {
       reviewedAt: null,
       officialSourcesChecked: [],
