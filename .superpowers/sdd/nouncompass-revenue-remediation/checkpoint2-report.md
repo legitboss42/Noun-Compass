@@ -31,3 +31,11 @@ The following new behavior tests were written and run red before their implement
 
 - No article MDX, sitemap, AdSense configuration, production service setting, migration, deployment, or outbound email was changed or invoked.
 - Before enabling re-engagement in Production: set a dedicated `UNSUBSCRIBE_SECRET`, confirm the owner-reviewed single-recipient test path, then explicitly set `REENGAGEMENT_ENABLED=true`.
+
+## Review fix round 1
+
+- The dedicated `UNSUBSCRIBE_SECRET` check now runs inside `sendReengagementEmail` and `sendInactiveStageEmail`, before transporter creation. This covers cron, admin, and `reengagement-preview.mjs --send`; render-only previews never call the sender.
+- Email-verification analytics no longer accepts a query parameter. The auth callback creates a five-minute signed, HttpOnly, SameSite=Lax marker cookie and redirects to the clean return path. A same-origin POST endpoint validates and clears it before the browser emits the event.
+- Flutterwave, the membership hero, payment callback, and receipt now use `semesterPass.durationDays` and the shared price facts rather than hard-coded plan duration/price claims.
+- The signed-out `Sign in to buy` link records the allow-listed membership CTA event before navigation.
+- Review-round verification: focused tests passed (7 tests) and `npx tsc --noEmit` passed.

@@ -34,7 +34,7 @@ export function CheckoutButton({
   }
 
   if (!signedIn) {
-    return <div className="checkout-action"><Link className="button" href={`/account/sign-in?next=${encodeURIComponent(returnTo)}`}>Sign in to buy</Link><p className="form-message" role="status">Sign in first; checkout never starts automatically after authentication.</p></div>;
+    return <div className="checkout-action"><Link className="button" href={`/account/sign-in?next=${encodeURIComponent(returnTo)}`} onClick={() => trackRevenueEvent("membership_cta_clicked", { ctaSource: "membership-card", authState: "signed-out", plan: "semester-pass" })}>Sign in to buy</Link><p className="form-message" role="status">Sign in first; checkout never starts automatically after authentication.</p></div>;
   }
 
   return <div className="checkout-action"><button className="button" type="button" onClick={checkout} disabled={!available || loading}>{loading ? "Opening secure checkout..." : available ? "Buy semester pass" : "Checkout is temporarily unavailable"}</button>{status && <p className="form-message form-message-error" role="alert" aria-live="assertive">{status}</p>}</div>;

@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { PrintReceiptButton } from "@/components/print-receipt-button";
 import { requireUser } from "@/lib/platform/auth";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { semesterPass } from "@/lib/platform/product";
 
 export default async function PaymentReceiptPage({ params }: { params: Promise<{ reference: string }> }) {
   const { reference } = await params;
@@ -26,7 +27,7 @@ export default async function PaymentReceiptPage({ params }: { params: Promise<{
     <main id="main-content" className="platform-auth receipt-page">
       <section className="platform-auth-card payment-receipt">
         <header><span className="eyebrow">NounCompass payment receipt</span><h1>Semester Pass receipt</h1><p>Keep this receipt with your Flutterwave confirmation.</p></header>
-        <dl><div><dt>Payment status</dt><dd>Confirmed</dd></div><div><dt>Amount</dt><dd>{amount}</dd></div><div><dt>Payment date</dt><dd>{date}</dd></div><div><dt>Reference</dt><dd>{payment.reference}</dd></div><div><dt>Account email</dt><dd>{payment.email}</dd></div><div><dt>Access plan</dt><dd>Semester Pass &middot; 180 days</dd></div><div><dt>Access ends</dt><dd>{accessEnd}</dd></div></dl>
+        <dl><div><dt>Payment status</dt><dd>Confirmed</dd></div><div><dt>Amount</dt><dd>{amount}</dd></div><div><dt>Payment date</dt><dd>{date}</dd></div><div><dt>Reference</dt><dd>{payment.reference}</dd></div><div><dt>Account email</dt><dd>{payment.email}</dd></div><div><dt>Access plan</dt><dd>Semester Pass &middot; {semesterPass.durationDays} days</dd></div><div><dt>Access ends</dt><dd>{accessEnd}</dd></div></dl>
         <p className="platform-privacy-note">NounCompass does not store your card number, PIN, CVV, or Flutterwave authentication details.</p>
         <div className="platform-auth-links receipt-actions"><PrintReceiptButton /><Link href="/dashboard">Continue to dashboard</Link><Link href="/dashboard/ai-practice">Open Practice Exam</Link></div>
       </section>

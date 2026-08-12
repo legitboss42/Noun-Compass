@@ -89,7 +89,7 @@ export default async function MembershipPage() {
             <SectionScrollButton className="button" targetId="semester-pass-details">See what the pass includes</SectionScrollButton>
             <Link className="category-hero-secondary" href={user ? "/dashboard" : "/account/sign-in?next=/membership"}>{user ? "Return to dashboard" : "Sign in to your account"} <span aria-hidden="true">&rarr;</span></Link>
           </div>
-          <aside className="category-hero-note"><strong>One payment, 180 days.</strong><span>No automatic renewal. Free public information is not placed behind the Semester Pass.</span></aside>
+          <aside className="category-hero-note"><strong>One payment, {semesterPass.durationDays} days.</strong><span>No automatic renewal. Free public information is not placed behind the Semester Pass.</span></aside>
         </div>
       </div>
       <section id="semester-pass-details" className="container section membership-layout">

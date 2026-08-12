@@ -4,6 +4,7 @@ import { isPaymentReference, shouldVerifyPaymentCallback } from "@/lib/platform/
 import { verifyAndActivatePayment } from "@/lib/platform/payments";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { RevenueEvent } from "@/components/revenue-event";
+import { semesterPass } from "@/lib/platform/product";
 
 export default async function PaymentCallbackPage({ searchParams }: { searchParams: Promise<{ status?: string; tx_ref?: string; transaction_id?: string }> }) {
   const params = await searchParams;
@@ -50,7 +51,7 @@ export default async function PaymentCallbackPage({ searchParams }: { searchPara
 
       if (success) {
         message = accessReady
-          ? "Your payment is confirmed and your 180-day Semester Pass is active."
+          ? `Your payment is confirmed and your ${semesterPass.durationDays}-day Semester Pass is active.`
           : "Your payment is confirmed. Your access is being finalized and will appear on your dashboard shortly.";
       }
     }

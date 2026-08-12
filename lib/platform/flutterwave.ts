@@ -1,5 +1,5 @@
 import { createHash, createHmac, randomBytes, timingSafeEqual } from "node:crypto";
-import { platformConfig } from "./config";
+import { semesterPass } from "./product";
 
 const FLUTTERWAVE_API = "https://api.flutterwave.com/v3";
 
@@ -44,17 +44,17 @@ export async function initializeFlutterwaveTransaction(input: {
     method: "POST",
     body: JSON.stringify({
       tx_ref: input.reference,
-      amount: platformConfig.semesterPass.amountKobo / 100,
-      currency: platformConfig.semesterPass.currency,
+      amount: semesterPass.price.ngn,
+      currency: semesterPass.price.currency,
       redirect_url: input.callbackUrl,
       customer: { email: input.email },
       meta: {
         nouncompass_customer_email: input.email,
-        nouncompass_plan_key: platformConfig.semesterPass.key,
+        nouncompass_plan_key: semesterPass.key,
       },
       customizations: {
-        title: "NounCompass Semester Pass",
-        description: "180 days of premium exam-preparation access",
+        title: semesterPass.name,
+        description: `${semesterPass.durationDays} days of premium exam-preparation access`,
       },
     }),
   });
@@ -99,8 +99,8 @@ export function payloadHash(rawBody: string) {
 
 export function assertSemesterPassTransaction(data: { status: string; amount: number; currency: string; created_at: string | null }) {
   if (data.status !== "successful") throw new Error("Payment is not successful.");
-  if (Math.round(data.amount * 100) !== platformConfig.semesterPass.amountKobo) throw new Error("Payment amount does not match the plan.");
-  if (data.currency !== platformConfig.semesterPass.currency) throw new Error("Payment currency does not match the plan.");
+  if (Math.round(data.amount * 100) !== semesterPass.price.kobo) throw new Error("Payment amount does not match the plan.");
+  if (data.currency !== semesterPass.price.currency) throw new Error("Payment currency does not match the plan.");
   if (!data.created_at || Number.isNaN(Date.parse(data.created_at))) throw new Error("Payment confirmation has no valid transaction timestamp.");
   return data.created_at;
 }
@@ -113,7 +113,7 @@ export function assertFlutterwaveCustomerIdentity(data: {
   if (data.meta?.nouncompass_customer_email?.trim().toLowerCase() !== normalizedExpected) {
     throw new Error("Payment customer metadata mismatch.");
   }
-  if (data.meta?.nouncompass_plan_key !== platformConfig.semesterPass.key) {
+  if (data.meta?.nouncompass_plan_key !== semesterPass.key) {
     throw new Error("Payment plan metadata mismatch.");
   }
   if ((process.env.FLUTTERWAVE_ENVIRONMENT ?? "test") === "live" && data.customer.email.trim().toLowerCase() !== normalizedExpected) {

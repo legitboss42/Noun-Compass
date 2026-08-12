@@ -5,7 +5,7 @@ import { Suspense } from "react";
 import { BackToTopButton } from "@/components/back-to-top-button";
 import { MobileBottomNavigation } from "@/components/homepage/home-interactions";
 import { ScrollReset } from "@/components/scroll-reset";
-import { RevenueEventFromQuery } from "@/components/revenue-event";
+import { RevenueEventFromAuthMarker } from "@/components/revenue-event";
 import { Footer, Header } from "@/components/site-shell";
 import { site } from "@/data/site";
 import { EDITORIAL_PROFILE_URL } from "@/lib/editorial";
@@ -131,5 +131,5 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       "query-input": "required name=search_term_string",
     },
   };
-  return <html lang="en" className={`${manrope.variable} ${sora.variable}`}><head><Script id="scroll-reset-bootstrap" strategy="beforeInteractive">{scrollResetBootstrap}</Script><Script id="google-analytics-loader" strategy="afterInteractive">{analyticsLoader}</Script></head><body><Suspense fallback={null}><ScrollReset /><RevenueEventFromQuery /></Suspense><a className="skip-link" href="#main-content">Skip to content</a><div data-public-header><Header /></div>{children}<BackToTopButton /><div data-public-footer><Footer /></div><div data-public-mobile-bottom><MobileBottomNavigation /></div><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organization) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(website) }} /></body></html>;
+  return <html lang="en" className={`${manrope.variable} ${sora.variable}`}><head><Script id="scroll-reset-bootstrap" strategy="beforeInteractive">{scrollResetBootstrap}</Script><Script id="google-analytics-loader" strategy="afterInteractive">{analyticsLoader}</Script></head><body><Suspense fallback={null}><ScrollReset /><RevenueEventFromAuthMarker /></Suspense><a className="skip-link" href="#main-content">Skip to content</a><div data-public-header><Header /></div>{children}<BackToTopButton /><div data-public-footer><Footer /></div><div data-public-mobile-bottom><MobileBottomNavigation /></div><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organization) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(website) }} /></body></html>;
 }

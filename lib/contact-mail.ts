@@ -3,6 +3,7 @@ import nodemailer from "nodemailer";
 import { buildReengagementEmail } from "@/lib/platform/reengagement-email-core";
 import { buildStageEmail, type InactiveStage, type StageContext } from "@/lib/platform/stage-email-core";
 import { siteBaseUrl, unsubscribeHeadersFor, unsubscribeLinkFor } from "@/lib/platform/unsubscribe";
+import { requireDedicatedReengagementUnsubscribeSecret } from "@/lib/platform/reengagement-safety";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MAX_NAME_LENGTH = 80;
@@ -309,6 +310,7 @@ export async function sendReengagementEmail({
   displayName?: string | null;
   to: string;
 }) {
+  requireDedicatedReengagementUnsubscribeSecret(process.env);
   const transporter = createTransporter();
   const fromAddress = process.env.CONTACT_FORM_AUTOREPLY_FROM ?? process.env.CONTACT_FORM_FROM ?? "NounCompass Support <support@nouncompass.me>";
   const siteUrl = siteBaseUrl();
@@ -342,6 +344,7 @@ export async function sendInactiveStageEmail({
   stage: InactiveStage;
   context?: StageContext;
 }) {
+  requireDedicatedReengagementUnsubscribeSecret(process.env);
   const transporter = createTransporter();
   const fromAddress = process.env.CONTACT_FORM_AUTOREPLY_FROM ?? process.env.CONTACT_FORM_FROM ?? "NounCompass Support <support@nouncompass.me>";
   const siteUrl = siteBaseUrl();
