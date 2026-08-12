@@ -1,4 +1,5 @@
 import { semesterPass } from "./product";
+import { isFlutterwaveSecretKeyValid } from "./flutterwave";
 
 const enabled = (value: string | undefined, fallback: boolean) => {
   if (value === undefined) return fallback;
@@ -10,10 +11,7 @@ export function isFlutterwaveConfigurationValid(
   secretKey: string | undefined,
   webhookSecret: string | undefined,
 ) {
-  const mode = environment?.toLowerCase() ?? "test";
-  if (!secretKey || !webhookSecret || !["test", "live"].includes(mode)) return false;
-  const isTestKey = secretKey.startsWith("FLWSECK_TEST-");
-  return mode === "test" ? isTestKey : !isTestKey;
+  return Boolean(webhookSecret) && isFlutterwaveSecretKeyValid(environment, secretKey);
 }
 
 export function isCheckoutReleaseEnabled(
@@ -21,8 +19,9 @@ export function isCheckoutReleaseEnabled(
   featureFlag: string | undefined,
   emergencyDisabled: string | undefined,
 ) {
-  if (enabled(emergencyDisabled, false)) return false;
-  return environment?.toLowerCase() === "live" || enabled(featureFlag, false);
+  if (emergencyDisabled === "true") return false;
+  if (environment === "live") return true;
+  return environment === "test" && featureFlag === "true";
 }
 
 const flutterwaveEnvironment = process.env.FLUTTERWAVE_ENVIRONMENT ?? "test";

@@ -15,9 +15,17 @@ test("emergency disable overrides both live mode and the feature flag", () => {
   assert.equal(isCheckoutReleaseEnabled("live", "true", "true"), false);
 });
 
+test("checkout mode and flags require exact lowercase values", () => {
+  assert.equal(isCheckoutReleaseEnabled("LIVE", "true", undefined), false);
+  assert.equal(isCheckoutReleaseEnabled("test", "TRUE", undefined), false);
+  assert.equal(isCheckoutReleaseEnabled("live", "false", "TRUE"), true);
+});
+
 test("rejects keys that do not match the configured Flutterwave environment", () => {
   assert.equal(isFlutterwaveConfigurationValid("test", "FLWSECK_TEST-example", "webhook-secret"), true);
   assert.equal(isFlutterwaveConfigurationValid("live", "FLWSECK_TEST-example", "webhook-secret"), false);
   assert.equal(isFlutterwaveConfigurationValid("live", "FLWSECK-example", "webhook-secret"), true);
+  assert.equal(isFlutterwaveConfigurationValid("live", "not-a-flutterwave-key", "webhook-secret"), false);
+  assert.equal(isFlutterwaveConfigurationValid("LIVE", "FLWSECK-example", "webhook-secret"), false);
   assert.equal(isFlutterwaveConfigurationValid("invalid", "FLWSECK-example", "webhook-secret"), false);
 });

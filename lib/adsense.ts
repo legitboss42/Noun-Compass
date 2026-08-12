@@ -26,7 +26,6 @@ const eligibleExactPaths = new Set([
   "/reviewers",
   "/admission",
   "/examinations",
-  "/fees",
   "/gst",
   "/portal",
   "/results",
@@ -58,4 +57,17 @@ export function isAdSenseEligiblePath(pathname: string): boolean {
   if (!pathname.startsWith("/") || pathname.includes("?") || pathname.includes("#")) return false;
   if (eligibleExactPaths.has(pathname)) return true;
   return pathname.startsWith("/articles/") && pathname.length > "/articles/".length;
+}
+
+/**
+ * The loader receives pathname, query, and hash separately from browser state.
+ * Any non-canonical variant fails closed, including client-only hash navigation.
+ */
+export function shouldLoadAdSenseForLocation(
+  config: AdSenseConfig,
+  pathname: string,
+  search: string,
+  hash: string,
+) {
+  return config.enabled && !search && !hash && isAdSenseEligiblePath(pathname);
 }

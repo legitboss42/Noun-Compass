@@ -18,3 +18,10 @@ No external or production mutation is authorized for this checkpoint: no AdSense
 1. AdSense owner approval, certified CMP setup, AdSense UI URL-prefix exclusions, publisher/`ads.txt` review, and explicit Production environment enablement.
 2. Owner-authorized controlled Flutterwave test transaction and verification of provider dashboard, callback/webhook, replay behavior, payment event/attempt, membership end date, and audit record. No provider transaction or database row was inspected here.
 3. Owner review and one-address email test send; verify inbox rendering, Brevo transactional logs, `notifications` handoff row, and cron result before explicitly setting `REENGAGEMENT_ENABLED=true`.
+
+## Review fix round 1 (2026-08-12)
+
+- AdSense route enforcement now takes pathname, query, and hash separately. The globally mounted loader reads `useSearchParams()` and listens for `hashchange`, so a query or hash variant cannot inject or retain the script after client navigation. The exact allowlist is documented in `docs/monetization-operations.md`; `/fees` was removed because its primary experience is the authenticated interactive Fee Checker.
+- Flutterwave configuration now imports the same strict `isFlutterwaveSecretKeyValid` predicate used at the request boundary. Environment values must be exact `test` or `live`; test mode accepts test-key prefixes only, live mode accepts the live-key pattern only, and checkout/emergency flags are exact lowercase `true` checks.
+- Red/green evidence: new location and strict-config tests failed against the previous behavior (missing loader decision helper, `/fees` eligible, and permissive config validation) before the minimal implementation. Final targeted verification is recorded after this change.
+- Final fix-round verification: `npx tsx --test tests/platform/adsense.test.ts tests/platform/config.test.ts tests/platform/flutterwave.test.ts` passed with 20 tests and 0 failures; `npx tsc --noEmit` and `git diff --check` passed.

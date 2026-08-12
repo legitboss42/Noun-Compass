@@ -9,7 +9,9 @@ The application has no ad placeholder or slot. The global client loader can appe
 - `NEXT_PUBLIC_ADSENSE_ENABLED` is exactly `true` (case and whitespace sensitive).
 - `NEXT_PUBLIC_ADSENSE_PUBLISHER_ID` matches `ca-pub-<digits>`.
 
-It is allowlisted to the homepage, public category hubs, `/articles` and `/articles/*`, and public trust/contact pages. It rejects query/fragment variants and excludes account, dashboard, admin, API, membership, tools, course materials, exam preparation, unsubscribe, payment/callback, support, and auth paths. Keep both variables absent or disabled in source control and unconfigured until these owner gates are complete:
+The exact route allowlist is `/`, `/articles`, `/articles/*`, `/admission`, `/examinations`, `/gst`, `/portal`, `/results`, `/student-guides`, `/study-centres`, `/about`, `/contact`, `/privacy-policy`, `/terms`, `/disclaimer`, `/editorial-policy`, `/copyright-policy`, `/corrections-policy`, `/academic-integrity`, `/takedown-policy`, `/refund-policy`, `/authors`, and `/reviewers`. These are editorial or trust pages with content as their dominant purpose.
+
+The loader rejects every query-string or hash variant before it injects, including client-only hash navigation. It excludes account, dashboard, admin, API, membership, tools, course materials, exam preparation, unsubscribe, payment/callback, support, auth, and `/fees`; the latter is excluded because the Fee Checker is interactive and account-gated. Keep both variables absent or disabled in source control and unconfigured until these owner gates are complete:
 
 1. AdSense approval for the live URL-prefix property.
 2. A Google-certified CMP configured for required visitor regions.
