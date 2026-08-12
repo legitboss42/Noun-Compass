@@ -2,12 +2,12 @@ import "server-only";
 
 import { sendInactiveStageEmail } from "@/lib/contact-mail";
 import {
-  deliverNotificationBatch,
   operationalDatabaseError,
   type NotificationDeliveryResult,
 } from "@/lib/platform/notification-delivery-core";
 import { OperationalDatabaseFailure } from "@/lib/platform/reengagement";
-import { stageNotification, type InactiveStage, type StageContext } from "@/lib/platform/stage-email-core";
+import { deliverStageNotificationBatch } from "@/lib/platform/stage-notification-delivery";
+import { type InactiveStage, type StageContext } from "@/lib/platform/stage-email-core";
 import type { createAdminClient } from "@/lib/supabase/admin";
 
 type AdminClient = NonNullable<ReturnType<typeof createAdminClient>>;
@@ -109,12 +109,13 @@ export async function sendStageBatch(
 ): Promise<StageBatchResult> {
   const dedupeKey = `reengagement:${runDate}`;
   const deliveries = students.map((student) => ({ ...student, userId: student.user_id }));
-  return deliverNotificationBatch({
+  return deliverStageNotificationBatch({
+    environment: process.env,
     candidates: deliveries,
     database: {
       async insertNotification(student, notification) {
         const { error } = await admin.from("notifications").insert({
-          user_id: student.user_id,
+          user_id: student.userId,
           kind: notification.kind,
           title: notification.title,
           body: notification.body,
@@ -127,16 +128,12 @@ export async function sendStageBatch(
         const { data, error } = await admin
           .from("notifications")
           .update({ emailed_at: new Date().toISOString() })
-          .eq("user_id", student.user_id)
+          .eq("user_id", student.userId)
           .eq("dedupe_key", dedupeKey)
           .select("user_id")
           .maybeSingle();
         return { error, persisted: Boolean(data) };
       },
-    },
-    makeNotification: (student) => {
-      const note = stageNotification(student.stage, student.context);
-      return { kind: "reengagement", title: note.title, body: note.body, actionUrl: note.actionUrl };
     },
     sendEmail: (student) => sendInactiveStageEmail({
       to: student.email!,

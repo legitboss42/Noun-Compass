@@ -15,17 +15,17 @@ Variable ownership, storage, sensitivity, and rotation are documented in [the cr
 
 ## Historical launch setup snapshot (2026-07-19, not current verification)
 
-This is retained as a dated record only. It must not be read as proof of the current provider, Vercel, or database state. The current local-proof and manual-gate status is in [monetization operations](./monetization-operations.md).
+This is retained as a dated record only. It must not be read as proof of the current provider, Vercel, or database state. In particular, the Flutterwave bullets below are prior operational observations, not a current assertion that credentials, webhook configuration, checkout, callback, webhook delivery, or production payment/membership rows work. Re-verify every one of those items with owner-authorized controlled evidence before any enablement. The current local-proof and manual-gate status is in [monetization operations](./monetization-operations.md).
 
 - Complete: Supabase organization/project on the Free plan, all three SQL migrations, Auth redirect URLs, email confirmation, automatic RLS defaults, and explicit least-privilege grants.
 - Complete: Supabase custom SMTP using the verified Brevo sender and authenticated `nouncompass.me` domain.
 - Complete: Supabase runtime variables, platform feature flags, and `CRON_SECRET` stored in Vercel Production and Preview environments.
-- Complete: Flutterwave Standard replaced Paystack in application code, with fresh test credentials and a signed test webhook at `/api/webhooks/flutterwave`.
-- Complete: Flutterwave sandbox hosted checkout and server verification passed for successful status, the exact NGN 2,500 amount, currency, local reference, provider-signed customer and plan metadata, and transaction timestamp. Live mode also requires an exact provider customer-email match.
-- Complete: Flutterwave live credentials and a fresh live webhook secret are isolated in Vercel Production; sandbox credentials remain isolated in Preview. The live webhook URL is configured with retries and V3 webhooks enabled.
-- Complete: live API initialization returned a Flutterwave-hosted checkout, and controlled inspection confirmed NGN 2,500 and the expected payment options. The post-configuration Production deployment is Ready/Current.
-- Pending by design: no live settlement was submitted because a real transaction would move money and may incur Flutterwave fees. This does not weaken the completed sandbox transaction and server-verification acceptance test.
-- Released: Production live checkout is enabled by `FLUTTERWAVE_ENVIRONMENT=live`; `CHECKOUT_EMERGENCY_DISABLED=true` is the fail-closed incident switch. Preview remains gated by `FEATURE_CHECKOUT`.
+- Historical record: Flutterwave Standard replaced Paystack in application code, and a prior setup reported test credentials plus a signed test webhook at `/api/webhooks/flutterwave`. Re-verify current configuration before use.
+- Historical record: a prior sandbox checkout and server verification reportedly checked successful status, NGN 2,500, currency, local reference, provider metadata, and timestamp. This checkpoint does not verify that transaction or any current callback/webhook delivery.
+- Historical record: prior notes reported isolated live/Preview credentials and a configured webhook URL. Treat credentials, secrets, retries, and V3 webhook settings as unverified until reviewed in the provider and Vercel by the owner.
+- Historical record: prior notes reported live API initialization and a Ready Production deployment. They do not prove current checkout availability, a provider transaction, callback, webhook processing, or a production payment/membership row.
+- Historical record: no live settlement was recorded. A controlled provider transaction remains a manual, owner-authorized gate because it can move money or incur fees.
+- Current code gate: `FLUTTERWAVE_ENVIRONMENT=live` is only a configuration signal and `CHECKOUT_EMERGENCY_DISABLED=true` is the fail-closed incident switch; neither proves a deployed environment is configured or enabled.
 - Preserved: existing Paystack businesses remain intact; deleting provider history is unnecessary for the code migration.
 - Complete: GitHub encrypted-backup secrets, encrypted artifact plus checksum, and an isolated PostgreSQL restore test using the latest successful backup.
 - Complete: authenticated E2E covered sign-in, semester profile persistence, the pre-release checkout-disabled state, and student denial from the admin surface. Temporary accounts were removed after testing.

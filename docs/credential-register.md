@@ -80,16 +80,15 @@ For every environment, verify the hosted checkout with a controlled provider tra
 
 ## Historical launch snapshot (2026-07-19, not current verification)
 
-The following is retained as an earlier operational record. It is not evidence of current Vercel, Flutterwave, Brevo, or database state; use [monetization operations](./monetization-operations.md) for the current local-proof and manual-gate status.
+The following is retained as an earlier operational record. It is not evidence of current Vercel, Flutterwave, Brevo, or database state. The provider-related bullets are historical observations only and must be re-verified with an owner-authorized controlled transaction, callback/webhook evidence, and production-row inspection before being treated as operational. Use [monetization operations](./monetization-operations.md) for the current local-proof and manual-gate status.
 
 - Supabase project, migrations, Auth URLs, RLS defaults, and Brevo SMTP are configured on free tiers.
 - The verified Brevo sender and authenticated `nouncompass.me` domain are active.
 - Supabase application variables, feature flags, and a generated cron secret are stored in Vercel for Production and Preview.
-- Flutterwave Standard is configured with fresh sandbox credentials in Vercel Preview and fresh live credentials in Vercel Production. Test and live webhook secrets are isolated in their matching environments.
-- Flutterwave sandbox acceptance passed hosted checkout and direct server verification for a successful NGN 2,500 payment, local reference, currency, provider-signed customer and plan metadata, and transaction timestamp. Live mode additionally requires the provider customer email to match.
-- The live Flutterwave API returned a hosted checkout successfully, and the controlled checkout inspection confirmed NGN 2,500 plus card, USSD, bank, bank-transfer, and eNaira options. The live webhook points to `https://nouncompass.me/api/webhooks/flutterwave`, with retries and V3 webhooks enabled.
-- Vercel Production was redeployed after the live-variable update and is Ready/Current. No live charge or settlement test was made, because that would move real money and could incur provider fees.
-- Live checkout was released by owner direction after sandbox acceptance and live initialization passed. No real charge was submitted during deployment validation.
+- Historical provider note: Flutterwave credentials and matching webhook secrets were previously reported in Preview/Production. Their current presence and correctness are unverified.
+- Historical provider note: a sandbox checkout was previously reported as accepting the exact NGN 2,500 contract and metadata. That transaction is not current proof of provider, callback, webhook, or database behavior.
+- Historical provider note: a live hosted checkout and webhook configuration were previously reported. Re-verify provider settings and controlled callback/webhook processing before any production use.
+- Historical deployment note: a Production redeploy and live checkout release were previously reported. Neither is current proof; no live charge or settlement was recorded, and a controlled owner-authorized transaction remains required.
 - GitHub Actions holds the database URL and backup passphrase as encrypted repository secrets. The scheduled backup, encrypted artifact checksum, decryption, and disposable restore test have passed.
 - The automated restore test does not expose the passphrase. The owner still needs a separate password-manager recovery copy before relying on manual, off-platform decryption.
 - Authenticated sign-in, profile persistence, cross-user RLS isolation, public draft protection, payment-write denial, and admin-route denial passed with temporary users that were deleted after testing.
