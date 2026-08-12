@@ -28,7 +28,10 @@ export type NotificationPayload = {
   actionUrl: string;
 };
 
-type DatabaseError = { code?: unknown } | null | undefined;
+// Supabase and provider adapters can attach diagnostic fields such as `message`
+// alongside `code`. Treat their error values as unknown at this boundary and
+// deliberately extract only the safe, structured code below.
+type DatabaseError = unknown;
 
 export type NotificationDeliveryDatabase<T extends DeliveryCandidate> = {
   insertNotification(candidate: T, notification: NotificationPayload): Promise<{ error: DatabaseError }>;
@@ -36,7 +39,8 @@ export type NotificationDeliveryDatabase<T extends DeliveryCandidate> = {
 };
 
 function safeCode(error: DatabaseError) {
-  const code = typeof error === "object" && error && typeof error.code === "string" ? error.code : "database_error";
+  const record = typeof error === "object" && error !== null ? error as Record<string, unknown> : null;
+  const code = typeof record?.code === "string" ? record.code : "database_error";
   return /^[A-Za-z0-9_]{1,48}$/.test(code) ? code : "database_error";
 }
 
