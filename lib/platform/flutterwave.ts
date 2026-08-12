@@ -3,14 +3,23 @@ import { semesterPass } from "./product";
 
 const FLUTTERWAVE_API = "https://api.flutterwave.com/v3";
 
+export function isFlutterwaveSecretKeyValid(environment: string | undefined, key: string | undefined) {
+  if (!key) return false;
+  const mode = environment ?? "test";
+  if (!(["test", "live"] as const).includes(mode as "test" | "live")) return false;
+  const isTestKey = key.startsWith("FLWSECK_TEST-");
+  const isLiveKey = /^FLWSECK-(?!TEST-)[A-Za-z0-9_-]+$/.test(key);
+  return mode === "test" ? isTestKey : isLiveKey;
+}
+
 function secretKey() {
   const key = process.env.FLUTTERWAVE_SECRET_KEY;
   if (!key) throw new Error("Flutterwave is not configured.");
 
   const environment = process.env.FLUTTERWAVE_ENVIRONMENT ?? "test";
-  const isTestKey = key.startsWith("FLWSECK_TEST-");
-  if (environment === "test" && !isTestKey) throw new Error("Flutterwave test mode requires a test secret key.");
-  if (environment === "live" && isTestKey) throw new Error("Flutterwave live mode requires a live secret key.");
+  if (!isFlutterwaveSecretKeyValid(environment, key)) {
+    throw new Error("Flutterwave secret key does not match a supported environment.");
+  }
   return key;
 }
 
@@ -35,28 +44,34 @@ export function createPaymentReference() {
   return `nc_${Date.now().toString(36)}_${randomBytes(9).toString("hex")}`;
 }
 
-export async function initializeFlutterwaveTransaction(input: {
+type FlutterwaveInitializationInput = {
   email: string;
   reference: string;
   callbackUrl: string;
-}) {
+};
+
+export function createFlutterwaveInitializationPayload(input: FlutterwaveInitializationInput) {
+  return {
+    tx_ref: input.reference,
+    amount: semesterPass.price.ngn,
+    currency: semesterPass.price.currency,
+    redirect_url: input.callbackUrl,
+    customer: { email: input.email },
+    meta: {
+      nouncompass_customer_email: input.email,
+      nouncompass_plan_key: semesterPass.key,
+    },
+    customizations: {
+      title: semesterPass.name,
+      description: `${semesterPass.durationDays} days of premium exam-preparation access`,
+    },
+  };
+}
+
+export async function initializeFlutterwaveTransaction(input: FlutterwaveInitializationInput) {
   return flutterwaveRequest<{ status: "success"; data: { link: string } }>("/payments", {
     method: "POST",
-    body: JSON.stringify({
-      tx_ref: input.reference,
-      amount: semesterPass.price.ngn,
-      currency: semesterPass.price.currency,
-      redirect_url: input.callbackUrl,
-      customer: { email: input.email },
-      meta: {
-        nouncompass_customer_email: input.email,
-        nouncompass_plan_key: semesterPass.key,
-      },
-      customizations: {
-        title: semesterPass.name,
-        description: `${semesterPass.durationDays} days of premium exam-preparation access`,
-      },
-    }),
+    body: JSON.stringify(createFlutterwaveInitializationPayload(input)),
   });
 }
 

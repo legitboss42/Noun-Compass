@@ -1,9 +1,38 @@
 import assert from "node:assert/strict";
 import { createHmac } from "node:crypto";
 import test from "node:test";
-import { assertFlutterwaveCustomerIdentity, assertSemesterPassTransaction, verifyFlutterwaveSignature } from "../../lib/platform/flutterwave";
+import { assertFlutterwaveCustomerIdentity, assertSemesterPassTransaction, createFlutterwaveInitializationPayload, isFlutterwaveSecretKeyValid, verifyFlutterwaveSignature } from "../../lib/platform/flutterwave";
 
 const validTransaction = { status: "successful", amount: 2500, currency: "NGN", created_at: "2026-07-19T12:00:00.000Z" };
+
+test("Flutterwave initialization always uses the exact NGN Semester Pass amount and binds the local customer and plan", () => {
+  assert.deepEqual(createFlutterwaveInitializationPayload({
+    email: "student@example.com",
+    reference: "nc_test_reference",
+    callbackUrl: "https://nouncompass.me/account/payment/callback",
+  }), {
+    tx_ref: "nc_test_reference",
+    amount: 2500,
+    currency: "NGN",
+    redirect_url: "https://nouncompass.me/account/payment/callback",
+    customer: { email: "student@example.com" },
+    meta: { nouncompass_customer_email: "student@example.com", nouncompass_plan_key: "semester-pass" },
+    customizations: {
+      title: "NOUN Compass Semester Pass",
+      description: "180 days of premium exam-preparation access",
+    },
+  });
+});
+
+test("Flutterwave credentials default to test and fail closed for invalid or mismatched live keys", () => {
+  assert.equal(isFlutterwaveSecretKeyValid(undefined, "FLWSECK_TEST-example"), true);
+  assert.equal(isFlutterwaveSecretKeyValid("test", "FLWSECK_TEST-example"), true);
+  assert.equal(isFlutterwaveSecretKeyValid("test", "FLWSECK-live-example"), false);
+  assert.equal(isFlutterwaveSecretKeyValid("live", "FLWSECK_TEST-example"), false);
+  assert.equal(isFlutterwaveSecretKeyValid("live", "FLWSECK-live-example"), true);
+  assert.equal(isFlutterwaveSecretKeyValid("live", "not-a-flutterwave-key"), false);
+  assert.equal(isFlutterwaveSecretKeyValid("preview", "FLWSECK_TEST-example"), false);
+});
 
 test("accepts an exact successful semester-pass transaction", () => {
   assert.equal(assertSemesterPassTransaction(validTransaction), validTransaction.created_at);

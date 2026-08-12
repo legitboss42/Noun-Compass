@@ -11,8 +11,11 @@ Variable ownership, storage, sensitivity, and rotation are documented in [the cr
 5. Configure isolated Flutterwave test/live credentials and signed webhooks. Production uses `FLUTTERWAVE_ENVIRONMENT=live`; use `CHECKOUT_EMERGENCY_DISABLED=true` to stop checkout during an incident.
 6. Add a random `CRON_SECRET` of at least 16 characters. Vercel invokes `/api/cron/daily` once daily.
 7. Add `SUPABASE_DB_URL` and `BACKUP_PASSPHRASE` to GitHub Actions secrets and manually run the encrypted backup workflow once before relying on its schedule.
+8. Before enabling Auto ads, obtain AdSense approval, configure a Google-certified CMP, set URL-prefix page exclusions for private/transactional paths in the AdSense UI, and then set both public AdSense variables in Production.
 
-## Launch setup status (2026-07-19)
+## Historical launch setup snapshot (2026-07-19, not current verification)
+
+This is retained as a dated record only. It must not be read as proof of the current provider, Vercel, or database state. The current local-proof and manual-gate status is in [monetization operations](./monetization-operations.md).
 
 - Complete: Supabase organization/project on the Free plan, all three SQL migrations, Auth redirect URLs, email confirmation, automatic RLS defaults, and explicit least-privilege grants.
 - Complete: Supabase custom SMTP using the verified Brevo sender and authenticated `nouncompass.me` domain.
@@ -53,6 +56,7 @@ Never point `RESTORE_DATABASE_URL` at production. Never commit database URLs, pa
 - Payment activation requires a locally created reference plus Flutterwave verification of provider transaction ID, status, amount, currency, email, and transaction timestamp.
 - A successful verified callback shows the thank-you page and links to an authenticated receipt. The receipt is generated only from the account-owned successful payment and membership records and can be printed or saved as PDF by the browser.
 - Protected routes and API responses must remain `noindex` and outside the sitemap.
+- Auto ads require explicit approval and are route-allowlisted in code to informational/trust content. In the AdSense UI, add URL-prefix exclusions for `/account`, `/dashboard`, `/admin`, `/api`, `/membership`, `/tools`, `/course-materials`, `/exam-prep`, `/unsubscribe`, auth, payment, callback, and support paths; configure a Google-certified CMP before enabling the loader.
 
 ## Exam-preparation content workflow
 

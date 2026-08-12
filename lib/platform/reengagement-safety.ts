@@ -2,6 +2,11 @@ export function hasDedicatedReengagementUnsubscribeSecret(environment: Record<st
   return Boolean(environment.UNSUBSCRIBE_SECRET?.trim());
 }
 
+/** The lifecycle cron is opt-in only; do not normalize near-miss values. */
+export function isReengagementCronEnabled(value: string | undefined) {
+  return value === "true";
+}
+
 /** Lifecycle sends must never sign an opt-out link with an unrelated service key. */
 export function requireDedicatedReengagementUnsubscribeSecret(environment: Record<string, string | undefined>) {
   const secret = environment.UNSUBSCRIBE_SECRET?.trim();

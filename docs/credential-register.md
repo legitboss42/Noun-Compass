@@ -26,6 +26,8 @@ This register documents variable names, purpose, storage, and rotation without r
 | `FEATURE_CHECKOUT` | Public configuration | Enables paid checkout in test/local environments. Live mode is released by `FLUTTERWAVE_ENVIRONMENT=live`. | `.env.local`, Vercel | Keep Preview `false` unless running a controlled sandbox acceptance test. |
 | `CHECKOUT_EMERGENCY_DISABLED` | Public configuration | Fail-closed override for every checkout environment. | `.env.local`, Vercel | Set `true` immediately during a payment incident; redeploy before investigating. |
 | `FEATURE_ADMIN` | Public configuration | Enables protected administration surfaces. | `.env.local`, Vercel | Enable only with an authorized admin membership and RLS tests. |
+| `NEXT_PUBLIC_ADSENSE_ENABLED` | Browser-safe control | Permits the route-aware Auto ads loader only when its value is exactly `true`. | Vercel Production after approval; never commit a value | Leave absent/disabled until AdSense approval, CMP certification, and URL-prefix exclusions are complete. |
+| `NEXT_PUBLIC_ADSENSE_PUBLISHER_ID` | Browser-safe identifier | AdSense publisher identifier used in the Google loader and `ads.txt`. | Vercel Production after approval | Must exactly match `ca-pub-<digits>` and the publisher in `public/ads.txt`; this is public, but not a substitute for approval. |
 
 ## Brevo and support email
 
@@ -56,6 +58,8 @@ The NounCompass Flutterwave integration uses Flutterwave Standard. Its callback 
 
 `FLUTTERWAVE_ENVIRONMENT=live` is the explicit Production release signal and requires a matching live key plus webhook secret. `CHECKOUT_EMERGENCY_DISABLED=true` overrides both live mode and `FEATURE_CHECKOUT`. The previous Paystack businesses remain intact because deleting them is unnecessary and could destroy operational history.
 
+For every environment, verify the hosted checkout with a controlled provider transaction only after an owner supplies credentials and authorizes it. Local tests prove request and validation contracts; they do not prove a provider transaction, webhook delivery, or production payment row.
+
 ## Scheduled operations and encrypted backups
 
 | Variable or secret | Sensitivity | Purpose | Approved stores | Rotation and validation |
@@ -74,7 +78,9 @@ The NounCompass Flutterwave integration uses Flutterwave Standard. Its callback 
 | `GOOGLE_PRIVATE_KEY` | Critical secret | Google service-account signing key. | `.env.local`, Vercel if runtime use is required | Preserve newline formatting; revoke and replace the service-account key if exposed. |
 | `GSC_SITE_URL` | Public configuration | Exact Search Console property identifier. | `.env.local`, Vercel if runtime use is required | Keep the trailing-slash form required by the configured URL-prefix property. |
 
-## Current launch status (2026-07-19)
+## Historical launch snapshot (2026-07-19, not current verification)
+
+The following is retained as an earlier operational record. It is not evidence of current Vercel, Flutterwave, Brevo, or database state; use [monetization operations](./monetization-operations.md) for the current local-proof and manual-gate status.
 
 - Supabase project, migrations, Auth URLs, RLS defaults, and Brevo SMTP are configured on free tiers.
 - The verified Brevo sender and authenticated `nouncompass.me` domain are active.

@@ -9,6 +9,7 @@ import {
   sendReengagementBatch,
 } from "@/lib/platform/reengagement";
 import { shouldSendStudyReminder } from "@/lib/platform/study-planner-premium";
+import { isReengagementCronEnabled } from "@/lib/platform/reengagement-safety";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 export async function GET(request: Request) {
@@ -124,7 +125,7 @@ async function runReengagement(
   admin: NonNullable<ReturnType<typeof createAdminClient>>,
   runDate: string,
 ) {
-  if (process.env.REENGAGEMENT_ENABLED !== "true") {
+  if (!isReengagementCronEnabled(process.env.REENGAGEMENT_ENABLED)) {
     return { reengagementEnabled: false as const };
   }
   if (!hasDedicatedReengagementUnsubscribeSecret(process.env)) {

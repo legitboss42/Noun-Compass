@@ -66,11 +66,11 @@ Selection is `public.select_reengagement_candidates(grace, cooldown, limit)`,
    ```sql
    select count(*) from public.select_reengagement_candidates(3, 14, 500);
    ```
-3. Preview and test-send to yourself:
+3. Render a local preview first (this sends nothing):
    ```bash
-   npx tsx scripts/marketing/reengagement-preview.mjs --send you@example.com
+   npx tsx scripts/marketing/reengagement-preview.mjs
    ```
-4. Click the unsubscribe link in that test and confirm it lands on
+4. After owner review, test-send one controlled address with `--send you@example.com`, then click the unsubscribe link and confirm it lands on
    `/unsubscribe` and completes.
 5. Only then set `REENGAGEMENT_ENABLED=true` in Vercel.
 
@@ -100,6 +100,7 @@ Reuses `BREVO_SMTP_*`, `CONTACT_FORM_FROM` / `CONTACT_FORM_AUTOREPLY_FROM`,
 
 ## Known gaps
 
+- Local preview and automated HTML/text/header tests do not prove an owner send, Brevo inbox/logs, notification row, or cron execution. Those remain manual checks before `REENGAGEMENT_ENABLED=true` is set in Vercel.
 - No account email-preferences page. The unsubscribe link is the only opt-out
   surface, which is why it has to keep working.
 - The contact auto-reply and study reminder do not use `renderBrandedEmail` yet.
