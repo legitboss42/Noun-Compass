@@ -263,3 +263,78 @@ test("articles with pending reviews describe dated checks only as previous edito
 
   assert.deepEqual(violations, []);
 });
+
+test("pending articles do not imply a current review through semantic equivalents", () => {
+  const dispositions = new Map(getEditorialDispositionManifest().map((item) => [item.slug, item]));
+  const date = String.raw`(?:\*{0,2})?(?:\d{1,2}\s+[A-Z][a-z]+\s+20\d{2}|20\d{2}-\d{2}-\d{2})(?:\*{0,2})?`;
+  const currentReviewEquivalents = [
+    new RegExp(String.raw`\breview completed on\s+${date}\b`, "i"),
+    new RegExp(String.raw`\blive[^.\n]{0,60}\breview(?:ed|\s+completed)?(?:\s+on)?\s+${date}\b`, "i"),
+    /\bverification pass\b/i,
+    new RegExp(String.raw`\bchecks? completed on\s+${date}\b`, "i"),
+    new RegExp(String.raw`\bconfirmed on\s+${date}\b`, "i"),
+    /\bvisible steps confirmed\b/i,
+    /\bcurrent(?:ly)? verified\b/i,
+    /\bcurrently confirmed\b/i,
+    new RegExp(String.raw`\bas of (?:the\s+)?${date}\b`, "i"),
+    new RegExp(String.raw`\b(?:verified|confirmed|checked|reviewed)\b[^.\n]{0,60}\b${date}\b`, "i"),
+    new RegExp(String.raw`\b${date}\b[^.\n]{0,60}\b(?:verified|confirmed|checked|reviewed)\b`, "i"),
+    /\breviewed (?:live )?session\b/i,
+  ];
+  const nonEditorialAllowlist = [
+    {
+      pattern: /\b(?:future|another) verification pass\b/i,
+      reason: "Prospective recheck instruction, not a claim that review is current or complete.",
+    },
+    {
+      pattern: /\bfinal [^.]+ need to be confirmed on official NOUN pages\b/i,
+      reason: "Reader instruction to confirm account-specific decisions, not an editorial freshness claim.",
+    },
+    {
+      pattern: /\bverify whether you are looking at a live task or reviewing an old one\b/i,
+      reason: "Student task-state instruction; review refers to viewing an old activity.",
+    },
+    {
+      pattern: /\b(?:safer|safest) verification route\b/i,
+      reason: "Navigation guidance naming a route, not a completed editorial verification.",
+    },
+  ];
+  const violations: string[] = [];
+
+  for (const { file, data, content } of readArticles()) {
+    const disposition = dispositions.get(data.slug);
+    assert.ok(disposition, `${file}: missing disposition`);
+    if (disposition.reviewVerification !== "pending") continue;
+
+    const publicFrontmatter = [
+      ["description", data.description],
+      ["seoDescription", data.seoDescription],
+      ["sourceReviewSummary", data.sourceReviewSummary],
+      ...((Array.isArray(data.reviewHighlights) ? data.reviewHighlights : []).map((value, index) => [`reviewHighlights[${index}]`, value])),
+    ].filter((entry): entry is [string, string] => typeof entry[1] === "string");
+    const publicLines: Array<[string, string]> = [
+      ...content.split(/\r?\n/).map((line, index): [string, string] => [`body:${index + 1}`, line]),
+      ...publicFrontmatter,
+    ];
+
+    for (const [location, line] of publicLines) {
+      if (!currentReviewEquivalents.some((pattern) => pattern.test(line))) continue;
+      if (/\b(?:earlier editorial pass|earlier editorial record|previous editorial record|repository records an earlier editorial pass)\b/i.test(line)) continue;
+      if (nonEditorialAllowlist.some(({ pattern }) => pattern.test(line))) continue;
+      violations.push(`${file}:${location}: ${line.trim()}`);
+    }
+  }
+
+  assert.ok(nonEditorialAllowlist.every(({ reason }) => reason.length > 20), "Every allowlist entry needs a justification");
+  assert.deepEqual(violations, []);
+
+  for (const { file, data, content } of readArticles()) {
+    if (dispositions.get(data.slug)?.reviewVerification !== "pending") continue;
+    if (!/\bearlier editorial (?:pass|record)\b/i.test(content)) continue;
+    assert.equal(
+      content.match(/A current source recheck is pending\./g)?.length,
+      1,
+      `${file}: historical editorial evidence requires exactly one pending-recheck notice`,
+    );
+  }
+});

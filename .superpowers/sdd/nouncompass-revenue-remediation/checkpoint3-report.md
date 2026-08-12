@@ -178,3 +178,34 @@ Fresh fix-round verification:
 - `npx tsc --noEmit` — **exit 0, no diagnostics**.
 - Full platform suite was intentionally not rerun in this bounded fix round;
   the earlier 149-test result remains historical evidence, not a fresh claim.
+
+## Fix Round 2 — Semantic Freshness Claims
+
+A second RED/GREEN scan extended the pending-review contract beyond the first
+round's literal phrases. It now checks article bodies and reader-visible
+frontmatter (`description`, `seoDescription`, `sourceReviewSummary`, and review
+highlights) for semantic equivalents including live reviews, review/check
+completion dates, verification passes, dated confirmation, `current verified`,
+`as of` verification phrasing, reviewed sessions, and date-adjacent
+verified/confirmed/checked/reviewed language.
+
+Residual claims were rewritten as observations or classifications from an
+earlier editorial pass. This included three newly affected TMA articles,
+historical results-workflow observations, NELFUND announcement references, the
+study-centre directory, and seven study-centre descriptions used in metadata and
+article decks. Useful historical evidence remains, while current truth is not
+implied. Each pending article with historical editorial evidence has exactly one
+`A current source recheck is pending.` notice.
+
+The scan has four narrowly documented non-editorial exceptions:
+
+- prospective `future`/`another verification pass` instructions;
+- instructions to confirm account-specific decisions on official NOUN pages;
+- student task-state language about reviewing an old activity; and
+- navigation language that names a safer verification route.
+
+Fresh fix-round verification:
+
+- `npx tsx --test tests/platform/editorial-content.test.ts` — **9 passed, 0 failed**.
+- `npx tsc --noEmit` — **exit 0, no diagnostics**.
+- Full platform suite was intentionally not rerun in this bounded fix round.
