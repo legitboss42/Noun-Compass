@@ -43,7 +43,7 @@ export default async function AdminReengagementPage({
   const knobs = { ...base, quietDays };
 
   let counts: Record<InactiveStage, number> | null = null;
-  let listsByStage: Partial<Record<InactiveStage, InactiveStudent[]>> = {};
+  const listsByStage: Partial<Record<InactiveStage, InactiveStudent[]>> = {};
   let previewError: string | null = null;
 
   if (!admin) {

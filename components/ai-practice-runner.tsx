@@ -152,7 +152,7 @@ export function AiPracticeRunner({
       setStatus("Generation paused after the safe batch limit. Resume to continue.");
       setBusy(false);
     }
-  }, []);
+  }, [premium]);
 
   useEffect(() => {
     if (!resumeSessionId) return;

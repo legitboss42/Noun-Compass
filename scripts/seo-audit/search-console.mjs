@@ -2,7 +2,7 @@ import { google } from "googleapis";
 import { env } from "./config.mjs";
 import { decodePrivateKey } from "./utils.mjs";
 
-export async function runSearchConsoleAudit(targetUrl) {
+export async function runSearchConsoleAudit() {
   if (!env.googleClientEmail || !env.googlePrivateKey || !env.gscSiteUrl) {
     return {
       ok: false,

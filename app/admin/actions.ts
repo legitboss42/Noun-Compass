@@ -1,14 +1,9 @@
 "use server";
 
-import { createHash, randomUUID } from "node:crypto";
+import { createHash } from "node:crypto";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requirePermission } from "@/lib/platform/admin-auth";
-import {
-  requireActionConfirmation,
-  requireAdminReason,
-} from "@/lib/platform/admin-workflows";
-import { writeAuditLog } from "@/lib/platform/audit";
 import { isOfficialNounSourceUrl, parseTimetableCsv } from "@/lib/platform/timetable-import";
 import { createAdminClient } from "@/lib/supabase/admin";
 
