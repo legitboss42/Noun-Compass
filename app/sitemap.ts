@@ -1,8 +1,8 @@
 import type { MetadataRoute } from "next";
 import { navItems, site } from "@/data/site";
-import { getAllArticles } from "@/lib/articles";
+import { getIndexableArticles } from "@/lib/editorial-dispositions";
 export default function sitemap(): MetadataRoute.Sitemap {
-  const articles = getAllArticles();
+  const articles = getIndexableArticles();
   const staticPaths = [
     "",
     ...navItems.map(({ href }) => href),
@@ -32,16 +32,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/tools/cgpa-calculator",
     "/tools/study-planner",
   ]);
-  const lastModified = new Date();
   const staticEntries = [...new Set(staticPaths)].map((path) => ({
     url: `${site.url}${path}`,
-    lastModified,
     changeFrequency: "weekly" as const,
     priority: path === "" ? 1 : highPriorityPaths.has(path) ? 0.9 : 0.7,
   }));
   const articleEntries = articles.map((article) => ({
     url: `${site.url}/articles/${article.slug}`,
-    lastModified: new Date(article.updatedAt),
     changeFrequency: "monthly" as const,
     priority: article.featured ? 0.9 : 0.8,
   }));

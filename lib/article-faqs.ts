@@ -86,7 +86,7 @@ const articleFaqs: Record<string, ArticleFaq[]> = {
   "gst302-summary": [
     { question: "Is this GST302 guide a replacement for official course material?", answer: "No. It is an original study-planning guide. Use the current official material as your primary learning source." },
     { question: "How should I revise GST302?", answer: "Study the official objectives, explain concepts in your own words, connect them to practical examples, and test recall regularly." },
-    { question: "Does this page provide past questions?", answer: "No. NOUN Compass focuses on original learning guidance rather than past-question repositories." },
+    { question: "Are these prompts copied from past questions?", answer: "No. NOUN Compass focuses on original learning guidance rather than past-question repositories." },
   ],
   "noun-support-ticket-guide": [
     { question: "What makes a useful support ticket?", answer: "A useful ticket states the task, exact problem, date, reference, evidence, and the specific help requested without exposing passwords." },

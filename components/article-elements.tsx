@@ -57,7 +57,7 @@ export function FAQBlock({ faqs }: { faqs: ArticleFaq[] }) {
 export function AuthorBox({ author, reviewer }: { author: string; reviewer: string }) {
   const authorProfile = getEditorialProfile(author);
   const reviewerProfile = getEditorialProfile(reviewer);
-  return <aside className="author-box"><div className="author-avatar">NC</div><div><span className="eyebrow">Who checked this guide</span><h2><Link href={authorProfile.href}>{author}</Link></h2><p>{author} prepared the guide, and <Link href={reviewerProfile.href}>{reviewer}</Link> checked the sources, the steps, and any advice that could affect a student&apos;s record or payment.</p><Link href="/editorial-policy">How we write and review guides</Link></div></aside>;
+  return <aside className="author-box"><div className="author-avatar">NC</div><div><span className="eyebrow">Editorial ownership</span><h2><Link href={authorProfile.href}>{author}</Link></h2><p>{author} prepared the guide. <Link href={reviewerProfile.href}>{reviewer}</Link> is the assigned review desk; use the source-review notice above to see whether a current verification is complete.</p><Link href="/editorial-policy">How we write and review guides</Link></div></aside>;
 }
 
 export function DisclaimerBox() {
@@ -73,10 +73,10 @@ export function SourceReviewBox({
   summary?: string;
   reviewedSources?: { label: string; url: string }[];
   reviewHighlights?: string[];
-  reviewedAt: string;
+  reviewedAt?: string;
 }) {
   if (!summary && !reviewedSources?.length && !reviewHighlights?.length) return null;
-  return <aside className="source-review-box"><strong>What we checked</strong>{summary ? <p>{summary}</p> : null}<p><strong>Sources checked:</strong> {formatDate(reviewedAt)}.</p>{reviewHighlights?.length ? <ul>{reviewHighlights.map((item) => <li key={item}>{item}</li>)}</ul> : null}{reviewedSources?.length ? <div className="source-review-links">{reviewedSources.map((item) => <a key={item.url} href={item.url} target="_blank" rel="noopener noreferrer">{item.label}</a>)}</div> : null}</aside>;
+  return <aside className="source-review-box"><strong>Recorded source-review evidence</strong>{summary ? <p>{summary}</p> : null}{reviewedAt ? <p><strong>Sources checked:</strong> {formatDate(reviewedAt)}.</p> : <p><strong>Current recheck pending.</strong> The links below were recorded in the article frontmatter and were not reverified in the current editorial checkpoint.</p>}{reviewHighlights?.length ? <ul>{reviewHighlights.map((item) => <li key={item}>{item}</li>)}</ul> : null}{reviewedSources?.length ? <div className="source-review-links">{reviewedSources.map((item) => <a key={item.url} href={item.url} target="_blank" rel="noopener noreferrer">{item.label}</a>)}</div> : null}</aside>;
 }
 
 export function RelatedReads({ articles }: { articles: ArticleMeta[] }) {

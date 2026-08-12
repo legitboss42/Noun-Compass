@@ -42,7 +42,17 @@ operational procedures, deployment checklist, and rollback guidance.
 
 ## Content
 
-Add launch guides to `content/articles` using the existing frontmatter format. Article routes, category archives, related reads, metadata, and sitemap entries are generated from those files.
+The repository currently contains exactly 59 article URLs under
+`content/articles`. Their search intent, cluster, editorial decision, source
+evidence, indexability, and readiness state are tracked in
+`lib/editorial-dispositions.ts`. Article routes and sitemap entries follow that
+manifest.
+
+Do not treat a frontmatter `updatedAt` value as proof of a current source
+review. Public last-checked and structured-data dates are emitted only after a
+verified review date is recorded in the manifest. See `docs/README.md` before
+using an older audit or completion report as evidence of current production
+state.
 
 ## Important
 

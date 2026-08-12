@@ -22,10 +22,11 @@ import { BlogCover } from "@/components/BlogCover";
 import { getAllArticles, getArticle, formatDate } from "@/lib/articles";
 import { getArticleFaqs } from "@/lib/article-faqs";
 import { getEditorialProfile } from "@/lib/editorial";
+import { getEditorialDisposition, getIndexableArticles } from "@/lib/editorial-dispositions";
 import { getCategory, site } from "@/data/site";
 
 export function generateStaticParams() {
-  return getAllArticles().map(({ slug }) => ({ slug }));
+  return getIndexableArticles().map(({ slug }) => ({ slug }));
 }
 
 function extractMdxFaqs(content: string) {
@@ -68,6 +69,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const image = `${url}/opengraph-image`;
   const seoTitle = article.seoTitle ?? article.title;
   const seoDescription = article.seoDescription ?? article.description;
+  const disposition = getEditorialDisposition(slug);
+  const verifiedDates = disposition?.dateMetadata.status === "verified";
 
   return {
     title: seoTitle,
@@ -88,8 +91,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       description: seoDescription,
       url,
       type: "article",
-      publishedTime: article.publishedAt,
-      modifiedTime: article.updatedAt,
+      ...(verifiedDates ? { publishedTime: article.publishedAt, modifiedTime: article.updatedAt } : {}),
       authors: [article.author],
       tags: [article.primaryKeyword, ...article.secondaryKeywords],
       images: [{ url: image, width: 1200, height: 630, alt: article.title }],
@@ -128,6 +130,8 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
   const categoryUrl = `${site.url}/${article.category}`;
   const authorProfile = getEditorialProfile(article.author);
   const reviewerProfile = getEditorialProfile(article.reviewer);
+  const disposition = getEditorialDisposition(article.slug);
+  const verifiedDates = disposition?.dateMetadata.status === "verified";
 
   const articleSchema = {
     "@context": "https://schema.org",
@@ -135,8 +139,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
     headline: article.title,
     description: article.description,
     image: `${articleUrl}/opengraph-image`,
-    datePublished: article.publishedAt,
-    dateModified: article.updatedAt,
+    ...(verifiedDates ? { datePublished: article.publishedAt, dateModified: article.updatedAt } : {}),
     inLanguage: "en-NG",
     isAccessibleForFree: true,
     keywords: [article.primaryKeyword, ...article.secondaryKeywords].join(", "),
@@ -247,7 +250,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
               <span>
                 Reviewed by <Link href={reviewerProfile.href}><strong>{article.reviewer}</strong></Link>
               </span>
-              <span>Updated {formatDate(article.updatedAt)}</span>
+              {verifiedDates ? <span>Updated {formatDate(article.updatedAt)}</span> : <span>Current source recheck pending</span>}
               <span>{article.readingTime}</span>
             </div>
           </div>
@@ -274,12 +277,12 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
               </figcaption>
             </figure>
 
-            <LastCheckedBox date={article.updatedAt} />
+            {verifiedDates ? <LastCheckedBox date={article.updatedAt} /> : null}
             <SourceReviewBox
               summary={article.sourceReviewSummary}
               reviewedSources={article.reviewedSources}
               reviewHighlights={article.reviewHighlights}
-              reviewedAt={article.updatedAt}
+              reviewedAt={verifiedDates ? article.updatedAt : undefined}
             />
 
             <div className="summary-box">

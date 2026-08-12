@@ -385,7 +385,7 @@ Generated from captured semester course rows and the official NOUN eCourseware c
 - **LIN203:** Morphology
 - **LIN211:** Introduction to Phonology
 - **LIN212:** Introduction to Morphology
-- **LIN312:** Research Methods in Linguistics � field methods, principles of transcription, translations, tonal an
+- **LIN312:** Research Methods in Linguistics — field methods, principles of transcription, translations, tonal an
 - **LIN314:** Contrastive Linguistics and Error Analysis
 - **LIN331:** Transformational Generative Grammar
 - **LIN413:** Historical/Comparative Linguistics
