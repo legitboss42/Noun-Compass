@@ -209,3 +209,30 @@ Fresh fix-round verification:
 - `npx tsx --test tests/platform/editorial-content.test.ts` — **9 passed, 0 failed**.
 - `npx tsc --noEmit` — **exit 0, no diagnostics**.
 - Full platform suite was intentionally not rerun in this bounded fix round.
+
+## Fix Round 3 — Local Present-State Verification Labels
+
+The pending-review scan now evaluates every claim in its local line context
+rather than treating a single article-level pending notice as permission for
+other present-state verification language. It covers noun `review` constructions,
+present-state `Verified Address` and `Verified Contact` labels, verified centre,
+location, route, workflow, session, status, and entry-point claims, plus review
+sentences that claim evidence was found, confirmed, or supported.
+
+Residual wording in the study-centre, results, and NELFUND articles now preserves
+the useful evidence as an observation or classification from the earlier
+editorial pass. The national study-centre tables use historical-record headers
+and cells, and their table note says explicitly that a current source recheck is
+pending. The NELFUND route is likewise framed as the official portal observed by
+the earlier pass; it is not asserted as currently reverified.
+
+Only two narrow non-editorial meanings are allowlisted in the test, with inline
+justification: NELFUND's account-specific `profile review` status label and the
+quoted eLearn message `Review not permitted`. Neither exception authorizes a
+current editorial-verification claim.
+
+Fresh fix-round verification:
+
+- `npx tsx --test tests/platform/editorial-content.test.ts` — **10 passed, 0 failed**.
+- `npx tsc --noEmit` — **exit 0, no diagnostics**.
+- Full platform suite was intentionally not rerun in this bounded fix round.

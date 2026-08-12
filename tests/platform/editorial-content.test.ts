@@ -338,3 +338,46 @@ test("pending articles do not imply a current review through semantic equivalent
     );
   }
 });
+
+test("pending articles qualify present-state verified labels in their local context", () => {
+  const dispositions = new Map(getEditorialDispositionManifest().map((item) => [item.slug, item]));
+  const presentVerifiedClaims = [
+    /\bverified (?:address|contact|general centre|general center|entry point|location|route|workflow|session|page|portal|source|match|listing|detail|record|sequence)\b/i,
+    /\b(?:address|contact|location|route|workflow|session|centre|center|page|portal|source|match|listing|detail|record|entry point) (?:is |are |was |were )?(?:fully )?verified\b/i,
+    /^#{2,4}\s+(?:the\s+)?verified\s+(?:route|workflow|status|location|centre|center|entry point)\b/i,
+    /\b(?:that|this) page verified\b/i,
+    /\b(?:the|this) verified workflow\b/i,
+    /\b(?:the|this) review (?:found|supports?|confirmed|verified|made)\b/i,
+    /\b(?:confirmed|verified)\b[^.\n]{0,70}\b(?:in|from) (?:this|the) review\b/i,
+    /\b(?:in|from) (?:this|the) review\b[^.\n]{0,70}\b(?:confirmed|verified)\b/i,
+    /\breviewed evidence supports?\b/i,
+  ];
+  const historicalQualifiers = /\b(?:earlier editorial pass|earlier editorial record|previous editorial record|previously (?:classified|recorded|verified)|recorded in the 19 June 2026 editorial pass)\b/i;
+  const exactNonEditorialAllowlist = [
+    {
+      file: "nelfund-application-status-meanings-explained.mdx",
+      text: "After successful JAMB verification, the flow displayed a profile review state.",
+      reason: "Profile review is the status label returned by the identity-verification flow, not an editorial review claim.",
+    },
+    {
+      file: "common-noun-tma-mistakes.mdx",
+      text: "`Review not permitted`",
+      reason: "Review not permitted is a quoted eLearn activity-state label, not an editorial claim.",
+    },
+  ];
+  const violations: string[] = [];
+
+  for (const { file, data, content } of readArticles()) {
+    if (dispositions.get(data.slug)?.reviewVerification !== "pending") continue;
+    const lines = content.split(/\r?\n/);
+    for (const [index, line] of lines.entries()) {
+      if (!presentVerifiedClaims.some((pattern) => pattern.test(line))) continue;
+      if (historicalQualifiers.test(line)) continue;
+      if (exactNonEditorialAllowlist.some((entry) => entry.file === file && line.includes(entry.text))) continue;
+      violations.push(`${file}:${index + 1}: ${line.trim()}`);
+    }
+  }
+
+  assert.ok(exactNonEditorialAllowlist.every(({ reason }) => reason.length > 20));
+  assert.deepEqual(violations, []);
+});
