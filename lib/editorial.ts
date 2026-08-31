@@ -6,12 +6,12 @@ export type EditorialProfile = {
   description: string;
 };
 
-export const EDITORIAL_PROFILE_URL = "https://webgrowth.info/victorious/";
+export const EDITORIAL_PROFILE_URL = "/authors/editorial-team";
 
 const editorialProfiles: Record<string, EditorialProfile> = {
   Victorious: {
     name: "Victorious",
-    href: EDITORIAL_PROFILE_URL,
+    href: "/authors/victor",
     type: "Person",
     title: "Founder / Editor, NOUN Compass",
     description:
@@ -27,7 +27,7 @@ const editorialProfiles: Record<string, EditorialProfile> = {
   },
   "Student Workflow Review Desk": {
     name: "Student Workflow Review Desk",
-    href: EDITORIAL_PROFILE_URL,
+    href: "/reviewers/student-workflow",
     type: "Organization",
     title: "Workflow Review Desk",
     description:
@@ -35,7 +35,7 @@ const editorialProfiles: Record<string, EditorialProfile> = {
   },
   "Student Finance Review Desk": {
     name: "Student Finance Review Desk",
-    href: EDITORIAL_PROFILE_URL,
+    href: "/reviewers/student-finance",
     type: "Organization",
     title: "Finance Review Desk",
     description:

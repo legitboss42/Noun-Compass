@@ -21,6 +21,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/corrections-policy",
     "/copyright-policy",
     "/takedown-policy",
+    "/authors/editorial-team",
+    "/authors/victor",
+    "/reviewers/student-workflow",
+    "/reviewers/student-finance",
   ];
   const highPriorityPaths = new Set([
     "/student-guides",
