@@ -19,6 +19,7 @@ export default function Page() {
       name: site.name,
       url: site.url,
       description: site.description,
+      logo: `${site.url}/images/brand/nouncompass-icon-512.png`,
     },
   };
   return <TrustPage title="About NOUN Compass" eyebrow="Independent student support" intro="We explain NOUN processes in plain language so students can spend less time guessing.">

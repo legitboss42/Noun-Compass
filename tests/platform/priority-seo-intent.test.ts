@@ -97,6 +97,39 @@ test("article rendering applies priority search intent to metadata, visible copy
   assert.match(source, /officialSource\.href/);
 });
 
+test("CTR-only SEO titles stay concise without replacing visible article titles", () => {
+  const source = read("app/articles/[slug]/page.tsx");
+  const expected = [
+    "NOUN Study Centres in Kano | Centre Guide",
+    "NOUN Core Courses vs Electives | Explained",
+    "NOUN Portal Password Reset | Recover Access",
+    "NOUN Study Centres in Benin | Edo Guide",
+    "Check NOUN CGPA & Class of Degree",
+    "NOUN Study Centres in Lagos | Centre Guide",
+  ];
+
+  for (const title of expected) {
+    assert.match(source, new RegExp(title.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
+    assert.ok(`${title} | NOUN Compass`.length <= 60, `${title} should remain within the rendered title target`);
+  }
+
+  assert.match(source, /intentOverride\?\.seoTitle \?\? ARTICLE_SEO_TITLE_OVERRIDES/);
+  assert.match(source, /const displayTitle = intentOverride\?\.title \?\? article\.title/);
+});
+
+test("Organization schema surfaces include the NOUN Compass logo", () => {
+  const layout = read("app/layout.tsx");
+  const about = read("app/about/page.tsx");
+  const contact = read("app/contact/page.tsx");
+  const article = read("app/articles/[slug]/page.tsx");
+
+  assert.match(layout, /publisher:\s*\{[\s\S]*?"@type": "Organization"[\s\S]*?logo: `\$\{site\.url\}\/images\/brand\/nouncompass-icon-512\.png`/);
+  assert.match(about, /about:\s*\{[\s\S]*?"@type": "Organization"[\s\S]*?logo: `\$\{site\.url\}\/images\/brand\/nouncompass-icon-512\.png`/);
+  assert.match(contact, /mainEntity:\s*\{[\s\S]*?"@type": "Organization"[\s\S]*?logo: `\$\{site\.url\}\/images\/brand\/nouncompass-icon-512\.png`/);
+  assert.match(article, /authorProfile\.type === "Organization"[\s\S]*?nouncompass-icon-512\.png/);
+  assert.match(article, /reviewerProfile\.type === "Organization"[\s\S]*?nouncompass-icon-512\.png/);
+});
+
 test("CGPA and result-checker snippets stay concise and query-led", () => {
   const cgpa = read("app/tools/cgpa-calculator/page.tsx");
   const result = read("app/tools/result-checker/page.tsx");

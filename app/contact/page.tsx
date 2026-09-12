@@ -20,6 +20,7 @@ export default function Page() {
       name: site.name,
       url: site.url,
       email: site.contactEmail,
+      logo: `${site.url}/images/brand/nouncompass-icon-512.png`,
       contactPoint: {
         "@type": "ContactPoint",
         contactType: "customer support",

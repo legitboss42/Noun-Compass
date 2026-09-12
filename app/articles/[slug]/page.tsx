@@ -26,6 +26,15 @@ import { getEditorialDisposition, getIndexableArticles } from "@/lib/editorial-d
 import { getArticleSearchIntentOverride } from "@/lib/search-intent-overrides";
 import { getCategory, site } from "@/data/site";
 
+const ARTICLE_SEO_TITLE_OVERRIDES = {
+  "noun-study-centres-in-kano": "NOUN Study Centres in Kano | Centre Guide",
+  "noun-core-courses-vs-electives": "NOUN Core Courses vs Electives | Explained",
+  "noun-portal-password-reset": "NOUN Portal Password Reset | Recover Access",
+  "noun-study-centres-in-benin": "NOUN Study Centres in Benin | Edo Guide",
+  "how-to-read-noun-cgpa-class-of-degree-and-outstanding-credit": "Check NOUN CGPA & Class of Degree",
+  "noun-study-centres-in-lagos": "NOUN Study Centres in Lagos | Centre Guide",
+} satisfies Record<string, string>;
+
 export function generateStaticParams() {
   return getIndexableArticles().map(({ slug }) => ({ slug }));
 }
@@ -69,7 +78,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const intentOverride = getArticleSearchIntentOverride(slug);
   const url = `${site.url}/articles/${slug}`;
   const image = `${url}/opengraph-image`;
-  const seoTitle = intentOverride?.seoTitle ?? article.seoTitle ?? article.title;
+  const seoTitle = intentOverride?.seoTitle ?? ARTICLE_SEO_TITLE_OVERRIDES[slug as keyof typeof ARTICLE_SEO_TITLE_OVERRIDES] ?? article.seoTitle ?? article.title;
   const seoDescription = intentOverride?.seoDescription ?? article.seoDescription ?? article.description;
   const primaryKeyword = intentOverride?.primaryKeyword ?? article.primaryKeyword;
   const secondaryKeywords = intentOverride?.secondaryKeywords ?? article.secondaryKeywords;
@@ -173,12 +182,18 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
       name: article.author,
       url: authorProfile.href,
       description: authorProfile.description,
+      ...(authorProfile.type === "Organization" ? {
+        logo: { "@type": "ImageObject", url: `${site.url}/images/brand/nouncompass-icon-512.png` },
+      } : {}),
     },
     editor: {
       "@type": reviewerProfile.type,
       name: reviewerProfile.name,
       url: reviewerProfile.href,
       description: reviewerProfile.description,
+      ...(reviewerProfile.type === "Organization" ? {
+        logo: { "@type": "ImageObject", url: `${site.url}/images/brand/nouncompass-icon-512.png` },
+      } : {}),
     },
     publisher: {
       "@type": "Organization",

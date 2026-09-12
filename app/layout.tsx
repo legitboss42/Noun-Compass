@@ -125,7 +125,12 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     url: site.url,
     description: site.description,
     inLanguage: "en-NG",
-    publisher: { "@type": "Organization", name: site.name, url: site.url },
+    publisher: {
+      "@type": "Organization",
+      name: site.name,
+      url: site.url,
+      logo: `${site.url}/images/brand/nouncompass-icon-512.png`,
+    },
     potentialAction: {
       "@type": "SearchAction",
       target: `${site.url}${site.searchPath}?q={search_term_string}`,

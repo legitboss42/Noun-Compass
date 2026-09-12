@@ -17,7 +17,7 @@ This batch follows the 2026-09-12 priority SEO deployment and uses settled Googl
 
 ## Implemented changes
 
-All changes are centralized in `lib/search-intent-overrides.ts` so article source bodies and canonical/routing behavior stay untouched.
+All first-pass changes are centralized in `lib/search-intent-overrides.ts` so article source bodies and canonical/routing behavior stay untouched.
 
 1. `is-noun-eligible-for-nelfund`
    - Owns the `can noun students apply for nelfund` query explicitly.
@@ -40,11 +40,34 @@ All changes are centralized in `lib/search-intent-overrides.ts` so article sourc
 
 `intentSection` is optional for metadata-only overrides. Existing intent-led overrides retain their visible answer sections.
 
+## Continuation: schema and title hygiene
+
+Fresh live auditing after the first follow-up deployment found one remaining genuine site-side technical issue: several nested `Organization` entities were emitted without a `logo` even though the primary root Organization and BlogPosting publisher already had one.
+
+The continuation adds the existing 512px NOUN Compass brand icon to:
+
+- `WebSite.publisher` in the root layout.
+- `AboutPage.about` on the About page.
+- `ContactPage.mainEntity` on the Contact page.
+- Article authors when the editorial profile is an `Organization`.
+- Article editors/review desks when the editorial profile is an `Organization`.
+
+The same audit identified six titles with meaningful impressions and avoidable truncation risk. These are metadata-only title overrides in the article template, so article H1s, source copy, routing, canonicals, descriptions and factual content remain unchanged:
+
+- `noun-study-centres-in-kano` → `NOUN Study Centres in Kano | Centre Guide`
+- `noun-core-courses-vs-electives` → `NOUN Core Courses vs Electives | Explained`
+- `noun-portal-password-reset` → `NOUN Portal Password Reset | Recover Access`
+- `noun-study-centres-in-benin` → `NOUN Study Centres in Benin | Edo Guide`
+- `how-to-read-noun-cgpa-class-of-degree-and-outstanding-credit` → `Check NOUN CGPA & Class of Degree`
+- `noun-study-centres-in-lagos` → `NOUN Study Centres in Lagos | Centre Guide`
+
+All six rendered title strings remain at or below 60 characters after the automatic ` | NOUN Compass` suffix is added. Borderline 61–62 character titles are deliberately left unchanged in this continuation because their wording remains useful and the length warning alone does not justify another rewrite.
+
 ## Deliberate non-changes
 
 - No changes to `www` redirects, canonical tags, robots rules or sitemap behavior.
 - No Dashboard metadata change because its current 56-character title is already healthy.
-- No repeat edits to carryover, Remita, school-fees, CGPA or result-checker before post-deployment Search Console data matures.
+- No repeat edits to carryover, Remita, school-fees, CGPA calculator or result-checker before post-deployment Search Console data matures.
 - No attempt to treat stale `Page with redirect` or duplicate-canonical classifications as live routing defects.
 - Core Web Vitals remains unavailable in GSC Wizard until a Chrome UX Report API key is configured.
 
