@@ -23,6 +23,7 @@ import { getAllArticles, getArticle, formatDate } from "@/lib/articles";
 import { getArticleFaqs } from "@/lib/article-faqs";
 import { getEditorialProfile } from "@/lib/editorial";
 import { getEditorialDisposition, getIndexableArticles } from "@/lib/editorial-dispositions";
+import { getArticleSearchIntentOverride } from "@/lib/search-intent-overrides";
 import { getCategory, site } from "@/data/site";
 
 export function generateStaticParams() {
@@ -65,17 +66,20 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
   if (!article) return {};
 
+  const intentOverride = getArticleSearchIntentOverride(slug);
   const url = `${site.url}/articles/${slug}`;
   const image = `${url}/opengraph-image`;
-  const seoTitle = article.seoTitle ?? article.title;
-  const seoDescription = article.seoDescription ?? article.description;
+  const seoTitle = intentOverride?.seoTitle ?? article.seoTitle ?? article.title;
+  const seoDescription = intentOverride?.seoDescription ?? article.seoDescription ?? article.description;
+  const primaryKeyword = intentOverride?.primaryKeyword ?? article.primaryKeyword;
+  const secondaryKeywords = intentOverride?.secondaryKeywords ?? article.secondaryKeywords;
   const disposition = getEditorialDisposition(slug);
   const verifiedReview = disposition?.reviewVerification === "verified" ? disposition : null;
 
   return {
     title: seoTitle,
     description: seoDescription,
-    keywords: [article.primaryKeyword, ...article.secondaryKeywords],
+    keywords: [primaryKeyword, ...secondaryKeywords],
     authors: [
       {
         name: article.author,
@@ -96,8 +100,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
         modifiedTime: verifiedReview.dateMetadata.updatedAt,
       } : {}),
       authors: [article.author],
-      tags: [article.primaryKeyword, ...article.secondaryKeywords],
-      images: [{ url: image, width: 1200, height: 630, alt: article.title }],
+      tags: [primaryKeyword, ...secondaryKeywords],
+      images: [{ url: image, width: 1200, height: 630, alt: intentOverride?.title ?? article.title }],
     },
     twitter: {
       card: "summary_large_image",
@@ -114,6 +118,11 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
 
   if (!article) notFound();
 
+  const intentOverride = getArticleSearchIntentOverride(slug);
+  const displayTitle = intentOverride?.title ?? article.title;
+  const displayDescription = intentOverride?.description ?? article.description;
+  const primaryKeyword = intentOverride?.primaryKeyword ?? article.primaryKeyword;
+  const secondaryKeywords = intentOverride?.secondaryKeywords ?? article.secondaryKeywords;
   const allArticles = getAllArticles();
   const related = article.relatedArticles
     .map((item) => getArticle(item))
@@ -126,7 +135,16 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
   const visibleFaqs = [...faqs, ...mdxFaqs].filter(
     (faq, index, list) => list.findIndex((item) => item.question === faq.question) === index,
   );
-  const headings = extractHeadings(articleContent);
+  const intentHeading = intentOverride?.intentSection
+    ? {
+        label: intentOverride.intentSection.heading,
+        id: slugifyHeading(intentOverride.intentSection.heading),
+      }
+    : null;
+  const mdxHeadings = extractHeadings(articleContent);
+  const headings = intentHeading
+    ? [intentHeading, ...mdxHeadings.filter((heading) => heading.id !== intentHeading.id)].slice(0, 12)
+    : mdxHeadings;
   const category = getCategory(article.category);
   const categoryLabel = category?.name ?? article.category.replace("-", " ");
   const articleUrl = `${site.url}/articles/${article.slug}`;
@@ -139,8 +157,8 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
   const articleSchema = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    headline: article.title,
-    description: article.description,
+    headline: displayTitle,
+    description: displayDescription,
     image: `${articleUrl}/opengraph-image`,
     ...(verifiedReview ? {
       datePublished: verifiedReview.dateMetadata.publishedAt,
@@ -148,7 +166,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
     } : {}),
     inLanguage: "en-NG",
     isAccessibleForFree: true,
-    keywords: [article.primaryKeyword, ...article.secondaryKeywords].join(", "),
+    keywords: [primaryKeyword, ...secondaryKeywords].join(", "),
     articleSection: categoryLabel,
     author: {
       "@type": authorProfile.type,
@@ -181,13 +199,13 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
   const webPageSchema = {
     "@context": "https://schema.org",
     "@type": "WebPage",
-    name: article.title,
+    name: displayTitle,
     url: articleUrl,
-    description: article.description,
+    description: displayDescription,
     inLanguage: "en-NG",
     isPartOf: { "@type": "WebSite", name: site.name, url: site.url },
     breadcrumb: { "@id": `${articleUrl}#breadcrumb` },
-    about: [article.primaryKeyword, ...article.secondaryKeywords],
+    about: [primaryKeyword, ...secondaryKeywords],
   };
 
   const breadcrumbSchema = {
@@ -197,7 +215,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Home", item: site.url },
       { "@type": "ListItem", position: 2, name: categoryLabel, item: categoryUrl },
-      { "@type": "ListItem", position: 3, name: article.title, item: articleUrl },
+      { "@type": "ListItem", position: 3, name: displayTitle, item: articleUrl },
     ],
   };
 
@@ -241,14 +259,14 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
               items={[
                 { label: "Home", href: "/" },
                 { label: categoryLabel, href: `/${article.category}` },
-                { label: article.title },
+                { label: displayTitle },
               ]}
             />
             <Link className="category-label" href={`/${article.category}`}>
               {categoryLabel}
             </Link>
-            <h1>{article.title}</h1>
-            <p className="article-deck">{article.description}</p>
+            <h1>{displayTitle}</h1>
+            <p className="article-deck">{displayDescription}</p>
             <div className="article-meta">
               <span>
                 By <strong>{article.author}</strong>
@@ -271,15 +289,15 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
           <div className="article-main">
             <figure className="article-feature-image">
               <BlogCover
-                title={article.title}
-                subtitle={article.description}
+                title={displayTitle}
+                subtitle={displayDescription}
                 category={article.category}
                 image={article.image}
-                imageAlt={article.title}
+                imageAlt={displayTitle}
                 mode="feature"
               />
               <figcaption>
-                Guide cover for {article.title}.
+                Guide cover for {displayTitle}.
               </figcaption>
             </figure>
 
@@ -294,13 +312,33 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
             <div className="summary-box">
               <strong>In short</strong>
               <p>
-                {article.description} {summaryCaution}
+                {displayDescription} {summaryCaution}
               </p>
             </div>
 
             <AdPlaceholder position="after intro" />
 
             <div className="prose">
+              {intentOverride?.intentSection ? (
+                <section aria-labelledby={slugifyHeading(intentOverride.intentSection.heading)}>
+                  <h2 id={slugifyHeading(intentOverride.intentSection.heading)}>{intentOverride.intentSection.heading}</h2>
+                  <p>{intentOverride.intentSection.summary}</p>
+                  <ul>
+                    {intentOverride.intentSection.bullets.map((item) => <li key={item}>{item}</li>)}
+                  </ul>
+                  <p>
+                    Verify the current rule on the{" "}
+                    <a href={intentOverride.intentSection.officialSource.href} target="_blank" rel="noopener noreferrer">
+                      {intentOverride.intentSection.officialSource.label}
+                    </a>
+                    {intentOverride.intentSection.nextStep ? (
+                      <>
+                        . Then <Link href={intentOverride.intentSection.nextStep.href}>{intentOverride.intentSection.nextStep.label}</Link>.
+                      </>
+                    ) : "."}
+                  </p>
+                </section>
+              ) : null}
               <MDXRemote
                 source={articleContent}
                 components={{
