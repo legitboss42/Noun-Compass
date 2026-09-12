@@ -13,6 +13,7 @@ function read(relativePath: string) {
 test("carryover search intent leads with the pass-mark question supported by current NOUN guidance", () => {
   const override = getArticleSearchIntentOverride("register-carryover-courses-noun");
   assert.ok(override);
+  assert.ok(override.intentSection);
   assert.equal(override.seoTitle, "NOUN Carryover Pass Mark: Is 40 a Pass?");
   assert.equal(override.primaryKeyword, "noun carryover pass mark");
   assert.match(override.seoDescription, /40%/);
@@ -27,6 +28,8 @@ test("Remita and school-fee pages own distinct search intents", () => {
   const fees = getArticleSearchIntentOverride("how-to-pay-noun-school-fees");
   assert.ok(remita);
   assert.ok(fees);
+  assert.ok(remita.intentSection);
+  assert.ok(fees.intentSection);
 
   assert.equal(remita.seoTitle, "NOUN Remita Payment Portal: Generate RRR");
   assert.equal(remita.primaryKeyword, "noun remita payment portal");
@@ -38,6 +41,50 @@ test("Remita and school-fee pages own distinct search intents", () => {
   assert.equal(fees.intentSection.heading, "How to Fund Your NOUN E-Wallet");
   assert.ok(fees.secondaryKeywords.includes("how to fund my noun wallet"));
   assert.equal(fees.intentSection.nextStep?.href, "/articles/how-to-generate-remita-for-noun");
+});
+
+test("NELFUND eligibility owns can-apply intent while application remains the procedural next step", () => {
+  const eligibility = getArticleSearchIntentOverride("is-noun-eligible-for-nelfund");
+  assert.ok(eligibility);
+  assert.ok(eligibility.intentSection);
+  assert.equal(eligibility.seoTitle, "Can NOUN Students Apply for NELFUND? Yes");
+  assert.equal(eligibility.primaryKeyword, "can noun students apply for nelfund");
+  assert.match(eligibility.seoDescription, /^Yes, NOUN students can apply for NELFUND\./);
+  assert.equal(eligibility.intentSection.nextStep?.href, "/articles/how-noun-students-apply-for-nelfund");
+});
+
+test("NELFUND requirements and JAMB snippets stay concise", () => {
+  const requirements = getArticleSearchIntentOverride("nelfund-requirements-for-noun-students");
+  const jamb = getArticleSearchIntentOverride("why-nelfund-requests-a-jamb-registration-number");
+  assert.ok(requirements);
+  assert.ok(jamb);
+  assert.ok(requirements.seoDescription.length <= 160);
+  assert.ok(jamb.seoDescription.length <= 160);
+  assert.match(requirements.seoDescription, /JAMB verification and date of birth/);
+  assert.match(jamb.seoDescription, /what it does not prove about regularization/);
+});
+
+test("study-centre titles are concise and location-led", () => {
+  const abuja = getArticleSearchIntentOverride("noun-study-centres-in-abuja");
+  const ogun = getArticleSearchIntentOverride("noun-study-centres-in-ogun");
+  assert.ok(abuja);
+  assert.ok(ogun);
+  assert.equal(abuja.seoTitle, "NOUN Study Centres in Abuja | Abuja Model");
+  assert.equal(ogun.seoTitle, "NOUN Study Centres in Ogun State | Centre Guide");
+  assert.ok(abuja.seoTitle.length <= 60);
+  assert.ok(ogun.seoTitle.length <= 60);
+});
+
+test("result-statement and outstanding-course snippets match current query intent", () => {
+  const statement = getArticleSearchIntentOverride("how-to-open-your-noun-result-statement-from-the-support-portal");
+  const outstanding = getArticleSearchIntentOverride("how-to-check-outstanding-courses-on-noun-result-statement");
+  assert.ok(statement);
+  assert.ok(outstanding);
+  assert.equal(statement.seoTitle, "NOUN Result Statement | Support Portal Guide");
+  assert.equal(outstanding.seoTitle, "Check Outstanding Courses in NOUN");
+  assert.ok(statement.seoTitle.length <= 60);
+  assert.ok(outstanding.seoDescription.length <= 160);
+  assert.match(outstanding.seoDescription, /Outstanding Courses section/);
 });
 
 test("article rendering applies priority search intent to metadata, visible copy, schema, and the intent section", () => {
