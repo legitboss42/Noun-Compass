@@ -92,7 +92,9 @@
 .admin-sidebar-footer button { width: 100%; cursor: pointer; }
 
 .admin-mobile-bar { display: none; }
-.admin-main { min-width: 0; display: grid; gap: 20px; }
+/* The single implicit column must be allowed to shrink, otherwise a wide
+   table/widget stretches the whole page past the viewport on small screens. */
+.admin-main { min-width: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px; }
 
 .admin-breadcrumbs ol {
   display: flex;
@@ -313,10 +315,55 @@
   .admin-mobile-bar nav a[data-active="true"] { color: #063d2c; background: #fff; }
   .admin-page-header { align-items: start; flex-direction: column; }
   .admin-grid-two { grid-template-columns: 1fr; }
+
+  /* Admin tables become stacked cards on phones so every column stays readable
+     instead of being squeezed or hidden behind a horizontal scrollbar. */
+  .admin-table-wrap { overflow: visible; border: 0; border-radius: 0; }
+  .admin-table { display: block; font-size: .88rem; }
+  .admin-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .admin-table tbody { display: grid; gap: 12px; }
+  .admin-table tbody tr {
+    display: grid;
+    padding: 15px 16px;
+    border: 1px solid #e0e8e3;
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 10px 26px rgba(8, 45, 31, .05);
+  }
+  .admin-table tbody tr:hover { background: #fff; }
+  .admin-table td {
+    display: grid;
+    grid-template-columns: minmax(96px, 33%) minmax(0, 1fr);
+    gap: 4px 12px;
+    align-items: start;
+    padding: 9px 0;
+    border-top: 1px solid #eef3f0;
+  }
+  .admin-table td:first-child { padding-top: 0; border-top: 0; }
+  .admin-table td:last-child { padding-bottom: 0; }
+  .admin-table td::before {
+    content: attr(data-label);
+    grid-column: 1;
+    grid-row: 1;
+    color: #6c7c72;
+    font-size: .68rem;
+    font-weight: 800;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+  }
+  .admin-table td > * { grid-column: 2; overflow-wrap: anywhere; }
+  .admin-table-actions { justify-content: flex-start; }
+}
+
+/* The public mobile bottom navigation is fixed to the viewport up to 700px, so
+   keep the same clearance the public pages reserve for it (.footer in
+   homepage.module.css). The base 72px shell padding does not account for the
+   safe-area inset that the fixed bar grows by on gesture-navigation devices. */
+@media (max-width: 700px) {
+  .admin-shell { padding-bottom: calc(76px + env(safe-area-inset-bottom)); }
 }
 
 @media (max-width: 560px) {
-  .admin-shell { padding-bottom: 96px; }
   .admin-stat-grid { grid-template-columns: 1fr; }
   .admin-stat-card { min-height: 125px; }
   .admin-filters, .admin-form-row { grid-template-columns: 1fr; }

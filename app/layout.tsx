@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Manrope, Sora } from "next/font/google";
 import Script from "next/script";
 import { Suspense } from "react";
@@ -51,6 +51,12 @@ export const metadata: Metadata = {
   publisher: "NOUN Compass",
   openGraph: { siteName: site.name, type: "website", locale: "en_NG", images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "NOUN Compass" }] },
   twitter: { card: "summary_large_image", images: ["/twitter-image"] },
+};
+
+export const viewport: Viewport = {
+  // The design system is light-only, so opt out of Android Chrome's forced
+  // "auto dark theme" instead of letting it invert panels and brand colours.
+  colorScheme: "only light",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
